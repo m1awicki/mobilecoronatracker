@@ -9,7 +9,7 @@ import com.mobilecoronatracker.model.CountryReportModelable
 class CountriesListAdapter : RecyclerView.Adapter<CountriesListAdapter.ViewHolder>() {
     var reports = emptyList<CountryReportModelable>()
 
-    inner class ViewHolder(val binding: ItemCountryReportBinding) :
+    inner class ViewHolder(private val binding: ItemCountryReportBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CountryReportModelable) {
             binding.item = item

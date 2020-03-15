@@ -6,8 +6,11 @@ import com.mobilecoronatracker.data.source.CovidCountriesDataObserver
 import com.mobilecoronatracker.data.source.CovidDataSource
 import com.mobilecoronatracker.data.source.impl.CovidRestDataReader
 import com.mobilecoronatracker.model.CountryReportModelable
+import java.util.Locale
 
 class CountriesListViewModel : ViewModel(), CountriesListViewModelable, CovidCountriesDataObserver {
+    private var currentList: List<CountryReportModelable> = emptyList()
+    private var currentFilterText: String = ""
     override val countryReports = MutableLiveData<List<CountryReportModelable>>()
     private var dataSource: CovidDataSource = CovidRestDataReader()
 
@@ -16,6 +19,23 @@ class CountriesListViewModel : ViewModel(), CountriesListViewModelable, CovidCou
     }
 
     override fun onCountriesData(data: List<CountryReportModelable>) {
-        countryReports.postValue(data)
+        currentList = data
+        postFilteredList()
+    }
+
+    override fun onFilterTextChanged(text: String) {
+        currentFilterText = text
+        postFilteredList()
+    }
+
+    private fun postFilteredList() {
+        countryReports.postValue(
+            currentList.filter {
+                it.country
+                    .toLowerCase(Locale.getDefault())
+                    .contains(
+                        currentFilterText.toLowerCase(Locale.getDefault())
+                    )
+            })
     }
 }

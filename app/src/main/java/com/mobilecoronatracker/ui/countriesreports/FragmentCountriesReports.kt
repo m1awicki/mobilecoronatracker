@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.mobilecoronatracker.R
 import com.mobilecoronatracker.databinding.FragmentCountriesReportsBinding
+import com.mobilecoronatracker.ui.utils.hideKeyboard
 import kotlinx.android.synthetic.main.fragment_countries_reports.*
 
 class FragmentCountriesReports : Fragment() {
@@ -22,7 +23,8 @@ class FragmentCountriesReports : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = DataBindingUtil.inflate<FragmentCountriesReportsBinding>(
-            inflater, R.layout.fragment_countries_reports, container, false)
+            inflater, R.layout.fragment_countries_reports, container, false
+        )
         binding.adapter = adapter
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -39,6 +41,7 @@ class FragmentCountriesReports : Fragment() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(text: String?): Boolean {
                 viewModel.onFilterTextChanged(text ?: "")
+                context?.let { hideKeyboard(it, searchView) }
                 return true
             }
 

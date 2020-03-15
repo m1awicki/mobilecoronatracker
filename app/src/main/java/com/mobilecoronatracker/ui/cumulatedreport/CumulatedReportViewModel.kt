@@ -17,7 +17,6 @@ class CumulatedReportViewModel : ViewModel(), CumulatedReportViewModelable, Covi
         cases.value = "???"
         deaths.value = "???"
         recovered.value = "???"
-        dataSource.setRefreshInterval(5)
         dataSource.addCovidCumulatedDataObserver(this)
     }
 

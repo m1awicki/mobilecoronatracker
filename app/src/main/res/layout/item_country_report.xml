@@ -6,7 +6,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/country_report_padding">
+        android:background="@drawable/rounded_rect_bg"
+        android:padding="@dimen/country_report_padding"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
@@ -16,19 +19,15 @@
             app:layout_constraintGuide_begin="200dp" />
 
         <TextView
-            android:id="@+id/country_name_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/country_name_label_text"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
             android:id="@+id/country_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{item.country}"
-            app:layout_constraintStart_toStartOf="@id/guideline"
+            android:textSize="20dp"
+            android:paddingBottom="10dp"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="China" />
 
@@ -38,7 +37,7 @@
             android:layout_height="wrap_content"
             android:text="@string/cases_label_text"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/country_name_label" />
+            app:layout_constraintTop_toBottomOf="@id/country_name" />
 
         <TextView
             android:id="@+id/cases"

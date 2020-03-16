@@ -1,5 +1,6 @@
 package com.mobilecoronatracker.ui.cumulatedreport
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mobilecoronatracker.data.source.CovidCumulatedDataObserver
@@ -7,7 +8,8 @@ import com.mobilecoronatracker.data.source.CovidDataSource
 import com.mobilecoronatracker.data.source.impl.CovidRestDataReader
 import com.mobilecoronatracker.model.GeneralReportModelable
 
-class CumulatedReportViewModel : ViewModel(), CumulatedReportViewModelable, CovidCumulatedDataObserver {
+class CumulatedReportViewModel : ViewModel(), CumulatedReportViewModelable,
+    CovidCumulatedDataObserver {
     override val cases = MutableLiveData<String>()
     override val deaths = MutableLiveData<String>()
     override val recovered = MutableLiveData<String>()
@@ -24,5 +26,9 @@ class CumulatedReportViewModel : ViewModel(), CumulatedReportViewModelable, Covi
         cases.postValue(data.cases.toString())
         deaths.postValue(data.deaths.toString())
         recovered.postValue(data.recovered.toString())
+    }
+
+    override fun onError() {
+        Log.e(CumulatedReportViewModel::class.java.simpleName, "onError")
     }
 }

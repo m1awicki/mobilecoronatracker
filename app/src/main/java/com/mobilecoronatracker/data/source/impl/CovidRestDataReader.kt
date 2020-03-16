@@ -73,6 +73,8 @@ class CovidRestDataReader : CovidDataSource {
         } catch (e: RuntimeException) {
             println("Http error: " + e.message)
             e.printStackTrace()
+            observersCountries.forEach { observer -> observer.onError() }
+            observersCumulated.forEach { observer -> observer.onError() }
         }
     }
 
@@ -93,6 +95,7 @@ class CovidRestDataReader : CovidDataSource {
             observersCumulated.forEach { observer -> observer.onCumulatedData(GeneralReportModel(data)) }
         } catch (e: IOException) {
             e.printStackTrace()
+            observersCumulated.forEach { observer -> observer.onError() }
         }
         conn.disconnect()
         conn = connectToEndpoint(perCountryDataEndpoint)
@@ -107,6 +110,7 @@ class CovidRestDataReader : CovidDataSource {
             observersCountries.forEach { observer -> observer.onCountriesData(mappedEntries) }
         } catch (e: IOException) {
             e.printStackTrace()
+            observersCountries.forEach { observer -> observer.onError() }
         }
         conn.disconnect()
     }

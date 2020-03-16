@@ -1,11 +1,13 @@
 package com.mobilecoronatracker.ui.countriesreports
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mobilecoronatracker.data.source.CovidCountriesDataObserver
 import com.mobilecoronatracker.data.source.CovidDataSource
 import com.mobilecoronatracker.data.source.impl.CovidRestDataReader
 import com.mobilecoronatracker.model.CountryReportModelable
+import com.mobilecoronatracker.ui.cumulatedreport.CumulatedReportViewModel
 import java.util.Locale
 
 class CountriesListViewModel : ViewModel(), CountriesListViewModelable, CovidCountriesDataObserver {
@@ -23,6 +25,11 @@ class CountriesListViewModel : ViewModel(), CountriesListViewModelable, CovidCou
     override fun onCountriesData(data: List<CountryReportModelable>) {
         currentList = data
         postFilteredList()
+    }
+
+    override fun onError() {
+        Log.e(CountriesListViewModel::class.java.simpleName, "onError")
+        isRefreshing.postValue(false)
     }
 
     override fun onFilterTextChanged(text: String) {

@@ -53,21 +53,27 @@ class CovidRestDataReader : CovidDataSource {
     }
 
     override fun requestData() {
-        readEndpoints()
+        taskExecutor.execute {
+            tryReadEndpoints()
+        }
     }
 
     private fun scheduleReading(delay: Long) {
         taskExecutor.schedule({
-            try {
-                readEndpoints()
-            } catch (e: RuntimeException) {
-                println("Http error: " + e.message)
-                e.printStackTrace()
-            }
+            tryReadEndpoints()
             if (observersCountries.size > 0 || observersCumulated.size > 0) {
                 scheduleReading(refreshInterval)
             }
         }, delay, TimeUnit.SECONDS)
+    }
+
+    private fun tryReadEndpoints() {
+        try {
+            readEndpoints()
+        } catch (e: RuntimeException) {
+            println("Http error: " + e.message)
+            e.printStackTrace()
+        }
     }
 
     private fun connectToEndpoint(endpoint: String): HttpsConnectionFacade {
@@ -91,7 +97,7 @@ class CovidRestDataReader : CovidDataSource {
         conn.disconnect()
         conn = connectToEndpoint(perCountryDataEndpoint)
         try {
-            var output = conn.getInput()
+            val output = conn.getInput()
             val entries = mapper.readValue(
                 output,
                 Array<CovidCountryEntry>::class.java

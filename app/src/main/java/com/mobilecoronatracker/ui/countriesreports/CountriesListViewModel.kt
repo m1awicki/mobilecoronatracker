@@ -12,9 +12,11 @@ class CountriesListViewModel : ViewModel(), CountriesListViewModelable, CovidCou
     private var currentList: List<CountryReportModelable> = emptyList()
     private var currentFilterText: String = ""
     override val countryReports = MutableLiveData<List<CountryReportModelable>>()
+    override val isRefreshing = MutableLiveData<Boolean>()
     private var dataSource: CovidDataSource = CovidRestDataReader()
 
     init {
+        isRefreshing.postValue(true)
         dataSource.addCovidCountriesDataObserver(this)
     }
 
@@ -28,6 +30,11 @@ class CountriesListViewModel : ViewModel(), CountriesListViewModelable, CovidCou
         postFilteredList()
     }
 
+    override fun onRefreshRequested() {
+        isRefreshing.postValue(true)
+        dataSource.requestData()
+    }
+
     private fun postFilteredList() {
         countryReports.postValue(
             currentList.filter {
@@ -37,5 +44,6 @@ class CountriesListViewModel : ViewModel(), CountriesListViewModelable, CovidCou
                         currentFilterText.toLowerCase(Locale.getDefault())
                     )
             })
+        isRefreshing.postValue(false)
     }
 }

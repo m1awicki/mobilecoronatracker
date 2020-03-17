@@ -12,8 +12,8 @@ class CreditsListAdapter : RecyclerView.Adapter<CreditsListAdapter.ViewHolder>()
     inner class ViewHolder(private val binding: ItemCreditsBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CreditsEntryModel) {
-            binding.header.text = item.header
-            binding.body.text = item.body
+            binding.item = item
+            binding.executePendingBindings()
         }
     }
 

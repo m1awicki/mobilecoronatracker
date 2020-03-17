@@ -25,7 +25,7 @@ class FragmentAbout : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentAboutBinding>(inflater,
             R.layout.fragment_about, container, false
         )
-        viewModel = CreditsListViewModel(activity!!.application)
+        viewModel = CreditsListViewModel(requireActivity().application)
         binding.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root

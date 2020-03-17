@@ -13,10 +13,11 @@ class CreditsListViewModel(@NonNull app: Application) : AndroidViewModel(app), C
 
     init {
         val list = listOf<CreditsEntryModel>(
-            CreditsEntryModelImpl(getString(R.string.icon_header), "made by Smashicons from www.flaticon.com")
-            , CreditsEntryModelImpl(getString(R.string.icon_header), "made by ultimatearm from www.flaticon.com")
-            , CreditsEntryModelImpl(getString(R.string.image_header), "made by ultimatearm from www.flaticon.com")
-            , CreditsEntryModelImpl(getString(R.string.data_source), "provided by https://github.com/NovelCOVID/API")
+            CreditsEntryModelImpl(getString(R.string.icon_header), getString(R.string.credits_smashicons_from_flaticon)),
+            CreditsEntryModelImpl(getString(R.string.icon_header), getString(R.string.credits_ultimatearm_from_flaticon)),
+            CreditsEntryModelImpl(getString(R.string.icon_header), getString(R.string.credits_freepik_from_flaticon)),
+            CreditsEntryModelImpl(getString(R.string.image_header), getString(R.string.credits_freepik_from_freepik)),
+            CreditsEntryModelImpl(getString(R.string.data_source), getString(R.string.credits_elite_da_myth_github))
         )
         credits.postValue(list)
     }

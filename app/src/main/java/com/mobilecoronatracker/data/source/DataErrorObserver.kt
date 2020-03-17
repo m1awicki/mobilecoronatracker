@@ -1,5 +1,5 @@
 package com.mobilecoronatracker.data.source
 
-interface DataObserver {
+interface DataErrorObserver {
     fun onError()
 }

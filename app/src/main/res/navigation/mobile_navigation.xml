@@ -16,4 +16,10 @@
         android:name="com.mobilecoronatracker.ui.countriesreports.FragmentCountriesReports"
         android:label="@string/reports_by_country_title"
         tools:layout="@layout/fragment_countries_reports" />
+
+    <fragment
+        android:id="@+id/navigation_about"
+        android:name="com.mobilecoronatracker.ui.about.FragmentAbout"
+        android:label="@string/about_title"
+        tools:layout="@layout/fragment_about" />
 </navigation>

@@ -13,4 +13,5 @@
     <string name="cumulated_recovered_label_text">All recovered:</string>
     <string name="reports_by_country_title">Reports By Country</string>
     <string name="cumulated_report_title">Cumulated Report</string>
+    <string name="menu_refresh">Refresh</string>
 </resources>

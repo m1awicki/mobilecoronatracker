@@ -53,21 +53,29 @@ class CovidRestDataReader : CovidDataSource {
     }
 
     override fun requestData() {
-        readEndpoints()
+        taskExecutor.execute {
+            tryReadEndpoints()
+        }
     }
 
     private fun scheduleReading(delay: Long) {
         taskExecutor.schedule({
-            try {
-                readEndpoints()
-            } catch (e: RuntimeException) {
-                println("Http error: " + e.message)
-                e.printStackTrace()
-            }
+            tryReadEndpoints()
             if (observersCountries.size > 0 || observersCumulated.size > 0) {
                 scheduleReading(refreshInterval)
             }
         }, delay, TimeUnit.SECONDS)
+    }
+
+    private fun tryReadEndpoints() {
+        try {
+            readEndpoints()
+        } catch (e: RuntimeException) {
+            println("Http error: " + e.message)
+            e.printStackTrace()
+            observersCountries.forEach { observer -> observer.onError() }
+            observersCumulated.forEach { observer -> observer.onError() }
+        }
     }
 
     private fun connectToEndpoint(endpoint: String): HttpsConnectionFacade {
@@ -87,11 +95,12 @@ class CovidRestDataReader : CovidDataSource {
             observersCumulated.forEach { observer -> observer.onCumulatedData(GeneralReportModel(data)) }
         } catch (e: IOException) {
             e.printStackTrace()
+            observersCumulated.forEach { observer -> observer.onError() }
         }
         conn.disconnect()
         conn = connectToEndpoint(perCountryDataEndpoint)
         try {
-            var output = conn.getInput()
+            val output = conn.getInput()
             val entries = mapper.readValue(
                 output,
                 Array<CovidCountryEntry>::class.java
@@ -101,6 +110,7 @@ class CovidRestDataReader : CovidDataSource {
             observersCountries.forEach { observer -> observer.onCountriesData(mappedEntries) }
         } catch (e: IOException) {
             e.printStackTrace()
+            observersCountries.forEach { observer -> observer.onError() }
         }
         conn.disconnect()
     }

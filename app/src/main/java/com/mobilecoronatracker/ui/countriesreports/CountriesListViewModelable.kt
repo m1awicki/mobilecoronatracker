@@ -5,6 +5,8 @@ import com.mobilecoronatracker.model.CountryReportModelable
 
 interface CountriesListViewModelable {
     fun onFilterTextChanged(text: String)
+    fun onRefreshRequested()
 
     val countryReports: LiveData<List<CountryReportModelable>>
+    val isRefreshing: LiveData<Boolean>
 }

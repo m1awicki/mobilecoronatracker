@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MobileCoronaTracker</string>
+    <string name="app_name">CoronaTracker</string>
     <string name="country_name_label_text">Country name:</string>
     <string name="cases_label_text">Cases:</string>
     <string name="deaths_label_text">Deaths:</string>

@@ -12,7 +12,7 @@ data class CountryReportModel(
     override val todayDeaths: Int,
     override val recovered: Int,
     override val critical: Int,
-    override val flagged: MutableLiveData<Boolean>,
+    override val flagged: Boolean,
     override val hasMoreData: Boolean
 ) : CountryReportModelable {
     constructor(data: CovidCountryEntry) :
@@ -24,7 +24,7 @@ data class CountryReportModel(
                 data.todayDeaths,
                 data.recovered,
                 data.critical,
-                MutableLiveData(Random().nextDouble() > 0.5),
+                Random().nextDouble() > 0.5,
                 Random().nextDouble() > 0.5
             )
 }

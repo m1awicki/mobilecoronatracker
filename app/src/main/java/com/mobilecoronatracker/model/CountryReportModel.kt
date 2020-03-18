@@ -1,17 +1,30 @@
 package com.mobilecoronatracker.model
 
+import androidx.lifecycle.MutableLiveData
 import com.mobilecoronatracker.model.pojo.CovidCountryEntry
+import java.util.Random
 
-class CountryReportModel(
-    override var country: String,
-    override var cases: Int,
-    override var todayCases: Int,
-    override var deaths: Int,
-    override var todayDeaths: Int,
-    override var recovered: Int,
-    override var critical: Int
+data class CountryReportModel(
+    override val country: String,
+    override val cases: Int,
+    override val todayCases: Int,
+    override val deaths: Int,
+    override val todayDeaths: Int,
+    override val recovered: Int,
+    override val critical: Int,
+    override val flagged: MutableLiveData<Boolean>,
+    override val hasMoreData: Boolean
 ) : CountryReportModelable {
     constructor(data: CovidCountryEntry) :
-            this(data.country, data.cases, data.todayCases, data.deaths, data.todayDeaths,
-                data.recovered, data.critical)
+            this(
+                data.country,
+                data.cases,
+                data.todayCases,
+                data.deaths,
+                data.todayDeaths,
+                data.recovered,
+                data.critical,
+                MutableLiveData(Random().nextDouble() > 0.5),
+                Random().nextDouble() > 0.5
+            )
 }

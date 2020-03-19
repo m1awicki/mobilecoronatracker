@@ -137,7 +137,7 @@
             android:id="@+id/active_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/cases_per_million_label_text"
+            android:text="@string/active_label_text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/critical_label" />
 

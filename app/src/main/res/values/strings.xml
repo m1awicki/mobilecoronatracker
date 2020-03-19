@@ -17,8 +17,8 @@
     <string name="about_title">About the app</string>
     <string name="github_repo_label">GitHub Repo</string>
     <string name="repo_link" translatable="false">https://github.com/m1awicki/mobilecoronatracker</string>
-    <string name="icon_header">"Icons"</string>
-    <string name="image_header">"Images"</string>
+    <string name="icon_header" translatable="false">"Icons"</string>
+    <string name="image_header" translatable="false">"Images"</string>
     <string name="data_source">Data source</string>
     <string name="about_text">This application is free and was created to help track progress of COVID-19 pandemic - disease caused by SARS-CoV-2 coronavirus discovered in 2019 in Wuhan, China.</string>
     <string name="credits" translatable="false">Credits:</string>

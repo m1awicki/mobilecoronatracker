@@ -1,7 +1,5 @@
 package com.mobilecoronatracker.model
 
-import androidx.lifecycle.LiveData
-
 interface CountryReportModelable {
     val country: String
     val cases: Int
@@ -10,7 +8,7 @@ interface CountryReportModelable {
     val todayDeaths: Int
     val recovered: Int
     val critical: Int
-	val active: Int
+    val active: Int
     var followed: Boolean
     val hasMoreData: Boolean
 }

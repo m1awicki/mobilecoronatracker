@@ -9,7 +9,8 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:background="@drawable/rounded_rect_bg"
-        android:paddingBottom="@{item.hasMoreData ? @dimen/zero_padding : @dimen/country_report_padding, default=@dimen/country_report_padding}">
+        android:paddingBottom="@{item.hasMoreData ? @dimen/zero_padding : @dimen/country_report_padding, default=@dimen/country_report_padding}"
+        tools:paddingBottom="0dp">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"

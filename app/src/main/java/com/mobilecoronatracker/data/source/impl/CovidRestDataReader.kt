@@ -1,5 +1,6 @@
 package com.mobilecoronatracker.data.source.impl
 
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mobilecoronatracker.connection.HttpsConnectionFacade
 import com.mobilecoronatracker.connection.impl.HttpsConnection
@@ -87,6 +88,7 @@ class CovidRestDataReader : CovidDataSource {
     private fun readEndpoints() {
         var conn: HttpsConnectionFacade = connectToEndpoint(cumulatedDataEndpoint)
         val mapper = ObjectMapper()
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
         try {
             val data: CovidCumulatedData = mapper.readValue(
                 conn.getInputStream(),

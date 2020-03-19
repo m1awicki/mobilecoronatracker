@@ -8,4 +8,5 @@ interface CountryReportModelable {
     var todayDeaths: Int
     var recovered: Int
     var critical: Int
+    var active: Int
 }

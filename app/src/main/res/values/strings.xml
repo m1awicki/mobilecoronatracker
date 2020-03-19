@@ -8,6 +8,7 @@
     <string name="today_deaths_label_text">Today deaths:</string>
     <string name="recovered_label_text">Recovered:</string>
     <string name="critical_label_text">Critical:</string>
+    <string name="cases_per_million_label_text">Active:</string>
     <string name="all_identified_cases_label_text">All identified cases:</string>
     <string name="all_deaths_label_text">All deaths:</string>
     <string name="cumulated_recovered_label_text">All recovered:</string>

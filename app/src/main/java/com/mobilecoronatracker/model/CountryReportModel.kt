@@ -9,9 +9,10 @@ class CountryReportModel(
     override var deaths: Int,
     override var todayDeaths: Int,
     override var recovered: Int,
-    override var critical: Int
+    override var critical: Int,
+    override var active: Int
 ) : CountryReportModelable {
     constructor(data: CovidCountryEntry) :
             this(data.country, data.cases, data.todayCases, data.deaths, data.todayDeaths,
-                data.recovered, data.critical)
+                data.recovered, data.critical, data.active)
 }

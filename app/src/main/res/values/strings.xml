@@ -1,9 +1,8 @@
 <resources>
-    <string name="app_name">CoronaTracker</string>
+    <string name="app_name" translatable="false">CoronaTracker</string>
     <string name="country_name_label_text">Country name:</string>
     <string name="cases_label_text">Cases:</string>
     <string name="deaths_label_text">Deaths:</string>
-    <string name="countries_reports_header">COVID data per country</string>
     <string name="today_cases_label_text">Today cases:</string>
     <string name="today_deaths_label_text">Today deaths:</string>
     <string name="recovered_label_text">Recovered:</string>
@@ -17,15 +16,15 @@
     <string name="menu_refresh">Refresh</string>
     <string name="about_title">About the app</string>
     <string name="github_repo_label">GitHub Repo</string>
-    <string name="repo_link">https://github.com/m1awicki/mobilecoronatracker</string>
-    <string name="icon_header">"Icons"</string>
-    <string name="image_header">"Images"</string>
+    <string name="repo_link" translatable="false">https://github.com/m1awicki/mobilecoronatracker</string>
+    <string name="icon_header" translatable="false">"Icons"</string>
+    <string name="image_header" translatable="false">"Images"</string>
     <string name="data_source">Data source</string>
-    <string name="credits">Credits:</string>
     <string name="about_text">This application is free and was created to help track progress of COVID-19 pandemic - disease caused by SARS-CoV-2 coronavirus discovered in 2019 in Wuhan, China.</string>
-    <string name="credits_smashicons_from_flaticon">made by Smashicons from www.flaticon.com</string>
-    <string name="credits_ultimatearm_from_flaticon">made by ultimatearm from www.flaticon.com</string>
-    <string name="credits_freepik_from_flaticon">made by Freepik from www.flaticon.com</string>
-    <string name="credits_freepik_from_freepik">World vector created by freepik - www.freepik.com</string>
-    <string name="credits_elite_da_myth_github">provided by https://github.com/NovelCOVID/API</string>
+    <string name="credits" translatable="false">Credits:</string>
+    <string name="credits_smashicons_from_flaticon" translatable="false">made by Smashicons from www.flaticon.com</string>
+    <string name="credits_ultimatearm_from_flaticon" translatable="false">made by ultimatearm from www.flaticon.com</string>
+    <string name="credits_freepik_from_flaticon" translatable="false">made by Freepik from www.flaticon.com</string>
+    <string name="credits_freepik_from_freepik" translatable="false">World vector created by freepik - www.freepik.com</string>
+    <string name="credits_elite_da_myth_github" translatable="false">provided by https://github.com/NovelCOVID/API</string>
 </resources>

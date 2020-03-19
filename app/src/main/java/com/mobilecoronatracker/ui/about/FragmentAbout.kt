@@ -39,7 +39,7 @@ class FragmentAbout : Fragment() {
     }
 
     private fun bindObservers() {
-        viewModel.credits.observe(this, Observer {
+        viewModel.credits.observe(viewLifecycleOwner, Observer {
             adapter.credits = it
             adapter.notifyDataSetChanged()
         })

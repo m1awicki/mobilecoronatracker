@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_flag"
-            android:tint="@{item.flagged ? @color/colorAccent : @android:color/darker_gray}"
+            android:tint="@{item.followed ? @color/colorAccent : @android:color/darker_gray}"
             app:layout_constraintBottom_toBottomOf="@+id/country_name"
             app:layout_constraintEnd_toEndOf="@+id/end_guideline"
             app:layout_constraintTop_toTopOf="@+id/country_name" />
@@ -168,19 +168,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/active_label_text"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/start_guideline"
             app:layout_constraintTop_toBottomOf="@id/critical_label" />
 
         <TextView
             android:id="@+id/active"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{String.valueOf(item.active)}"
+            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
             app:layout_constraintStart_toStartOf="@id/guideline"
             app:layout_constraintTop_toBottomOf="@id/critical"
             tools:text="123" />
 
-		<TextView
+        <TextView
             android:id="@+id/more_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -196,7 +197,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/end_guideline"
             app:layout_constraintStart_toStartOf="@+id/start_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/critical_label" />
+            app:layout_constraintTop_toBottomOf="@+id/active_label"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

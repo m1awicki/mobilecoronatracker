@@ -43,32 +43,46 @@ class CountriesListViewModel(private val countriesReportsSettings: CountriesRepo
         dataSource.requestData()
     }
 
-    fun onCountryFollowed(countryName: String) {
+    override fun onCountryFollowed(countryName: String) {
         countriesReportsSettings.addFollowedCountry(countryName)
+        postFilteredList()
     }
 
-    fun onCountryUnfollowed(countryName: String) {
+    override fun onCountryUnfollowed(countryName: String) {
         countriesReportsSettings.removeFollowedCountry(countryName)
+        postFilteredList()
     }
 
     private fun postFilteredList() {
-        val filtered = currentList.filter {
+        val filtered = getFilteredList()
+        countryReports.postValue(getFollowStatusList(filtered))
+        isRefreshing.postValue(false)
+    }
+
+    private fun getFilteredList(): List<CountryReportModelable> {
+        return currentList.filter {
             it.country
                 .toLowerCase(Locale.getDefault())
                 .contains(
                     currentFilterText.toLowerCase(Locale.getDefault())
                 )
         }
-        val followedCountries = countriesReportsSettings.getFollowedCountries()
+    }
 
-        countryReports.postValue(
-            filtered.filter {
-                followedCountries.contains(it.country)
-            }.map { it} + filtered.filter {
-                !followedCountries.contains(
-                    it.country
-                )
-            })
-        isRefreshing.postValue(false)
+    private fun getFollowStatusList(filtered: List<CountryReportModelable>): List<CountryReportModelable> {
+        val followedCountries = countriesReportsSettings.getFollowedCountries()
+        val followed = filtered.filter {
+            followedCountries.contains(it.country)
+        }.map {
+            it.followed = true
+            it
+        }
+        val notFollowed = filtered.filterNot {
+            followedCountries.contains(it.country)
+        }.map {
+            it.followed = false;
+            it
+        }
+        return followed + notFollowed
     }
 }

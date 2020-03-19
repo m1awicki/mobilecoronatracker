@@ -9,4 +9,6 @@ interface CountriesListViewModelable {
 
     val countryReports: LiveData<List<CountryReportModelable>>
     val isRefreshing: LiveData<Boolean>
+    fun onCountryFollowed(countryName: String)
+    fun onCountryUnfollowed(countryName: String)
 }

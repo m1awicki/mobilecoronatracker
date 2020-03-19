@@ -11,6 +11,6 @@ interface CountryReportModelable {
     val recovered: Int
     val critical: Int
 	val active: Int
-    val flagged: LiveData<Boolean>
+    var followed: Boolean
     val hasMoreData: Boolean
 }

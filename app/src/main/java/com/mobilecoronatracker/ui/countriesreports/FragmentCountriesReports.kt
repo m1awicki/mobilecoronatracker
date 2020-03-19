@@ -21,7 +21,9 @@ class FragmentCountriesReports : Fragment() {
     private val viewModel by lazy {
         CountriesListViewModel(SharedPreferencesCountriesReportsSettings(requireContext()))
     }
-    private val adapter = CountriesListAdapter()
+    private val adapter by lazy {
+        CountriesListAdapter(viewModel)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

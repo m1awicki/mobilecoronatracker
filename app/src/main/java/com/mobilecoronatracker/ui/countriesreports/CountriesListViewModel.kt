@@ -3,14 +3,14 @@ package com.mobilecoronatracker.ui.countriesreports
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mobilecoronatracker.data.persistence.CountriesReportsSettings
+import com.mobilecoronatracker.data.persistence.CountriesFollowRepo
 import com.mobilecoronatracker.data.source.CovidCountriesDataObserver
 import com.mobilecoronatracker.data.source.CovidDataSource
 import com.mobilecoronatracker.data.source.impl.CovidRestDataReader
 import com.mobilecoronatracker.model.CountryReportModelable
 import java.util.Locale
 
-class CountriesListViewModel(private val countriesReportsSettings: CountriesReportsSettings) :
+class CountriesListViewModel(private val countriesFollowRepo: CountriesFollowRepo) :
     ViewModel(), CountriesListViewModelable, CovidCountriesDataObserver {
     private var currentList: List<CountryReportModelable> = emptyList()
     private var currentFilterText: String = ""
@@ -44,12 +44,12 @@ class CountriesListViewModel(private val countriesReportsSettings: CountriesRepo
     }
 
     override fun onCountryFollowed(countryName: String) {
-        countriesReportsSettings.addFollowedCountry(countryName)
+        countriesFollowRepo.addFollowedCountry(countryName)
         postFilteredList()
     }
 
     override fun onCountryUnfollowed(countryName: String) {
-        countriesReportsSettings.removeFollowedCountry(countryName)
+        countriesFollowRepo.removeFollowedCountry(countryName)
         postFilteredList()
     }
 
@@ -70,7 +70,7 @@ class CountriesListViewModel(private val countriesReportsSettings: CountriesRepo
     }
 
     private fun getFollowStatusList(filtered: List<CountryReportModelable>): List<CountryReportModelable> {
-        val followedCountries = countriesReportsSettings.getFollowedCountries()
+        val followedCountries = countriesFollowRepo.getFollowedCountries()
         val followed = filtered.filter {
             followedCountries.contains(it.country)
         }.map {

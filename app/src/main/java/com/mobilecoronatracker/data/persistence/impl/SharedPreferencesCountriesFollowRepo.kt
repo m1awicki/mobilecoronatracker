@@ -2,9 +2,9 @@ package com.mobilecoronatracker.data.persistence.impl
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.mobilecoronatracker.data.persistence.CountriesReportsSettings
+import com.mobilecoronatracker.data.persistence.CountriesFollowRepo
 
-class SharedPreferencesCountriesReportsSettings(context: Context) : CountriesReportsSettings {
+class SharedPreferencesCountriesFollowRepo(context: Context) : CountriesFollowRepo {
     private val sharedPrefs: SharedPreferences
 
     init {

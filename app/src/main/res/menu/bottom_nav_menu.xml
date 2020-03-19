@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- TODO: add attribution for:
-        Icons made by <a href="https://www.flaticon.com/authors/ultimatearm" title="ultimatearm">ultimatearm</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
-        -->
     <item
         android:id="@+id/navigation_cumulated"
         android:icon="@drawable/ic_report"
         android:title="@string/cumulated_report_title" />
 
-    <!-- TODO: add attribution for:
-        Icons made by <a href="https://www.flaticon.com/authors/ultimatearm" title="ultimatearm">ultimatearm</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
-        -->
     <item
         android:id="@+id/navigation_per_country"
         android:icon="@drawable/ic_contagious"
         android:title="@string/reports_by_country_title" />
+
+    <item
+        android:id="@+id/navigation_about"
+        android:icon="@drawable/ic_info"
+        android:title="@string/about_title" />
 </menu>

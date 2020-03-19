@@ -2,6 +2,9 @@ package com.mobilecoronatracker.ui.countriesreports
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
@@ -10,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.mobilecoronatracker.R
 import com.mobilecoronatracker.databinding.FragmentCountriesReportsBinding
+import com.mobilecoronatracker.ui.utils.hideKeyboard
 import kotlinx.android.synthetic.main.fragment_countries_reports.*
 
 class FragmentCountriesReports : Fragment() {
@@ -21,8 +25,10 @@ class FragmentCountriesReports : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
         val binding = DataBindingUtil.inflate<FragmentCountriesReportsBinding>(
-            inflater, R.layout.fragment_countries_reports, container, false)
+            inflater, R.layout.fragment_countries_reports, container, false
+        )
         binding.adapter = adapter
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -35,10 +41,27 @@ class FragmentCountriesReports : Fragment() {
         bindObservers()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.countries_reports_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_refresh -> {
+                viewModel.onRefreshRequested()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun setupViews() {
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        countries_reports_search_view.setOnQueryTextListener(object :
+            SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(text: String?): Boolean {
                 viewModel.onFilterTextChanged(text ?: "")
+                context?.let { hideKeyboard(it, countries_reports_search_view) }
                 return true
             }
 
@@ -46,12 +69,15 @@ class FragmentCountriesReports : Fragment() {
                 viewModel.onFilterTextChanged(text ?: "")
                 return true
             }
-
         })
+
+        countries_reports_swipe_refresh.setOnRefreshListener {
+            viewModel.onRefreshRequested()
+        }
     }
 
     private fun bindObservers() {
-        viewModel.countryReports.observe(this, Observer {
+        viewModel.countryReports.observe(viewLifecycleOwner, Observer {
             adapter.reports = it
             adapter.notifyDataSetChanged()
         })

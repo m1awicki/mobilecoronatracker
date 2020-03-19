@@ -11,7 +11,7 @@
         android:paddingRight="15dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -27,7 +27,7 @@
 
             <LinearLayout
                 android:id="@+id/cumulated_cases_container"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_rect_bg"
                 android:orientation="horizontal"
@@ -40,9 +40,9 @@
                     android:id="@+id/cumulated_cases_label"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginEnd="15dp"
                     android:background="@drawable/rounded_rect_bg"
-                    android:gravity="right"
+                    android:gravity="end"
                     android:text="@string/all_identified_cases_label_text"
                     android:textSize="20sp" />
 
@@ -50,8 +50,8 @@
                     android:id="@+id/cumulated_cases"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:gravity="left"
+                    android:layout_marginStart="15dp"
+                    android:gravity="start"
                     android:text="@{viewModel.cases}"
                     android:textSize="20sp"
                     tools:text="111" />
@@ -73,8 +73,8 @@
                     android:id="@+id/cumulated_deaths_label"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
-                    android:gravity="right"
+                    android:layout_marginEnd="15dp"
+                    android:gravity="end"
                     android:text="@string/all_deaths_label_text"
                     android:textSize="20sp" />
 
@@ -82,8 +82,8 @@
                     android:id="@+id/cumulated_deaths"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:gravity="right"
+                    android:layout_marginStart="15dp"
+                    android:gravity="start"
                     android:text="@{viewModel.deaths}"
                     android:textColor="@android:color/holo_red_dark"
                     android:textSize="20sp"
@@ -106,8 +106,8 @@
                     android:id="@+id/cumulated_recovered_label"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
-                    android:gravity="right"
+                    android:layout_marginEnd="15dp"
+                    android:gravity="end"
                     android:text="@string/cumulated_recovered_label_text"
                     android:textSize="20sp" />
 
@@ -115,8 +115,8 @@
                     android:id="@+id/cumulated_recovered"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:gravity="left"
+                    android:layout_marginStart="15dp"
+                    android:gravity="start"
                     android:text="@{viewModel.recovered}"
                     android:textColor="@android:color/holo_green_dark"
                     android:textSize="20sp"

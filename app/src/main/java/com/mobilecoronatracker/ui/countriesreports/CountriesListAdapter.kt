@@ -13,6 +13,7 @@ class CountriesListAdapter : RecyclerView.Adapter<CountriesListAdapter.ViewHolde
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CountryReportModelable) {
             binding.item = item
+            binding.executePendingBindings()
         }
     }
 

@@ -77,7 +77,7 @@ class FragmentCountriesReports : Fragment() {
     }
 
     private fun bindObservers() {
-        viewModel.countryReports.observe(this, Observer {
+        viewModel.countryReports.observe(viewLifecycleOwner, Observer {
             adapter.reports = it
             adapter.notifyDataSetChanged()
         })

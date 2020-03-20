@@ -9,14 +9,28 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:background="@drawable/rounded_rect_bg"
-        android:padding="@dimen/country_report_padding">
+        android:paddingBottom="@dimen/country_report_padding">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="200dp" />
+            app:layout_constraintGuide_percent="0.6" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/start_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="10dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/end_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="10dp" />
 
         <TextView
             android:id="@+id/country_name"
@@ -25,25 +39,37 @@
             android:gravity="center"
             android:paddingBottom="10dp"
             android:text="@{item.country}"
-            android:textSize="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
+            app:layout_constraintStart_toStartOf="@+id/start_guideline"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="China" />
+
+        <ImageView
+            android:id="@+id/bookmark_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_flag"
+            android:onClick="@{() -> item.followed ? listener.onCountryUnfollowed(item.country) : listener.onCountryFollowed(item.country) }"
+            android:tint="@{item.followed ? @color/colorAccent : @android:color/darker_gray}"
+            app:layout_constraintBottom_toBottomOf="@+id/country_name"
+            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
+            app:layout_constraintTop_toTopOf="@+id/country_name" />
 
         <TextView
             android:id="@+id/cases_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cases_label_text"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/start_guideline"
             app:layout_constraintTop_toBottomOf="@id/country_name" />
 
         <TextView
             android:id="@+id/cases"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{String.valueOf(item.cases)}"
+            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
             app:layout_constraintStart_toStartOf="@id/guideline"
             app:layout_constraintTop_toBottomOf="@id/country_name"
             tools:text="123" />
@@ -53,14 +79,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/today_cases_label_text"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/start_guideline"
             app:layout_constraintTop_toBottomOf="@id/cases_label" />
 
         <TextView
             android:id="@+id/today_cases"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{String.valueOf(item.todayCases)}"
+            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
             app:layout_constraintStart_toStartOf="@id/guideline"
             app:layout_constraintTop_toBottomOf="@id/cases"
             tools:text="123" />
@@ -70,14 +97,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/deaths_label_text"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/start_guideline"
             app:layout_constraintTop_toBottomOf="@id/today_cases_label" />
 
         <TextView
             android:id="@+id/deaths"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{String.valueOf(item.deaths)}"
+            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
             app:layout_constraintStart_toStartOf="@id/guideline"
             app:layout_constraintTop_toBottomOf="@id/today_cases"
             tools:text="123" />
@@ -87,14 +115,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/today_deaths_label_text"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/start_guideline"
             app:layout_constraintTop_toBottomOf="@id/deaths_label" />
 
         <TextView
             android:id="@+id/today_deaths"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{String.valueOf(item.todayDeaths)}"
+            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
             app:layout_constraintStart_toStartOf="@id/guideline"
             app:layout_constraintTop_toBottomOf="@id/deaths"
             tools:text="123" />
@@ -104,14 +133,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/recovered_label_text"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/start_guideline"
             app:layout_constraintTop_toBottomOf="@id/today_deaths_label" />
 
         <TextView
             android:id="@+id/recovered"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{String.valueOf(item.recovered)}"
+            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
             app:layout_constraintStart_toStartOf="@id/guideline"
             app:layout_constraintTop_toBottomOf="@id/today_deaths"
             tools:text="123" />
@@ -121,14 +151,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/critical_label_text"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/start_guideline"
             app:layout_constraintTop_toBottomOf="@id/recovered_label" />
 
         <TextView
             android:id="@+id/critical"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{String.valueOf(item.critical)}"
+            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
             app:layout_constraintStart_toStartOf="@id/guideline"
             app:layout_constraintTop_toBottomOf="@id/recovered"
             tools:text="123" />
@@ -138,14 +169,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/active_label_text"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/start_guideline"
             app:layout_constraintTop_toBottomOf="@id/critical_label" />
 
         <TextView
             android:id="@+id/active"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{String.valueOf(item.active)}"
+            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
             app:layout_constraintStart_toStartOf="@id/guideline"
             app:layout_constraintTop_toBottomOf="@id/critical"
             tools:text="123" />
@@ -154,8 +186,14 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="item"
             type="com.mobilecoronatracker.model.CountryReportModelable" />
+
+        <variable
+            name="listener"
+            type="com.mobilecoronatracker.ui.countriesreports.CountryFollowListener" />
     </data>
 </layout>

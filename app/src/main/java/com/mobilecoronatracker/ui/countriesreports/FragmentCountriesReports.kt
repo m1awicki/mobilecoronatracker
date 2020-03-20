@@ -12,13 +12,18 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.mobilecoronatracker.R
+import com.mobilecoronatracker.data.persistence.impl.SharedPreferencesCountriesFollowRepo
 import com.mobilecoronatracker.databinding.FragmentCountriesReportsBinding
 import com.mobilecoronatracker.ui.utils.hideKeyboard
 import kotlinx.android.synthetic.main.fragment_countries_reports.*
 
 class FragmentCountriesReports : Fragment() {
-    private val viewModel = CountriesListViewModel()
-    private val adapter = CountriesListAdapter()
+    private val viewModel by lazy {
+        CountriesListViewModel(SharedPreferencesCountriesFollowRepo(requireContext()))
+    }
+    private val adapter by lazy {
+        CountriesListAdapter()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,6 +34,7 @@ class FragmentCountriesReports : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentCountriesReportsBinding>(
             inflater, R.layout.fragment_countries_reports, container, false
         )
+        adapter.listener = viewModel
         binding.adapter = adapter
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -39,6 +45,11 @@ class FragmentCountriesReports : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupViews()
         bindObservers()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        adapter.listener = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

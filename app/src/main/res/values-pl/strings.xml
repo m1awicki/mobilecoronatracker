@@ -18,4 +18,6 @@
     <string name="critical_label_text">W stanie krytycznym:</string>
     <string name="about_text">Ta aplikacja jest darmowa i została stworzona aby ułatwić śledzenie postępu pandemii COVID-19 - choroby powodowanej przez koronawirusa SARS-CoV-2, który został odkryty w 2019 roku w Wuhan (Chiny).</string>
     <string name="active_label_text">Aktywne:</string>
+    <string name="more_data">Więcej danych</string>
+
 </resources>

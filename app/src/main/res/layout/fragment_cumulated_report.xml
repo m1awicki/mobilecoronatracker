@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="200dp" />
+                app:layout_constraintGuide_begin="240dp" />
 
             <LinearLayout
                 android:id="@+id/cumulated_cases_container"
@@ -38,7 +38,7 @@
 
                 <TextView
                     android:id="@+id/cumulated_cases_label"
-                    android:layout_width="200dp"
+                    android:layout_width="230dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="15dp"
                     android:background="@drawable/rounded_rect_bg"
@@ -54,7 +54,7 @@
                     android:gravity="start"
                     android:text="@{viewModel.cases}"
                     android:textSize="20sp"
-                    tools:text="111" />
+                    tools:text="123456789" />
             </LinearLayout>
 
             <LinearLayout
@@ -71,7 +71,7 @@
 
                 <TextView
                     android:id="@+id/cumulated_deaths_label"
-                    android:layout_width="200dp"
+                    android:layout_width="230dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="15dp"
                     android:gravity="end"
@@ -104,7 +104,7 @@
 
                 <TextView
                     android:id="@+id/cumulated_recovered_label"
-                    android:layout_width="200dp"
+                    android:layout_width="230dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="15dp"
                     android:gravity="end"

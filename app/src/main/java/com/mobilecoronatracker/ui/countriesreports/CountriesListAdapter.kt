@@ -6,13 +6,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mobilecoronatracker.databinding.ItemCountryReportBinding
 import com.mobilecoronatracker.model.CountryReportModelable
 
-class CountriesListAdapter : RecyclerView.Adapter<CountriesListAdapter.ViewHolder>() {
+
+class CountriesListAdapter :
+    RecyclerView.Adapter<CountriesListAdapter.ViewHolder>() {
     var reports = emptyList<CountryReportModelable>()
+    var listener: CountryFollowListener? = null
 
     inner class ViewHolder(private val binding: ItemCountryReportBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CountryReportModelable) {
             binding.item = item
+            binding.listener = listener
             binding.executePendingBindings()
         }
     }
@@ -25,5 +29,6 @@ class CountriesListAdapter : RecyclerView.Adapter<CountriesListAdapter.ViewHolde
 
     override fun getItemCount(): Int = reports.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(reports[position])
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
+        holder.bind(reports[position])
 }

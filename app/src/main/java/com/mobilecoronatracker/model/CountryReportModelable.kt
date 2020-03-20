@@ -1,12 +1,13 @@
 package com.mobilecoronatracker.model
 
 interface CountryReportModelable {
-    var country: String
-    var cases: Int
-    var todayCases: Int
-    var deaths: Int
-    var todayDeaths: Int
-    var recovered: Int
-    var critical: Int
-    var active: Int
+    val country: String
+    val cases: Int
+    val todayCases: Int
+    val deaths: Int
+    val todayDeaths: Int
+    val recovered: Int
+    val critical: Int
+    val active: Int
+    var followed: Boolean
 }

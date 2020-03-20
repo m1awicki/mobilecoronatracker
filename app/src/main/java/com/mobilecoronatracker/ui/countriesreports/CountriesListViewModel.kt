@@ -9,13 +9,14 @@ import com.mobilecoronatracker.data.source.CovidDataSource
 import com.mobilecoronatracker.model.CountryReportModelable
 import java.util.Locale
 
-class CountriesListViewModel(private val countriesFollowRepo: CountriesFollowRepo) :
-    ViewModel(), CountriesListViewModelable, CovidCountriesDataObserver, CountryFollowListener {
+class CountriesListViewModel(
+    private val countriesFollowRepo: CountriesFollowRepo,
+    private val dataSource: CovidDataSource
+) : ViewModel(), CountriesListViewModelable, CovidCountriesDataObserver {
     private var currentList: List<CountryReportModelable> = emptyList()
     private var currentFilterText: String = ""
     override val countryReports = MutableLiveData<List<CountryReportModelable>>()
     override val isRefreshing = MutableLiveData<Boolean>()
-    private val dataSource: CovidDataSource by inject() //missing inport
 
     init {
         isRefreshing.postValue(true)
@@ -42,14 +43,19 @@ class CountriesListViewModel(private val countriesFollowRepo: CountriesFollowRep
         dataSource.requestData()
     }
 
-    override fun onCountryFollowed(countryName: String) {
+    override fun onFollowRequested(countryName: String) {
         countriesFollowRepo.addFollowedCountry(countryName)
         postFilteredList()
     }
 
-    override fun onCountryUnfollowed(countryName: String) {
+    override fun onUnfollowRequested(countryName: String) {
         countriesFollowRepo.removeFollowedCountry(countryName)
         postFilteredList()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        dataSource.removeCovidCountriesDataObserver(this)
     }
 
     private fun postFilteredList() {

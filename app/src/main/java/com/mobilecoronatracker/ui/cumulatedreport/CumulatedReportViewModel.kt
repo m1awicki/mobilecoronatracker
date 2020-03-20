@@ -5,15 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mobilecoronatracker.data.source.CovidCumulatedDataObserver
 import com.mobilecoronatracker.data.source.CovidDataSource
-import com.mobilecoronatracker.data.source.impl.CovidRestDataReader
 import com.mobilecoronatracker.model.GeneralReportModelable
 
-class CumulatedReportViewModel : ViewModel(), CumulatedReportViewModelable,
+class CumulatedReportViewModel(private val dataSource: CovidDataSource) : ViewModel(),
+    CumulatedReportViewModelable,
     CovidCumulatedDataObserver {
     override val cases = MutableLiveData<String>()
     override val deaths = MutableLiveData<String>()
     override val recovered = MutableLiveData<String>()
-    private var dataSource: CovidDataSource = CovidRestDataReader()
 
     init {
         cases.value = "???"
@@ -30,5 +29,10 @@ class CumulatedReportViewModel : ViewModel(), CumulatedReportViewModelable,
 
     override fun onError() {
         Log.e(CumulatedReportViewModel::class.java.simpleName, "onError")
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        dataSource.removeCovidCumulatedDataObserver(this)
     }
 }

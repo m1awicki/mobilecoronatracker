@@ -12,15 +12,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.mobilecoronatracker.R
-import com.mobilecoronatracker.data.persistence.impl.SharedPreferencesCountriesFollowRepo
 import com.mobilecoronatracker.databinding.FragmentCountriesReportsBinding
 import com.mobilecoronatracker.ui.utils.hideKeyboard
 import kotlinx.android.synthetic.main.fragment_countries_reports.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FragmentCountriesReports : Fragment() {
-    private val viewModel by lazy {
-        CountriesListViewModel(SharedPreferencesCountriesFollowRepo(requireContext()))
-    }
+class FragmentCountriesReports : Fragment(), CountryFollowListener {
+    private val viewModel: CountriesListViewModelable by viewModel<CountriesListViewModel>()
     private val adapter by lazy {
         CountriesListAdapter()
     }
@@ -34,7 +32,7 @@ class FragmentCountriesReports : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentCountriesReportsBinding>(
             inflater, R.layout.fragment_countries_reports, container, false
         )
-        adapter.listener = viewModel
+        adapter.listener = this
         binding.adapter = adapter
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -65,6 +63,14 @@ class FragmentCountriesReports : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onCountryFollowed(countryName: String) {
+        viewModel.onFollowRequested(countryName)
+    }
+
+    override fun onCountryUnfollowed(countryName: String) {
+        viewModel.onUnfollowRequested(countryName)
     }
 
     private fun setupViews() {

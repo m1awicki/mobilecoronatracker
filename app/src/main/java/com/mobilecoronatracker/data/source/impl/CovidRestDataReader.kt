@@ -12,7 +12,7 @@ import com.mobilecoronatracker.model.GeneralReportModel
 import com.mobilecoronatracker.model.pojo.CovidCountryEntry
 import com.mobilecoronatracker.model.pojo.CovidCumulatedData
 import java.io.IOException
-import java.util.*
+import java.util.LinkedList
 import java.util.concurrent.ScheduledThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 
@@ -32,7 +32,7 @@ class CovidRestDataReader : CovidDataSource {
     override fun addCovidCountriesDataObserver(observer: CovidCountriesDataObserver) {
         if (observersCountries.contains(observer)) return
         observersCountries.add(observer)
-        if (observersCountries.size == 1) {
+        if (observersCountries.size > 0) {
             scheduleReading(0)
         }
     }
@@ -44,7 +44,7 @@ class CovidRestDataReader : CovidDataSource {
     override fun addCovidCumulatedDataObserver(observer: CovidCumulatedDataObserver) {
         if (observersCumulated.contains(observer)) return
         observersCumulated.add(observer)
-        if (observersCumulated.size == 1) {
+        if (observersCumulated.size > 0) {
             scheduleReading(0)
         }
     }
@@ -94,7 +94,13 @@ class CovidRestDataReader : CovidDataSource {
                 conn.getInputStream(),
                 CovidCumulatedData::class.java
             )
-            observersCumulated.forEach { observer -> observer.onCumulatedData(GeneralReportModel(data)) }
+            observersCumulated.forEach { observer ->
+                observer.onCumulatedData(
+                    GeneralReportModel(
+                        data
+                    )
+                )
+            }
         } catch (e: IOException) {
             e.printStackTrace()
             observersCumulated.forEach { observer -> observer.onError() }

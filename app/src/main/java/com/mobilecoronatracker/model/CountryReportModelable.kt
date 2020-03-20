@@ -10,5 +10,4 @@ interface CountryReportModelable {
     val critical: Int
     val active: Int
     var followed: Boolean
-    val hasMoreData: Boolean
 }

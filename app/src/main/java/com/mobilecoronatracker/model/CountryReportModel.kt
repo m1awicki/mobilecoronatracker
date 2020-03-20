@@ -11,8 +11,7 @@ data class CountryReportModel(
     override val recovered: Int,
     override val critical: Int,
     override val active: Int,
-    override var followed: Boolean,
-    override val hasMoreData: Boolean
+    override var followed: Boolean
 ) : CountryReportModelable {
     constructor(data: CovidCountryEntry) :
             this(
@@ -24,7 +23,6 @@ data class CountryReportModel(
                 data.recovered,
                 data.critical,
                 data.active,
-                followed = false,
-                hasMoreData = false
+                followed = false
             )
 }

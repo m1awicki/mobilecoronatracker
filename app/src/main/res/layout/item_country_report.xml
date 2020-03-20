@@ -9,8 +9,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:background="@drawable/rounded_rect_bg"
-        android:paddingBottom="@{item.hasMoreData ? @dimen/zero_padding : @dimen/country_report_padding, default=@dimen/country_report_padding}"
-        tools:paddingBottom="0dp">
+        android:paddingBottom="@dimen/country_report_padding">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
@@ -182,25 +181,6 @@
             app:layout_constraintStart_toStartOf="@id/guideline"
             app:layout_constraintTop_toBottomOf="@id/critical"
             tools:text="123" />
-
-        <TextView
-            android:id="@+id/more_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/rounded_bottom_rect_bg"
-            android:backgroundTint="@color/colorAccent"
-            android:gravity="center"
-            android:padding="4dp"
-            android:text="@string/more_data"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
-            android:visibility="@{item.hasMoreData ? View.VISIBLE : View.GONE, default=gone}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
-            app:layout_constraintStart_toStartOf="@+id/start_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/active_label"
-            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

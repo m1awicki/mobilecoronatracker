@@ -7,7 +7,7 @@ import com.mobilecoronatracker.databinding.ItemCountryReportBinding
 import com.mobilecoronatracker.model.CountryReportModelable
 
 
-class CountriesListAdapter() :
+class CountriesListAdapter :
     RecyclerView.Adapter<CountriesListAdapter.ViewHolder>() {
     var reports = emptyList<CountryReportModelable>()
     var listener: CountryFollowListener? = null

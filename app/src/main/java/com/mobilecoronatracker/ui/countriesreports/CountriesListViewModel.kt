@@ -11,7 +11,7 @@ import com.mobilecoronatracker.model.CountryReportModelable
 import java.util.Locale
 
 class CountriesListViewModel(private val countriesFollowRepo: CountriesFollowRepo) :
-    ViewModel(), CountriesListViewModelable, CovidCountriesDataObserver {
+    ViewModel(), CountriesListViewModelable, CovidCountriesDataObserver, CountryFollowListener {
     private var currentList: List<CountryReportModelable> = emptyList()
     private var currentFilterText: String = ""
     override val countryReports = MutableLiveData<List<CountryReportModelable>>()

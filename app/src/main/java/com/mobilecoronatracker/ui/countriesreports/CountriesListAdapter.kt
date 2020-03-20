@@ -5,24 +5,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mobilecoronatracker.databinding.ItemCountryReportBinding
 import com.mobilecoronatracker.model.CountryReportModelable
-import kotlinx.android.synthetic.main.item_country_report.view.*
 
 
-class CountriesListAdapter(val viewModel: CountriesListViewModelable) :
+class CountriesListAdapter() :
     RecyclerView.Adapter<CountriesListAdapter.ViewHolder>() {
     var reports = emptyList<CountryReportModelable>()
+    var listener: CountryFollowListener? = null
 
     inner class ViewHolder(private val binding: ItemCountryReportBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CountryReportModelable) {
-            binding.root.bookmark_button.setOnClickListener {
-                if (item.followed) {
-                    viewModel.onCountryUnfollowed(item.country)
-                } else {
-                    viewModel.onCountryFollowed(item.country)
-                }
-            }
             binding.item = item
+            binding.listener = listener
             binding.executePendingBindings()
         }
     }

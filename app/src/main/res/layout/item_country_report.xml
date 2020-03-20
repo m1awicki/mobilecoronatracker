@@ -51,6 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_flag"
+            android:onClick="@{() -> item.followed ? listener.onCountryUnfollowed(item.country) : listener.onCountryFollowed(item.country) }"
             android:tint="@{item.followed ? @color/colorAccent : @android:color/darker_gray}"
             app:layout_constraintBottom_toBottomOf="@+id/country_name"
             app:layout_constraintEnd_toEndOf="@+id/end_guideline"
@@ -210,5 +211,9 @@
         <variable
             name="item"
             type="com.mobilecoronatracker.model.CountryReportModelable" />
+
+        <variable
+            name="listener"
+            type="com.mobilecoronatracker.ui.countriesreports.CountryFollowListener" />
     </data>
 </layout>

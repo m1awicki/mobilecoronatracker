@@ -22,7 +22,7 @@ class FragmentCountriesReports : Fragment() {
         CountriesListViewModel(SharedPreferencesCountriesFollowRepo(requireContext()))
     }
     private val adapter by lazy {
-        CountriesListAdapter(viewModel)
+        CountriesListAdapter()
     }
 
     override fun onCreateView(
@@ -34,6 +34,7 @@ class FragmentCountriesReports : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentCountriesReportsBinding>(
             inflater, R.layout.fragment_countries_reports, container, false
         )
+        adapter.listener = viewModel
         binding.adapter = adapter
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -44,6 +45,11 @@ class FragmentCountriesReports : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupViews()
         bindObservers()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        adapter.listener = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import com.mobilecoronatracker.data.persistence.CountriesFollowRepo
 import com.mobilecoronatracker.data.source.CovidCountriesDataObserver
 import com.mobilecoronatracker.data.source.CovidDataSource
-import com.mobilecoronatracker.data.source.impl.CovidRestDataReader
 import com.mobilecoronatracker.model.CountryReportModelable
 import java.util.Locale
 
@@ -16,7 +15,7 @@ class CountriesListViewModel(private val countriesFollowRepo: CountriesFollowRep
     private var currentFilterText: String = ""
     override val countryReports = MutableLiveData<List<CountryReportModelable>>()
     override val isRefreshing = MutableLiveData<Boolean>()
-    private var dataSource: CovidDataSource = CovidRestDataReader()
+    private val dataSource: CovidDataSource by inject() //missing inport
 
     init {
         isRefreshing.postValue(true)

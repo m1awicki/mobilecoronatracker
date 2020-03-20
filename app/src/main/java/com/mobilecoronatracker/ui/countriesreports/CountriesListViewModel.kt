@@ -43,12 +43,12 @@ class CountriesListViewModel(
         dataSource.requestData()
     }
 
-    override fun onFollowRequested(countryName: String) {
+    override fun onCountryFollowed(countryName: String) {
         countriesFollowRepo.addFollowedCountry(countryName)
         postFilteredList()
     }
 
-    override fun onUnfollowRequested(countryName: String) {
+    override fun onCountryUnfollowed(countryName: String) {
         countriesFollowRepo.removeFollowedCountry(countryName)
         postFilteredList()
     }

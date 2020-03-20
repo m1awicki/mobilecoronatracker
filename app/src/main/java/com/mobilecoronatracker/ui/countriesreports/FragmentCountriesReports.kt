@@ -17,7 +17,7 @@ import com.mobilecoronatracker.ui.utils.hideKeyboard
 import kotlinx.android.synthetic.main.fragment_countries_reports.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FragmentCountriesReports : Fragment(), CountryFollowListener {
+class FragmentCountriesReports : Fragment() {
     private val viewModel: CountriesListViewModelable by viewModel<CountriesListViewModel>()
     private val adapter by lazy {
         CountriesListAdapter()
@@ -32,7 +32,7 @@ class FragmentCountriesReports : Fragment(), CountryFollowListener {
         val binding = DataBindingUtil.inflate<FragmentCountriesReportsBinding>(
             inflater, R.layout.fragment_countries_reports, container, false
         )
-        adapter.listener = this
+        adapter.listener = viewModel
         binding.adapter = adapter
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -63,14 +63,6 @@ class FragmentCountriesReports : Fragment(), CountryFollowListener {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onCountryFollowed(countryName: String) {
-        viewModel.onFollowRequested(countryName)
-    }
-
-    override fun onCountryUnfollowed(countryName: String) {
-        viewModel.onUnfollowRequested(countryName)
     }
 
     private fun setupViews() {

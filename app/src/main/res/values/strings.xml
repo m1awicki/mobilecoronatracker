@@ -8,9 +8,9 @@
     <string name="recovered_label_text">Recovered:</string>
     <string name="critical_label_text">Critical:</string>
     <string name="active_label_text">Active:</string>
-    <string name="all_identified_cases_label_text">All identified cases:</string>
-    <string name="all_deaths_label_text">All deaths:</string>
-    <string name="cumulated_recovered_label_text">All recovered:</string>
+    <string name="all_identified_cases_label_text">All identified cases</string>
+    <string name="all_deaths_label_text">All deaths</string>
+    <string name="cumulated_recovered_label_text">All recovered</string>
     <string name="reports_by_country_title">Reports By Country</string>
     <string name="cumulated_report_title">Cumulated Report</string>
     <string name="menu_refresh">Refresh</string>

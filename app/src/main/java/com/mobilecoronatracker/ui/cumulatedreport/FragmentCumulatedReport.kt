@@ -6,11 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
 import com.mobilecoronatracker.R
 import com.mobilecoronatracker.databinding.FragmentCumulatedReportBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FragmentCumulatedReport : Fragment() {
-    private val viewModel = CumulatedReportViewModel()
+    private val viewModel: CumulatedReportViewModelable by viewModel<CumulatedReportViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

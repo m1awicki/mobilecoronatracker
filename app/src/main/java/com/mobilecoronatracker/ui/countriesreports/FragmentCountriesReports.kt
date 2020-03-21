@@ -12,15 +12,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.mobilecoronatracker.R
-import com.mobilecoronatracker.data.persistence.impl.SharedPreferencesCountriesFollowRepo
 import com.mobilecoronatracker.databinding.FragmentCountriesReportsBinding
 import com.mobilecoronatracker.ui.utils.hideKeyboard
 import kotlinx.android.synthetic.main.fragment_countries_reports.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FragmentCountriesReports : Fragment() {
-    private val viewModel by lazy {
-        CountriesListViewModel(SharedPreferencesCountriesFollowRepo(requireContext()))
-    }
+    private val viewModel: CountriesListViewModelable by viewModel<CountriesListViewModel>()
     private val adapter by lazy {
         CountriesListAdapter()
     }

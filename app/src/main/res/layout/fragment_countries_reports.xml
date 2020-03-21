@@ -45,7 +45,7 @@
 
         <variable
             name="viewModel"
-            type="com.mobilecoronatracker.ui.countriesreports.CountriesListViewModel" />
+            type="com.mobilecoronatracker.ui.countriesreports.CountriesListViewModelable" />
 
         <variable
             name="adapter"

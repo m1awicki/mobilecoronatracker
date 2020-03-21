@@ -129,6 +129,6 @@
 
         <variable
             name="viewModel"
-            type="com.mobilecoronatracker.ui.cumulatedreport.CumulatedReportViewModel" />
+            type="com.mobilecoronatracker.ui.cumulatedreport.CumulatedReportViewModelable" />
     </data>
 </layout>

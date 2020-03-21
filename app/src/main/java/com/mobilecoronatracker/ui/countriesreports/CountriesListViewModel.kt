@@ -6,17 +6,17 @@ import androidx.lifecycle.ViewModel
 import com.mobilecoronatracker.data.persistence.CountriesFollowRepo
 import com.mobilecoronatracker.data.source.CovidCountriesDataObserver
 import com.mobilecoronatracker.data.source.CovidDataSource
-import com.mobilecoronatracker.data.source.impl.CovidRestDataReader
 import com.mobilecoronatracker.model.CountryReportModelable
 import java.util.Locale
 
-class CountriesListViewModel(private val countriesFollowRepo: CountriesFollowRepo) :
-    ViewModel(), CountriesListViewModelable, CovidCountriesDataObserver, CountryFollowListener {
+class CountriesListViewModel(
+    private val countriesFollowRepo: CountriesFollowRepo,
+    private val dataSource: CovidDataSource
+) : ViewModel(), CountriesListViewModelable, CovidCountriesDataObserver {
     private var currentList: List<CountryReportModelable> = emptyList()
     private var currentFilterText: String = ""
     override val countryReports = MutableLiveData<List<CountryReportModelable>>()
     override val isRefreshing = MutableLiveData<Boolean>()
-    private var dataSource: CovidDataSource = CovidRestDataReader()
 
     init {
         isRefreshing.postValue(true)
@@ -51,6 +51,11 @@ class CountriesListViewModel(private val countriesFollowRepo: CountriesFollowRep
     override fun onCountryUnfollowed(countryName: String) {
         countriesFollowRepo.removeFollowedCountry(countryName)
         postFilteredList()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        dataSource.removeCovidCountriesDataObserver(this)
     }
 
     private fun postFilteredList() {

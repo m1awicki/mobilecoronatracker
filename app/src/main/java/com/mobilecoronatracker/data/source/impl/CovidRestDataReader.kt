@@ -12,7 +12,7 @@ import com.mobilecoronatracker.model.GeneralReportModel
 import com.mobilecoronatracker.model.pojo.CovidCountryEntry
 import com.mobilecoronatracker.model.pojo.CovidCumulatedData
 import java.io.IOException
-import java.util.*
+import java.util.LinkedList
 import java.util.concurrent.ScheduledThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 
@@ -24,6 +24,8 @@ class CovidRestDataReader : CovidDataSource {
     private val observersCountries: LinkedList<CovidCountriesDataObserver> = LinkedList()
     private val taskExecutor: ScheduledThreadPoolExecutor = ScheduledThreadPoolExecutor(1)
     private var refreshInterval = DEFAULT_INTERVAL
+    private var currentCountriesReports: List<CountryReportModel>? = null
+    private var currentGeneralReportModel: GeneralReportModel? = null
 
     override fun setRefreshInterval(seconds: Long) {
         if (seconds in 1..MAX_INTERVAL) refreshInterval = seconds
@@ -34,6 +36,10 @@ class CovidRestDataReader : CovidDataSource {
         observersCountries.add(observer)
         if (observersCountries.size == 1) {
             scheduleReading(0)
+        } else {
+            currentCountriesReports?.let {
+                observer.onCountriesData(it)
+            } ?: run { observer.onError() }
         }
     }
 
@@ -46,6 +52,10 @@ class CovidRestDataReader : CovidDataSource {
         observersCumulated.add(observer)
         if (observersCumulated.size == 1) {
             scheduleReading(0)
+        } else {
+            currentGeneralReportModel?.let {
+                observer.onCumulatedData(it)
+            } ?: run { observer.onError() }
         }
     }
 
@@ -94,7 +104,10 @@ class CovidRestDataReader : CovidDataSource {
                 conn.getInputStream(),
                 CovidCumulatedData::class.java
             )
-            observersCumulated.forEach { observer -> observer.onCumulatedData(GeneralReportModel(data)) }
+            currentGeneralReportModel = GeneralReportModel(data)
+            observersCumulated.forEach { observer ->
+                currentGeneralReportModel?.let { observer.onCumulatedData(it) }
+            }
         } catch (e: IOException) {
             e.printStackTrace()
             observersCumulated.forEach { observer -> observer.onError() }
@@ -107,9 +120,11 @@ class CovidRestDataReader : CovidDataSource {
                 output,
                 Array<CovidCountryEntry>::class.java
             )
-            val mappedEntries =
+            currentCountriesReports =
                 entries.map { covidCountryEntry -> CountryReportModel(covidCountryEntry) }
-            observersCountries.forEach { observer -> observer.onCountriesData(mappedEntries) }
+            observersCountries.forEach { observer ->
+                currentCountriesReports?.let { observer.onCountriesData(it) }
+            }
         } catch (e: IOException) {
             e.printStackTrace()
             observersCountries.forEach { observer -> observer.onError() }

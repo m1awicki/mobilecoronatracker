@@ -18,13 +18,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="240dp" />
-
             <LinearLayout
                 android:id="@+id/cumulated_cases_container"
                 android:layout_width="0dp"
@@ -49,7 +42,6 @@
                     android:id="@+id/cumulated_cases"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
                     android:gravity="center"
                     android:text="@{viewModel.cases}"
                     android:textSize="20sp"

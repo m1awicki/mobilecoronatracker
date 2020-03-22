@@ -8,20 +8,23 @@ import com.mobilecoronatracker.model.CountryReportModel
 import com.mobilecoronatracker.model.CountryReportModelable
 import com.mobilecoronatracker.model.GeneralReportModel
 import com.mobilecoronatracker.model.GeneralReportModelable
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
-class CovidDataRepoImpl(private val covidApi: CovidApi) : CovidDataRepo {
+class CovidDataRepoImpl(
+    private val covidApi: CovidApi,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+) : CovidDataRepo {
     override suspend fun getCountriesData(): List<CountryReportModelable> {
-        return when (val safeApiCallResult =
-            safeApiCall { covidApi.getCountriesData() }) {
-            is NetworkResult.ResponseResult -> safeApiCallResult.data.map { CountryReportModel(it) }
+        return when (val callResult = safeApiCall(dispatcher) { covidApi.getCountriesData() }) {
+            is NetworkResult.ResponseResult -> callResult.data.map { CountryReportModel(it) }
             is NetworkResult.ErrorResult -> emptyList()
         }
     }
 
     override suspend fun getCumulatedData(): GeneralReportModelable {
-        return when (val safeApiCallResult =
-            safeApiCall { covidApi.getCumulatedData() }) {
-            is NetworkResult.ResponseResult -> GeneralReportModel(safeApiCallResult.data)
+        return when (val callResult = safeApiCall(dispatcher) { covidApi.getCumulatedData() }) {
+            is NetworkResult.ResponseResult -> GeneralReportModel(callResult.data)
             is NetworkResult.ErrorResult -> GeneralReportModel(0, 0, 0)
         }
     }

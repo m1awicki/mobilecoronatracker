@@ -1,10 +1,17 @@
 package com.mobilecoronatracker.data.networking
 
-suspend fun <T> safeApiCall(apiCall: suspend () -> T): NetworkResult<T> {
-    return try {
-        NetworkResult.ResponseResult(apiCall.invoke())
-    } catch (e: Exception) {
-        //TODO: handle different types of errors
-        NetworkResult.ErrorResult(Throwable(e))
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
+
+suspend fun <T> safeApiCall(
+    dispatcher: CoroutineDispatcher,
+    apiCall: suspend () -> T
+): NetworkResult<T> {
+    return withContext(dispatcher) {
+        try {
+            NetworkResult.ResponseResult(apiCall.invoke())
+        } catch (e: Exception) {
+            NetworkResult.ErrorResult(Throwable(e))
+        }
     }
 }

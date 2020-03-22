@@ -1,6 +1,4 @@
-package com.mobilecoronatracker.data.networking.impl
-
-import com.mobilecoronatracker.data.networking.NetworkResult
+package com.mobilecoronatracker.data.networking
 
 suspend fun <T> safeApiCall(apiCall: suspend () -> T): NetworkResult<T> {
     return try {

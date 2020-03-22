@@ -29,6 +29,7 @@ class FragmentCountriesReports : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
+
         val binding = DataBindingUtil.inflate<FragmentCountriesReportsBinding>(
             inflater, R.layout.fragment_countries_reports, container, false
         )
@@ -51,7 +52,7 @@ class FragmentCountriesReports : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.countries_reports_menu, menu)
+        inflater.inflate(R.menu.reports_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 

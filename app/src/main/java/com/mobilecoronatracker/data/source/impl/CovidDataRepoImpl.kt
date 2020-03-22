@@ -4,10 +4,10 @@ import com.mobilecoronatracker.data.networking.NetworkResult
 import com.mobilecoronatracker.data.networking.safeApiCall
 import com.mobilecoronatracker.data.source.CovidApi
 import com.mobilecoronatracker.data.source.CovidDataRepo
-import com.mobilecoronatracker.model.CountryReportModel
 import com.mobilecoronatracker.model.CountryReportModelable
-import com.mobilecoronatracker.model.GeneralReportModel
 import com.mobilecoronatracker.model.GeneralReportModelable
+import com.mobilecoronatracker.model.impl.CountryReportModel
+import com.mobilecoronatracker.model.impl.GeneralReportModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 

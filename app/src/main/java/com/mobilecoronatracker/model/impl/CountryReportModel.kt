@@ -1,5 +1,6 @@
-package com.mobilecoronatracker.model
+package com.mobilecoronatracker.model.impl
 
+import com.mobilecoronatracker.model.CountryReportModelable
 import com.mobilecoronatracker.model.pojo.CovidCountryEntry
 
 data class CountryReportModel(

@@ -1,4 +1,4 @@
-# Android application to track SARS-CoV-2 outbreak.
+## Android application to track SARS-CoV-2 outbreak  [![Build Status](https://app.bitrise.io/app/0515e0e25fb4fe41/status.svg?token=FtIcpOJKQ9gQ8a1XTYcWwQ&branch=master)](https://app.bitrise.io/app/0515e0e25fb4fe41) ##
 
 SARS-CoV-2 is a coronavirus causing COVID-19 disease. This application lets user track progress of the pandemic.
 Data source used by the application is provided by: https://github.com/NovelCOVID/API

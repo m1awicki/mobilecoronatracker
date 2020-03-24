@@ -1,36 +1,26 @@
 package com.mobilecoronatracker.ui.countriesreports
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mobilecoronatracker.data.persistence.CountriesFollowRepo
-import com.mobilecoronatracker.data.source.CovidCountriesDataObserver
-import com.mobilecoronatracker.data.source.CovidDataSource
+import com.mobilecoronatracker.data.source.CovidDataRepo
 import com.mobilecoronatracker.model.CountryReportModelable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 class CountriesListViewModel(
     private val countriesFollowRepo: CountriesFollowRepo,
-    private val dataSource: CovidDataSource
-) : ViewModel(), CountriesListViewModelable, CovidCountriesDataObserver {
+    private val covidDataRepo: CovidDataRepo
+) : ViewModel(), CountriesListViewModelable {
     private var currentList: List<CountryReportModelable> = emptyList()
     private var currentFilterText: String = ""
     override val countryReports = MutableLiveData<List<CountryReportModelable>>()
     override val isRefreshing = MutableLiveData<Boolean>()
 
     init {
-        isRefreshing.postValue(true)
-        dataSource.addCovidCountriesDataObserver(this)
-    }
-
-    override fun onCountriesData(data: List<CountryReportModelable>) {
-        currentList = data
-        postFilteredList()
-    }
-
-    override fun onError() {
-        Log.e(CountriesListViewModel::class.java.simpleName, "onError")
-        isRefreshing.postValue(false)
+        refreshData()
     }
 
     override fun onFilterTextChanged(text: String) {
@@ -39,8 +29,7 @@ class CountriesListViewModel(
     }
 
     override fun onRefreshRequested() {
-        isRefreshing.postValue(true)
-        dataSource.requestData()
+        refreshData()
     }
 
     override fun onCountryFollowed(countryName: String) {
@@ -53,9 +42,12 @@ class CountriesListViewModel(
         postFilteredList()
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        dataSource.removeCovidCountriesDataObserver(this)
+    private fun refreshData() {
+        isRefreshing.postValue(true)
+        viewModelScope.launch(Dispatchers.IO) {
+            currentList = covidDataRepo.getCountriesData()
+            postFilteredList()
+        }
     }
 
     private fun postFilteredList() {

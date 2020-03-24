@@ -1,38 +1,44 @@
 package com.mobilecoronatracker.ui.cumulatedreport
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mobilecoronatracker.data.source.CovidCumulatedDataObserver
-import com.mobilecoronatracker.data.source.CovidDataSource
+import androidx.lifecycle.viewModelScope
+import com.mobilecoronatracker.data.source.CovidDataRepo
 import com.mobilecoronatracker.model.GeneralReportModelable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class CumulatedReportViewModel(private val dataSource: CovidDataSource) : ViewModel(),
-    CumulatedReportViewModelable,
-    CovidCumulatedDataObserver {
+class CumulatedReportViewModel(private val covidDataRepo: CovidDataRepo) : ViewModel(),
+    CumulatedReportViewModelable {
     override val cases = MutableLiveData<String>()
     override val deaths = MutableLiveData<String>()
     override val recovered = MutableLiveData<String>()
+    override val isRefreshing = MutableLiveData<Boolean>()
 
     init {
         cases.value = "???"
         deaths.value = "???"
         recovered.value = "???"
-        dataSource.addCovidCumulatedDataObserver(this)
+        refreshData()
     }
 
-    override fun onCumulatedData(data: GeneralReportModelable) {
+    private fun refreshData() {
+        isRefreshing.postValue(true)
+        viewModelScope.launch(Dispatchers.IO) {
+            val data = covidDataRepo.getCumulatedData()
+            onCumulatedData(data)
+            isRefreshing.postValue(false)
+        }
+    }
+
+    override fun onRefreshRequested() {
+        refreshData()
+    }
+
+    private fun onCumulatedData(data: GeneralReportModelable) {
         cases.postValue(data.cases.toString())
         deaths.postValue(data.deaths.toString())
         recovered.postValue(data.recovered.toString())
     }
 
-    override fun onError() {
-        Log.e(CumulatedReportViewModel::class.java.simpleName, "onError")
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        dataSource.removeCovidCumulatedDataObserver(this)
-    }
 }

@@ -4,6 +4,7 @@ import android.app.Application
 import com.mobilecoronatracker.koin.module.appModule
 import com.mobilecoronatracker.koin.module.countriesReportsModule
 import com.mobilecoronatracker.koin.module.cumulatedReportModule
+import com.mobilecoronatracker.koin.module.dbModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -17,7 +18,8 @@ class CoronaTrackerApp : Application() {
             modules(
                 appModule,
                 countriesReportsModule,
-                cumulatedReportModule
+                cumulatedReportModule,
+                dbModule
             )
         }
     }

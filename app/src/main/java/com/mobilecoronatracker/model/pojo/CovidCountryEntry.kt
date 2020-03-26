@@ -8,6 +8,6 @@ data class CovidCountryEntry(
     val todayDeaths: Int = 0,
     val recovered: Int = 0,
     val critical: Int = 0,
-    val casesPerOneMillion: Int = 0,
+    val casesPerOneMillion: Double = 0.0,
     val active: Int = 0
 )

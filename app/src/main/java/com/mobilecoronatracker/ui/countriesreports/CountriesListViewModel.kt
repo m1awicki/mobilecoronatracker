@@ -3,16 +3,17 @@ package com.mobilecoronatracker.ui.countriesreports
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mobilecoronatracker.data.persistence.CountriesFollowRepo
-import com.mobilecoronatracker.data.source.CovidDataRepo
+import com.mobilecoronatracker.data.repository.CountriesDataRepo
+import com.mobilecoronatracker.data.repository.CountriesFollowRepo
 import com.mobilecoronatracker.model.CountryReportModelable
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.Locale
 
 class CountriesListViewModel(
     private val countriesFollowRepo: CountriesFollowRepo,
-    private val covidDataRepo: CovidDataRepo
+    private val countriesDataRepo: CountriesDataRepo
 ) : ViewModel(), CountriesListViewModelable {
     private var currentList: List<CountryReportModelable> = emptyList()
     private var currentFilterText: String = ""
@@ -21,6 +22,13 @@ class CountriesListViewModel(
 
     init {
         refreshData()
+
+        viewModelScope.launch {
+            countriesDataRepo.getAllCountriesTodayData().collect {
+                currentList = it
+                postFilteredList()
+            }
+        }
     }
 
     override fun onFilterTextChanged(text: String) {
@@ -45,8 +53,7 @@ class CountriesListViewModel(
     private fun refreshData() {
         isRefreshing.postValue(true)
         viewModelScope.launch(Dispatchers.IO) {
-            currentList = covidDataRepo.getCountriesData()
-            postFilteredList()
+            countriesDataRepo.refreshCountriesData()
         }
     }
 

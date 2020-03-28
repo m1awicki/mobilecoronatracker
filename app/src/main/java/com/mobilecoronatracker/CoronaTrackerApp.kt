@@ -1,6 +1,7 @@
 package com.mobilecoronatracker
 
 import android.app.Application
+import com.facebook.stetho.Stetho
 import com.mobilecoronatracker.koin.module.appModule
 import com.mobilecoronatracker.koin.module.countriesReportsModule
 import com.mobilecoronatracker.koin.module.cumulatedReportModule
@@ -12,6 +13,9 @@ import org.koin.core.context.startKoin
 class CoronaTrackerApp : Application() {
     override fun onCreate() {
         super.onCreate()
+        if (BuildConfig.DEBUG) {
+            Stetho.initializeWithDefaults(this)
+        }
         startKoin {
             androidLogger()
             androidContext(this@CoronaTrackerApp)

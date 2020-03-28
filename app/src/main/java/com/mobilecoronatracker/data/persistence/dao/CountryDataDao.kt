@@ -41,4 +41,13 @@ abstract class CountryDataDao : BaseDao<CountryData> {
         timestampStart: Long,
         timestampEnd: Long
     ): Flow<List<CountryData>>
+
+    @Query(
+        """
+        SELECT * 
+        FROM country_data 
+        WHERE entry_date = :todayTimestamp AND country_id = :countryId
+        """
+    )
+    abstract fun getCountryByTimestampNow(countryId: Long, todayTimestamp: Long): CountryData?
 }

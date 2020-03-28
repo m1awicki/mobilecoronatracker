@@ -1,6 +1,5 @@
 package com.mobilecoronatracker.data.repository.impl
 
-import android.util.Log
 import com.mobilecoronatracker.data.persistence.dao.AccumulatedDataDao
 import com.mobilecoronatracker.data.persistence.entity.AccumulatedData
 import com.mobilecoronatracker.data.repository.AccumulatedDataRepo
@@ -18,24 +17,42 @@ class AccumulatedDataRepoImpl(
 ) : AccumulatedDataRepo {
     override fun getTodayData(): Flow<GeneralReportModelable> {
         val todayTimestamp = getTodayTimestamp()
-        Log.d("MDMD", "$todayTimestamp")
         return accumulatedDataDao.getByTimestamp(todayTimestamp).filterNotNull().map { data ->
             GeneralReportModel(data)
         }
     }
 
     override suspend fun refreshAccumulatedData() {
-        val accumulatedData = covidDataRepo.getCumulatedData()
+        val generalReportModelable = covidDataRepo.getCumulatedData()
         val todayTimestamp = getTodayTimestamp()
-        accumulatedDataDao.insert(
-            AccumulatedData(
-                0,
-                accumulatedData.cases,
-                accumulatedData.deaths,
-                accumulatedData.recovered,
-                getTodayTimestamp()
+
+        insertOrUpdate(todayTimestamp, generalReportModelable)
+    }
+
+    private suspend fun insertOrUpdate(
+        todayTimestamp: Long,
+        generalReportModelable: GeneralReportModelable
+    ) {
+        val accumulatedData = accumulatedDataDao.getByTimestampNow(todayTimestamp)
+        if (accumulatedData == null) {
+            accumulatedDataDao.insert(
+                AccumulatedData(
+                    0,
+                    generalReportModelable.cases,
+                    generalReportModelable.deaths,
+                    generalReportModelable.recovered,
+                    todayTimestamp
+                )
             )
-        )
+        } else {
+            accumulatedDataDao.update(
+                accumulatedData.copy(
+                    infected = generalReportModelable.cases,
+                    dead = generalReportModelable.deaths,
+                    recovered = generalReportModelable.recovered
+                )
+            )
+        }
     }
 
     override suspend fun hasNoData(): Boolean =

@@ -13,8 +13,6 @@ import com.mobilecoronatracker.model.impl.CountryReportModel
 import com.mobilecoronatracker.utils.getTodayTimestamp
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.util.Calendar
-import java.util.TimeZone
 
 class CountriesDataRepoImpl(
     private val countryDataDao: CountryDataDao,
@@ -24,7 +22,6 @@ class CountriesDataRepoImpl(
 ) : CountriesDataRepo {
     override fun getAllCountriesTodayData(): Flow<List<CountryReportModelable>> {
         val todayTimestamp = getTodayTimestamp()
-        Log.d("MDMD", "$todayTimestamp")
         return countryDataDao.getAllCountryByTimestamp(todayTimestamp).map { list ->
             list.map {
                 CountryReportModel(it)
@@ -32,7 +29,7 @@ class CountriesDataRepoImpl(
         }
     }
 
-    override suspend fun hasTodayCountryData(): Boolean {
+    override suspend fun hasNoTodayCountryData(): Boolean {
         val todayTimestamp = getTodayTimestamp()
         return countryDataDao.getAllCountryByTimestampNow(todayTimestamp).map {
             CountryReportModel(it)
@@ -44,19 +41,37 @@ class CountriesDataRepoImpl(
         val todayTimestamp = getTodayTimestamp()
         appDatabase.withTransactionWrapper {
             countriesData.forEach {
-                val id = countryDao.insert(Country(0, it.country, it.country))
-                countryDataDao.insert(
-                    CountryData(
-                        infected = it.cases,
-                        todayInfected = it.todayCases,
-                        critical = it.critical,
-                        recovered = it.recovered,
-                        dead = it.deaths,
-                        todayDead = it.todayDeaths,
-                        countryId = id,
-                        entryDate = todayTimestamp
+                var countryId = countryDao.insert(Country(0, it.country, it.country))
+                if (countryId == -1L) {
+                    countryId = countryDao.getByCountryName(it.country)?.id ?: 0L
+                }
+                val countryData =
+                    countryDataDao.getCountryByTimestampNow(countryId, todayTimestamp)
+                if (countryData == null) {
+                    countryDataDao.insert(
+                        CountryData(
+                            infected = it.cases,
+                            todayInfected = it.todayCases,
+                            critical = it.critical,
+                            recovered = it.recovered,
+                            dead = it.deaths,
+                            todayDead = it.todayDeaths,
+                            countryId = countryId,
+                            entryDate = todayTimestamp
+                        )
                     )
-                )
+                } else {
+                    countryDataDao.update(
+                        countryData.copy(
+                            infected = it.cases,
+                            todayInfected = it.todayCases,
+                            dead = it.deaths,
+                            todayDead = it.todayDeaths,
+                            critical = it.critical,
+                            recovered = it.recovered
+                        )
+                    )
+                }
             }
         }
     }

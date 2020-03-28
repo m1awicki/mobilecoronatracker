@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 @Entity(
     tableName = "province_data",
     indices = [
-        Index(value = ["id", "entryDate"], unique = true)
+        Index(value = ["id", "entry_date"], unique = true)
     ],
     foreignKeys = [
         androidx.room.ForeignKey(

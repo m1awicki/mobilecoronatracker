@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 @Entity(
     tableName = "accumulated_data",
     indices = [
-        Index(value = ["entryDate"], unique = true)
+        Index(value = ["entry_date"], unique = true)
     ]
 )
 data class AccumulatedData(

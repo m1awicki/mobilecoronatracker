@@ -27,5 +27,5 @@ class ProvinceData(
     val dead: Int = 0,
     val recovered: Int = 0,
     @ColumnInfo(name = "entry_date") val entryDate: Long = System.currentTimeMillis(),
-    @ColumnInfo(name = "province_id") val provinceId: Int
+    @ColumnInfo(name = "province_id") val provinceId: Long
 )

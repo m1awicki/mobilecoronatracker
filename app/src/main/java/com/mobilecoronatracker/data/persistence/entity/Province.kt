@@ -19,7 +19,7 @@ import androidx.room.PrimaryKey
     ]
 )
 data class Province(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Long,
     val name: String,
-    @ColumnInfo(name = "country_id") val countryId: Int
+    @ColumnInfo(name = "country_id") val countryId: Long
 )

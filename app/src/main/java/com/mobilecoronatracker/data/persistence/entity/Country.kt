@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey
     indices = [Index(value = ["name"], unique = true)]
 )
 data class Country(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Long,
     val name: String,
     @ColumnInfo(name = "code_iso2") val codeIso2: String,
     @ColumnInfo(name = "continent_name") val continentName: String = ""

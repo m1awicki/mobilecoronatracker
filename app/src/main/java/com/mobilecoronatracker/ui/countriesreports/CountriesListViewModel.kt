@@ -21,9 +21,11 @@ class CountriesListViewModel(
     override val isRefreshing = MutableLiveData<Boolean>()
 
     init {
-        refreshData()
+        viewModelScope.launch(Dispatchers.IO) {
+            if (countriesDataRepo.hasNoTodayCountryData()) {
+                refreshData()
+            }
 
-        viewModelScope.launch {
             countriesDataRepo.getAllCountriesTodayData().collect {
                 currentList = it
                 postFilteredList()

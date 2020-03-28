@@ -1,14 +1,18 @@
-package com.mobilecoronatracker.data.persistence.impl
+package com.mobilecoronatracker.data.repository.impl
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.mobilecoronatracker.data.persistence.CountriesFollowRepo
+import com.mobilecoronatracker.data.repository.CountriesFollowRepo
 
-class SharedPreferencesCountriesFollowRepo(context: Context) : CountriesFollowRepo {
+class SharedPreferencesCountriesFollowRepo(context: Context) :
+    CountriesFollowRepo {
     private val sharedPrefs: SharedPreferences
 
     init {
-        sharedPrefs = context.getSharedPreferences(SHARED_PREFS_FILE_NAME, SHARED_PREFS_MODE)
+        sharedPrefs = context.getSharedPreferences(
+            SHARED_PREFS_FILE_NAME,
+            SHARED_PREFS_MODE
+        )
     }
 
     override fun addFollowedCountry(country: String) {

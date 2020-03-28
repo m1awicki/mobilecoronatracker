@@ -1,9 +1,9 @@
-package com.mobilecoronatracker.data.source.impl
+package com.mobilecoronatracker.data.repository.impl
 
 import com.mobilecoronatracker.data.networking.NetworkResult
 import com.mobilecoronatracker.data.networking.safeApiCall
 import com.mobilecoronatracker.data.source.CovidApi
-import com.mobilecoronatracker.data.source.CovidDataRepo
+import com.mobilecoronatracker.data.repository.CovidDataRepo
 import com.mobilecoronatracker.model.CountryReportModelable
 import com.mobilecoronatracker.model.GeneralReportModelable
 import com.mobilecoronatracker.model.impl.CountryReportModel

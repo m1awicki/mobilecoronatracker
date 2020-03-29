@@ -14,7 +14,7 @@ abstract class ProvinceDataDao : BaseDao<ProvinceData> {
         WHERE entry_date=:timestamp
         """
     )
-    abstract fun getAllProvinceByTimestamp(timestamp: Long): Flow<List<ProvinceData>>
+    abstract fun getAllProvinceByTimestampFlow(timestamp: Long): Flow<List<ProvinceData>>
 
     @Query(
         """
@@ -23,7 +23,7 @@ abstract class ProvinceDataDao : BaseDao<ProvinceData> {
             WHERE entry_date>=:timestampStart AND entry_date<=:timestampEnd
             """
     )
-    abstract fun getProvinceByTimestampRange(
+    abstract fun getProvinceByTimestampRangeFlow(
         timestampStart: Long,
         timestampEnd: Long
     ): Flow<List<ProvinceData>>

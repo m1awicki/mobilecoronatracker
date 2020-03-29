@@ -17,7 +17,7 @@ class AccumulatedDataRepoImpl(
 ) : AccumulatedDataRepo {
     override fun getTodayData(): Flow<GeneralReportModelable> {
         val todayTimestamp = getTodayTimestamp()
-        return accumulatedDataDao.getByTimestamp(todayTimestamp).filterNotNull().map { data ->
+        return accumulatedDataDao.getByTimestampFlow(todayTimestamp).filterNotNull().map { data ->
             GeneralReportModel(data)
         }
     }
@@ -33,7 +33,7 @@ class AccumulatedDataRepoImpl(
         todayTimestamp: Long,
         generalReportModelable: GeneralReportModelable
     ) {
-        val accumulatedData = accumulatedDataDao.getByTimestampNow(todayTimestamp)
+        val accumulatedData = accumulatedDataDao.getByTimestamp(todayTimestamp)
         if (accumulatedData == null) {
             accumulatedDataDao.insert(
                 AccumulatedData(
@@ -56,5 +56,5 @@ class AccumulatedDataRepoImpl(
     }
 
     override suspend fun hasNoData(): Boolean =
-        accumulatedDataDao.getByTimestampNow(getTodayTimestamp()) == null
+        accumulatedDataDao.getByTimestamp(getTodayTimestamp()) == null
 }

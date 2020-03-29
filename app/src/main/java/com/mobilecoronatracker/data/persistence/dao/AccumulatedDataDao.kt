@@ -14,7 +14,7 @@ abstract class AccumulatedDataDao : BaseDao<AccumulatedData> {
         WHERE entry_date=:timestamp
         """
     )
-    abstract fun getByTimestamp(timestamp: Long): Flow<AccumulatedData>
+    abstract fun getByTimestampFlow(timestamp: Long): Flow<AccumulatedData>
 
     @Query(
         """
@@ -23,7 +23,7 @@ abstract class AccumulatedDataDao : BaseDao<AccumulatedData> {
         WHERE entry_date=:timestamp
         """
     )
-    abstract suspend fun getByTimestampNow(timestamp: Long): AccumulatedData?
+    abstract suspend fun getByTimestamp(timestamp: Long): AccumulatedData?
 
     @Query(
         """
@@ -32,7 +32,7 @@ abstract class AccumulatedDataDao : BaseDao<AccumulatedData> {
         WHERE entry_date>=:timestampStart AND entry_date<=:timestampEnd
         """
     )
-    abstract fun getByTimestampRange(
+    abstract fun getByTimestampRangeFlow(
         timestampStart: Long,
         timestampEnd: Long
     ): Flow<AccumulatedData>

@@ -17,7 +17,7 @@ abstract class CountryDataDao : BaseDao<CountryData> {
         ORDER BY infected DESC
         """
     )
-    abstract fun getAllCountryByTimestamp(timestamp: Long): Flow<List<CountryDataWithCountryName>>
+    abstract fun getAllCountryByTimestampFlow(timestamp: Long): Flow<List<CountryDataWithCountryName>>
 
     @Query(
         """
@@ -28,7 +28,7 @@ abstract class CountryDataDao : BaseDao<CountryData> {
         ORDER BY infected DESC
         """
     )
-    abstract suspend fun getAllCountryByTimestampNow(timestamp: Long): List<CountryDataWithCountryName>
+    abstract suspend fun getAllCountryByTimestamp(timestamp: Long): List<CountryDataWithCountryName>
 
     @Query(
         """
@@ -37,7 +37,7 @@ abstract class CountryDataDao : BaseDao<CountryData> {
         WHERE entry_date>=:timestampStart AND entry_date<=:timestampEnd
         """
     )
-    abstract fun getCountryByTimestampRange(
+    abstract fun getCountryByTimestampRangeFlow(
         timestampStart: Long,
         timestampEnd: Long
     ): Flow<List<CountryData>>
@@ -49,5 +49,5 @@ abstract class CountryDataDao : BaseDao<CountryData> {
         WHERE entry_date = :todayTimestamp AND country_id = :countryId
         """
     )
-    abstract fun getCountryByTimestampNow(countryId: Long, todayTimestamp: Long): CountryData?
+    abstract fun getCountryByTimestamp(countryId: Long, todayTimestamp: Long): CountryData?
 }

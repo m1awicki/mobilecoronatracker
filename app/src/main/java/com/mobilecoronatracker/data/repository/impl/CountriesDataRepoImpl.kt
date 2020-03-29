@@ -1,6 +1,5 @@
 package com.mobilecoronatracker.data.repository.impl
 
-import android.util.Log
 import com.mobilecoronatracker.data.persistence.AppDatabase
 import com.mobilecoronatracker.data.persistence.dao.CountryDao
 import com.mobilecoronatracker.data.persistence.dao.CountryDataDao
@@ -22,7 +21,7 @@ class CountriesDataRepoImpl(
 ) : CountriesDataRepo {
     override fun getAllCountriesTodayData(): Flow<List<CountryReportModelable>> {
         val todayTimestamp = getTodayTimestamp()
-        return countryDataDao.getAllCountryByTimestamp(todayTimestamp).map { list ->
+        return countryDataDao.getAllCountryByTimestampFlow(todayTimestamp).map { list ->
             list.map {
                 CountryReportModel(it)
             }
@@ -31,7 +30,7 @@ class CountriesDataRepoImpl(
 
     override suspend fun hasNoTodayCountryData(): Boolean {
         val todayTimestamp = getTodayTimestamp()
-        return countryDataDao.getAllCountryByTimestampNow(todayTimestamp).map {
+        return countryDataDao.getAllCountryByTimestamp(todayTimestamp).map {
             CountryReportModel(it)
         }.isEmpty()
     }
@@ -46,7 +45,7 @@ class CountriesDataRepoImpl(
                     countryId = countryDao.getByCountryName(it.country)?.id ?: 0L
                 }
                 val countryData =
-                    countryDataDao.getCountryByTimestampNow(countryId, todayTimestamp)
+                    countryDataDao.getCountryByTimestamp(countryId, todayTimestamp)
                 if (countryData == null) {
                     countryDataDao.insert(
                         CountryData(

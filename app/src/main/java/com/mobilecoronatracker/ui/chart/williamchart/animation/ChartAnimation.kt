@@ -1,5 +1,7 @@
 package com.mobilecoronatracker.ui.chart.williamchart.animation
 
+// Copied from https://github.com/diogobernardino/WilliamChart
+
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
 

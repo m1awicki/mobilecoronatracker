@@ -1,5 +1,8 @@
 package com.mobilecoronatracker.ui.chart.williamchart
 
+// Copied from https://github.com/diogobernardino/WilliamChart
+// Modified by m1awicki
+
 import com.mobilecoronatracker.ui.chart.williamchart.animation.ChartAnimation
 import com.mobilecoronatracker.ui.chart.williamchart.data.ChartConfiguration
 import com.mobilecoronatracker.ui.chart.williamchart.data.DataPoint

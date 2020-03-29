@@ -1,5 +1,7 @@
 package com.mobilecoronatracker.ui.chart.williamchart.data
 
+// Copied from https://github.com/diogobernardino/WilliamChart
+
 data class Paddings(val left: Float, val top: Float, val right: Float, val bottom: Float)
 
 fun Paddings.mergeWith(paddings: Paddings): Paddings {

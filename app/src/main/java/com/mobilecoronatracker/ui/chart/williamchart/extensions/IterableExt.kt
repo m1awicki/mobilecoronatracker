@@ -1,5 +1,7 @@
 package com.mobilecoronatracker.ui.chart.williamchart.extensions
 
+// Copied from https://github.com/diogobernardino/WilliamChart
+
 inline fun <T, R : Comparable<R>> Iterable<T>.maxValueBy(selector: (T) -> R): R? {
     val iterator = iterator()
     if (!iterator.hasNext()) return null

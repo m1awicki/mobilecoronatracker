@@ -1,5 +1,7 @@
 package com.mobilecoronatracker.ui.chart.williamchart.data
 
+// Copied from https://github.com/diogobernardino/WilliamChart
+
 enum class AxisType {
     NONE, // No axis
     X, // Only axis X

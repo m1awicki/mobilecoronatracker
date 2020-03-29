@@ -1,5 +1,7 @@
 package com.mobilecoronatracker.ui.chart.williamchart.data
 
+// Copied from https://github.com/diogobernardino/WilliamChart
+
 data class LineChartConfiguration(
     override val width: Int,
     override val height: Int,

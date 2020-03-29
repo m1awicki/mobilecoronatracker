@@ -1,5 +1,7 @@
 package com.mobilecoronatracker.ui.chart.williamchart.renderer.executor
 
+// Copied from https://github.com/diogobernardino/WilliamChart
+
 import com.mobilecoronatracker.ui.chart.williamchart.data.AxisType
 import com.mobilecoronatracker.ui.chart.williamchart.data.Paddings
 import com.mobilecoronatracker.ui.chart.williamchart.data.mergeWith

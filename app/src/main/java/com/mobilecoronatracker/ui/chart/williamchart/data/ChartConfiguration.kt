@@ -1,5 +1,7 @@
 package com.mobilecoronatracker.ui.chart.williamchart.data
 
+// Copied from https://github.com/diogobernardino/WilliamChart
+
 open class ChartConfiguration(
     open val width: Int,
     open val height: Int,

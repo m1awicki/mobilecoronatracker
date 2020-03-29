@@ -1,5 +1,7 @@
 package com.mobilecoronatracker.ui.chart.williamchart.view
 
+// Copied from https://github.com/diogobernardino/WilliamChart
+
 import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.Canvas

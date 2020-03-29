@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="15dp">
+
+    <com.mobilecoronatracker.ui.chart.williamchart.view.MultiLineChartView
+        android:id="@+id/multiLineChart"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        app:chart_axis="none"
+        app:horizontal_labels_strategy="pickAndMatch"
+        app:chart_lineColor="#ffffff"
+        app:chart_lineThickness="1.5dp"
+        app:chart_smoothLine="true"
+        app:chart_labelsSize="10sp"
+        app:chart_labelsColor="#FF70977F"
+        app:chart_pointsDrawable="@drawable/ic_circle"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+<!--
+    <com.mobilecoronatracker.ui.chart.williamchart.view.LineChartView
+        android:id="@+id/chart1"
+        app:chart_lineColor="@color/colorPrimary"
+        app:chart_lineThickness="2dp"
+        app:chart_smoothLine="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="200dp" /> -->
+    <!-- <com.mobilecoronatracker.ui.chart.williamchart.view.LineChartView
+        android:id="@+id/chart2"
+        app:chart_lineColor="@color/colorPrimary"
+        app:chart_lineThickness="2dp"
+        app:chart_smoothLine="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chart1"
+        android:layout_width="0dp"
+        android:layout_height="100dp" />
+    <com.mobilecoronatracker.ui.chart.williamchart.view.LineChartView
+        android:id="@+id/chart3"
+        app:chart_lineColor="@color/colorPrimary"
+        app:chart_lineThickness="2dp"
+        app:chart_smoothLine="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chart2"
+        android:layout_width="0dp"
+        android:layout_height="100dp" />
+
+    <com.mobilecoronatracker.ui.chart.williamchart.view.LineChartView
+        android:id="@+id/chart4"
+        app:chart_lineColor="@color/colorPrimary"
+        app:chart_lineThickness="2dp"
+        app:chart_smoothLine="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chart3"
+        android:layout_width="0dp"
+        android:layout_height="100dp" />
+
+    <com.mobilecoronatracker.ui.chart.williamchart.view.LineChartView
+        android:id="@+id/chart5"
+        app:chart_lineColor="@color/colorPrimary"
+        app:chart_lineThickness="2dp"
+        app:chart_smoothLine="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chart4"
+        android:layout_width="0dp"
+        android:layout_height="100dp" /> -->
+</androidx.constraintlayout.widget.ConstraintLayout>

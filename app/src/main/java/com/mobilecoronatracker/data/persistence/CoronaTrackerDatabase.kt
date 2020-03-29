@@ -1,14 +1,12 @@
 package com.mobilecoronatracker.data.persistence
 
-import android.content.Context
-import androidx.room.RoomDatabase
 import com.mobilecoronatracker.data.persistence.dao.AccumulatedDataDao
 import com.mobilecoronatracker.data.persistence.dao.CountryDao
 import com.mobilecoronatracker.data.persistence.dao.CountryDataDao
 import com.mobilecoronatracker.data.persistence.dao.ProvinceDao
 import com.mobilecoronatracker.data.persistence.dao.ProvinceDataDao
 
-interface AppDatabase {
+interface CoronaTrackerDatabase {
     suspend fun <R> withTransactionWrapper(block: suspend () -> R)
     fun provinceDao(): ProvinceDao
     fun provinceDataDao(): ProvinceDataDao

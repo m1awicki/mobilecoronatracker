@@ -1,11 +1,10 @@
-package com.mobilecoronatracker.data.persistence.impl
+package com.mobilecoronatracker.data.persistence
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.withTransaction
-import com.mobilecoronatracker.data.persistence.AppDatabase
 import com.mobilecoronatracker.data.persistence.dao.AccumulatedDataDao
 import com.mobilecoronatracker.data.persistence.dao.CountryDao
 import com.mobilecoronatracker.data.persistence.dao.CountryDataDao
@@ -27,7 +26,7 @@ import com.mobilecoronatracker.data.persistence.entity.ProvinceData
     ],
     version = 1
 )
-abstract class AppDatabaseImpl : RoomDatabase(), AppDatabase {
+abstract class CoronaTrackerRoomDatabase : RoomDatabase(), CoronaTrackerDatabase {
     abstract override fun accumulatedDataDao(): AccumulatedDataDao
     abstract override fun countryDataDao(): CountryDataDao
     abstract override fun countryDao(): CountryDao
@@ -42,7 +41,7 @@ abstract class AppDatabaseImpl : RoomDatabase(), AppDatabase {
 
     companion object {
         fun buildDatabase(context: Context) =
-            Room.databaseBuilder(context, AppDatabaseImpl::class.java, "covid_db")
+            Room.databaseBuilder(context, CoronaTrackerRoomDatabase::class.java, "covid_db")
                 .build()
     }
 }

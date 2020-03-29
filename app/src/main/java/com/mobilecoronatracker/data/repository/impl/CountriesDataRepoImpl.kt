@@ -1,6 +1,6 @@
 package com.mobilecoronatracker.data.repository.impl
 
-import com.mobilecoronatracker.data.persistence.AppDatabase
+import com.mobilecoronatracker.data.persistence.CoronaTrackerDatabase
 import com.mobilecoronatracker.data.persistence.dao.CountryDao
 import com.mobilecoronatracker.data.persistence.dao.CountryDataDao
 import com.mobilecoronatracker.data.persistence.entity.Country
@@ -17,7 +17,7 @@ class CountriesDataRepoImpl(
     private val countryDataDao: CountryDataDao,
     private val countryDao: CountryDao,
     private val covidDataRepo: CovidDataRepo,
-    private val appDatabase: AppDatabase
+    private val coronaTrackerDatabase: CoronaTrackerDatabase
 ) : CountriesDataRepo {
     override fun getAllCountriesTodayData(): Flow<List<CountryReportModelable>> {
         val todayTimestamp = getTodayTimestamp()
@@ -36,7 +36,7 @@ class CountriesDataRepoImpl(
     override suspend fun refreshCountriesData() {
         val countiesReportModelable = covidDataRepo.getCountriesData()
         val todayTimestamp = getTodayTimestamp()
-        appDatabase.withTransactionWrapper {
+        coronaTrackerDatabase.withTransactionWrapper {
             countiesReportModelable.forEach {
                 var countryId = countryDao.insert(Country(0, it.country, it.country))
                 if (countryId == -1L) {

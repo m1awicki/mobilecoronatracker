@@ -28,11 +28,9 @@ class CountriesDataRepoImpl(
         }
     }
 
-    override suspend fun hasNoTodayCountryData(): Boolean {
+    override suspend fun hasTodayCountryData(): Boolean {
         val todayTimestamp = getTodayTimestamp()
-        return countryDataDao.getAllCountryByTimestamp(todayTimestamp).map {
-            CountryReportModel(it)
-        }.isEmpty()
+        return countryDataDao.getAllCountriesCountByTimestamp(todayTimestamp) != 0
     }
 
     override suspend fun refreshCountriesData() {

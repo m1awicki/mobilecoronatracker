@@ -22,7 +22,7 @@ class CountriesListViewModel(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            if (countriesDataRepo.hasNoTodayCountryData()) {
+            if (!countriesDataRepo.hasTodayCountryData()) {
                 refreshData()
             }
 

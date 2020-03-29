@@ -7,5 +7,5 @@ import kotlinx.coroutines.flow.Flow
 interface CountriesDataRepo {
     fun getAllCountriesTodayData(): Flow<List<CountryReportModelable>>
     suspend fun refreshCountriesData()
-    suspend fun hasNoTodayCountryData(): Boolean
+    suspend fun hasTodayCountryData(): Boolean
 }

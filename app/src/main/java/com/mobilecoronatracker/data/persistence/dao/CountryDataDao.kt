@@ -21,14 +21,13 @@ abstract class CountryDataDao : BaseDao<CountryData> {
 
     @Query(
         """
-        SELECT country_data.*, country.name 
+        SELECT COUNT(*)
         FROM country_data 
         INNER JOIN country ON country_data.country_id = country.id 
-        WHERE entry_date=:timestamp 
-        ORDER BY infected DESC
+        WHERE entry_date=:timestamp
         """
     )
-    abstract suspend fun getAllCountryByTimestamp(timestamp: Long): List<CountryDataWithCountryName>
+    abstract suspend fun getAllCountriesCountByTimestamp(timestamp: Long): Int
 
     @Query(
         """

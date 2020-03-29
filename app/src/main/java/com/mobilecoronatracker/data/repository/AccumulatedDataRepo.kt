@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface AccumulatedDataRepo {
     fun getTodayData(): Flow<GeneralReportModelable>
     suspend fun refreshAccumulatedData()
-    suspend fun hasNoData(): Boolean
+    suspend fun hasTodayData(): Boolean
 }

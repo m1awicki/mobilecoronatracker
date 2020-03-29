@@ -21,7 +21,7 @@ class CumulatedReportViewModel(private val accumulatedDataRepo: AccumulatedDataR
         deaths.value = "???"
         recovered.value = "???"
         viewModelScope.launch(Dispatchers.IO) {
-            if (accumulatedDataRepo.hasNoData()) {
+            if (!accumulatedDataRepo.hasTodayData()) {
                 refreshData()
             }
 

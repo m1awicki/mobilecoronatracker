@@ -35,7 +35,7 @@ abstract class CountryDataDao : BaseDao<CountryData> {
         WHERE entry_date>=:timestampStart AND entry_date<=:timestampEnd AND country_id=:countryId
         """
     )
-    abstract fun getCountryDataRangeByTimestampRangeFlow(
+    abstract fun getCountryDataForTimeRange(
         timestampStart: Long,
         timestampEnd: Long,
         countryId: Long

@@ -24,7 +24,6 @@ class CumulatedReportViewModel(private val accumulatedDataRepo: AccumulatedDataR
             if (!accumulatedDataRepo.hasTodayData()) {
                 refreshData()
             }
-
             accumulatedDataRepo.getTodayData().collect {
                 onCumulatedData(it)
             }

@@ -25,7 +25,6 @@ class CountriesListViewModel(
             if (!countriesDataRepo.hasTodayCountryData()) {
                 refreshData()
             }
-
             countriesDataRepo.getAllCountriesTodayData().collect {
                 currentList = it
                 postFilteredList()

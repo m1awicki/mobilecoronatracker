@@ -23,7 +23,6 @@ abstract class CountryDataDao : BaseDao<CountryData> {
         """
         SELECT COUNT(*)
         FROM country_data 
-        INNER JOIN country ON country_data.country_id = country.id 
         WHERE entry_date=:timestamp
         """
     )

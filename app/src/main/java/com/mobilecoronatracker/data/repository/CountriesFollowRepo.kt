@@ -1,4 +1,4 @@
-package com.mobilecoronatracker.data.persistence
+package com.mobilecoronatracker.data.repository
 
 interface CountriesFollowRepo {
     fun addFollowedCountry(country: String)

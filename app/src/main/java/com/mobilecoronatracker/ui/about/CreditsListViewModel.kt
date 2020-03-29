@@ -6,7 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.mobilecoronatracker.R
 import com.mobilecoronatracker.model.CreditsEntryModel
-import com.mobilecoronatracker.model.CreditsEntryModelImpl
+import com.mobilecoronatracker.model.impl.CreditsEntryModelImpl
 
 class CreditsListViewModel(@NonNull app: Application) : AndroidViewModel(app), CreditsListViewModelable {
     override val credits = MutableLiveData<List<CreditsEntryModel>>()

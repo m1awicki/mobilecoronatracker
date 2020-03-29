@@ -1,5 +1,7 @@
-package com.mobilecoronatracker.model
+package com.mobilecoronatracker.model.impl
 
+import com.mobilecoronatracker.data.persistence.entity.AccumulatedData
+import com.mobilecoronatracker.model.GeneralReportModelable
 import com.mobilecoronatracker.model.pojo.CovidCumulatedData
 
 class GeneralReportModel(
@@ -8,4 +10,5 @@ class GeneralReportModel(
     override var recovered: Int
 ) : GeneralReportModelable {
     constructor(data: CovidCumulatedData) : this(data.cases, data.deaths, data.recovered)
+    constructor(data: AccumulatedData) : this(data.cases, data.deaths, data.recovered)
 }

@@ -1,4 +1,4 @@
-package com.mobilecoronatracker.data.source
+package com.mobilecoronatracker.data.repository
 
 import com.mobilecoronatracker.model.CountryReportModelable
 import com.mobilecoronatracker.model.GeneralReportModelable

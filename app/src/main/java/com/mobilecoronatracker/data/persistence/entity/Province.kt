@@ -3,11 +3,13 @@ package com.mobilecoronatracker.data.persistence.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 
 @Entity(
     tableName = "province",
+    indices = [Index("name", "country_id", unique = true)],
     foreignKeys = [
         ForeignKey(
             entity = Country::class,

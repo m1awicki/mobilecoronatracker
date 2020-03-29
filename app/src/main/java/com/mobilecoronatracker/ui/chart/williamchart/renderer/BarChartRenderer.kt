@@ -22,12 +22,14 @@ import com.mobilecoronatracker.ui.chart.williamchart.extensions.toDataPoints
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.toLabels
 import com.mobilecoronatracker.ui.chart.williamchart.renderer.executor.DebugWithLabelsFrame
 import com.mobilecoronatracker.ui.chart.williamchart.renderer.executor.MeasureBarChartPaddings
+import com.mobilecoronatracker.ui.chart.williamchart.strategy.BarChartStrategy
 import kotlin.math.max
 
 class BarChartRenderer(
     private val view: ChartContract.BarView,
     private val painter: Painter,
-    private var animation: ChartAnimation<DataPoint>
+    private var animation: ChartAnimation<DataPoint>,
+    private val xLabelsPlacingStrategy: ChartContract.HorizontalAxisLabelsPlacingStrategy = BarChartStrategy()
 ) : ChartContract.Renderer {
 
     private var data = emptyList<DataPoint>()
@@ -38,9 +40,7 @@ class BarChartRenderer(
 
     private lateinit var chartConfiguration: BarChartConfiguration
 
-    private val xLabels: List<Label> by lazy {
-        data.toLabels()
-    }
+    private var xLabels: List<Label> = emptyList()
 
     private val yLabels by lazy {
         val scaleStep = chartConfiguration.scale.size / RendererConstants.defaultScaleNumberOfSteps
@@ -56,7 +56,6 @@ class BarChartRenderer(
     }
 
     override fun preDraw(configuration: ChartConfiguration): Boolean {
-
         if (data.isEmpty()) return true
 
         chartConfiguration = configuration as BarChartConfiguration
@@ -103,7 +102,6 @@ class BarChartRenderer(
     }
 
     override fun draw() {
-
         if (data.isEmpty()) return
 
         if (chartConfiguration.axis.shouldDisplayAxisX())
@@ -144,24 +142,11 @@ class BarChartRenderer(
     }
 
     private fun placeLabelsX(innerFrame: Frame) {
-
-        val halfBarWidth = (innerFrame.right - innerFrame.left) / xLabels.size / 2
-        val labelsLeftPosition = innerFrame.left + halfBarWidth
-        val labelsRightPosition = innerFrame.right - halfBarWidth
-        val widthBetweenLabels = (labelsRightPosition - labelsLeftPosition) / (xLabels.size - 1)
-        val xLabelsVerticalPosition =
-            innerFrame.bottom -
-                painter.measureLabelAscent(chartConfiguration.labelsSize) +
-                    RendererConstants.labelsPaddingToInnerChart
-
-        xLabels.forEachIndexed { index, label ->
-            label.screenPositionX = labelsLeftPosition + (widthBetweenLabels * index)
-            label.screenPositionY = xLabelsVerticalPosition
-        }
+        xLabels = xLabelsPlacingStrategy.placeLabels(innerFrame, chartConfiguration.labelsSize,
+            painter, data.toLabels())
     }
 
     private fun placeLabelsY(innerFrame: Frame) {
-
         val heightBetweenLabels =
             (innerFrame.bottom - innerFrame.top) / RendererConstants.defaultScaleNumberOfSteps
         val labelsBottomPosition =
@@ -177,14 +162,12 @@ class BarChartRenderer(
     }
 
     private fun placeDataPoints(innerFrame: Frame) {
-
         val scaleSize = chartConfiguration.scale.size
         val chartHeight = innerFrame.bottom - innerFrame.top
         val halfBarWidth = (innerFrame.right - innerFrame.left) / xLabels.size / 2
         val labelsLeftPosition = innerFrame.left + halfBarWidth
         val labelsRightPosition = innerFrame.right - halfBarWidth
         val widthBetweenLabels = (labelsRightPosition - labelsLeftPosition) / (xLabels.size - 1)
-
         data.forEachIndexed { index, dataPoint ->
             dataPoint.screenPositionX = labelsLeftPosition + (widthBetweenLabels * index)
             dataPoint.screenPositionY =

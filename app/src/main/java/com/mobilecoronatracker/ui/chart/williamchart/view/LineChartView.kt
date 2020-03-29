@@ -1,6 +1,7 @@
 package com.mobilecoronatracker.ui.chart.williamchart.view
 
 // Copied from https://github.com/diogobernardino/WilliamChart
+// Modified by m1awicki
 
 import android.content.Context
 import android.content.res.TypedArray
@@ -10,23 +11,18 @@ import android.graphics.Path
 import android.util.AttributeSet
 import androidx.annotation.DrawableRes
 import androidx.annotation.Size
+import androidx.core.view.doOnPreDraw
 import com.mobilecoronatracker.ui.chart.williamchart.ChartContract
 import com.mobilecoronatracker.R
 import com.mobilecoronatracker.ui.chart.williamchart.animation.NoAnimation
-import com.mobilecoronatracker.ui.chart.williamchart.data.ChartConfiguration
-import com.mobilecoronatracker.ui.chart.williamchart.data.DataPoint
-import com.mobilecoronatracker.ui.chart.williamchart.data.Frame
-import com.mobilecoronatracker.ui.chart.williamchart.data.Label
-import com.mobilecoronatracker.ui.chart.williamchart.data.LineChartConfiguration
-import com.mobilecoronatracker.ui.chart.williamchart.data.Paddings
-import com.mobilecoronatracker.ui.chart.williamchart.data.toLinearGradient
-import com.mobilecoronatracker.ui.chart.williamchart.data.toRect
+import com.mobilecoronatracker.ui.chart.williamchart.data.*
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.centerAt
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.getDrawable
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.obtainStyledAttributes
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.toLinePath
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.toSmoothLinePath
 import com.mobilecoronatracker.ui.chart.williamchart.renderer.LineChartRenderer
+import com.mobilecoronatracker.ui.chart.williamchart.strategy.DefaultStrategy
 
 class LineChartView @JvmOverloads constructor(
     context: Context,
@@ -54,6 +50,14 @@ class LineChartView @JvmOverloads constructor(
     @Suppress("MemberVisibilityCanBePrivate")
     var pointsDrawableRes = -1
 
+    private val renderer by lazy {
+        LineChartRenderer(this, painter, NoAnimation(), horizontalLabelsStrategy)
+    }
+
+    override fun draw() {
+        renderer.draw()
+    }
+
     override val chartConfiguration: ChartConfiguration
     get() =
     LineChartConfiguration(
@@ -78,8 +82,11 @@ class LineChartView @JvmOverloads constructor(
     labelsFormatter = labelsFormatter
     )
 
+    override fun getDefaultHorizontalLabelsStrategy(): ChartContract.HorizontalAxisLabelsPlacingStrategy {
+        return defaultLineChartHorizontalLabelsStrategy
+    }
+
     init {
-        renderer = LineChartRenderer(this, painter, NoAnimation())
         handleAttributes(obtainStyledAttributes(attrs, R.styleable.LineChartAttrs))
         handleEditMode()
     }
@@ -174,11 +181,28 @@ class LineChartView @JvmOverloads constructor(
         }
     }
 
+    fun show(entries: LinkedHashMap<String, Float>) {
+        doOnPreDraw { renderer.preDraw(chartConfiguration) }
+        renderer.render(entries)
+    }
+
+    fun animate(entries: LinkedHashMap<String, Float>) {
+        doOnPreDraw { renderer.preDraw(chartConfiguration) }
+        renderer.anim(entries, animation)
+    }
+
+    override fun handleEditMode() {
+        if (isInEditMode) {
+            show(AxisChartData.editModeSampleData)
+        }
+    }
+
     companion object {
         private const val defaultSmoothFactor = 0.20f
         private const val defaultSmooth = false
         private const val defaultLineThickness = 4F
         private const val defaultFillColor = 0
         private const val defaultLineColor = Color.BLACK
+        private val defaultLineChartHorizontalLabelsStrategy = DefaultStrategy()
     }
 }

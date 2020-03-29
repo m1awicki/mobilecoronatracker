@@ -19,12 +19,13 @@ import com.mobilecoronatracker.ui.chart.williamchart.extensions.obtainStyledAttr
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.toLinePath
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.toSmoothLinePath
 import com.mobilecoronatracker.ui.chart.williamchart.renderer.MultiLineChartRenderer
+import com.mobilecoronatracker.ui.chart.williamchart.strategy.DefaultStrategy
 
 class MultiLineChartView  @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
-) : AxisMultiChartView(context, attrs, defStyleAttr), ChartContract.MultiLineView {
+) : AxisChartView(context, attrs, defStyleAttr), ChartContract.MultiLineView {
 
     @Suppress("MemberVisibilityCanBePrivate")
     var smooth: Boolean = defaultSmooth
@@ -42,7 +43,7 @@ class MultiLineChartView  @JvmOverloads constructor(
     @Suppress("MemberVisibilityCanBePrivate")
     var pointsDrawableRes = -1
 
-    private val renderer by lazy {
+    private val renderer: MultiLineChartRenderer by lazy {
         MultiLineChartRenderer(this, painter, NoAnimation(), horizontalLabelsStrategy)
     }
 
@@ -71,6 +72,10 @@ class MultiLineChartView  @JvmOverloads constructor(
                         getDrawable(pointsDrawableRes)!!.intrinsicHeight else -1,
                     labelsFormatter = labelsFormatter
             )
+
+    override fun getDefaultHorizontalLabelsStrategy(): ChartContract.HorizontalAxisLabelsPlacingStrategy {
+        return defaultLineChartHorizontalLabelsStrategy
+    }
 
     fun show(entries: List<LinkedHashMap<String, Float>>) {
         doOnPreDraw { renderer.preDraw(chartConfiguration) }
@@ -161,7 +166,7 @@ class MultiLineChartView  @JvmOverloads constructor(
 
     override fun handleEditMode() {
         if (isInEditMode) {
-            this.show(editModeSampleData)
+            this.show(AxisChartData.editModeMultiLineSampleData)
         }
     }
 
@@ -170,14 +175,6 @@ class MultiLineChartView  @JvmOverloads constructor(
         private const val defaultSmooth = false
         private const val defaultLineThickness = 4F
         private const val defaultLineColor = Color.BLACK
-
-        private val editModeSampleData = listOf(
-            linkedMapOf(
-                "Label1" to 1f,
-                "Label2" to 7.5f,
-                "Label3" to 4.7f,
-                "Label4" to 3.5f
-            )
-        )
+        private val defaultLineChartHorizontalLabelsStrategy = DefaultStrategy()
     }
 }

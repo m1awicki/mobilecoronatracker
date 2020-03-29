@@ -1,6 +1,7 @@
 package com.mobilecoronatracker.ui.chart.williamchart.renderer
 
 // Copied from https://github.com/diogobernardino/WilliamChart
+// Modified my m1awicki
 
 import com.mobilecoronatracker.ui.chart.williamchart.ChartContract
 import com.mobilecoronatracker.ui.chart.williamchart.Painter
@@ -22,12 +23,14 @@ import com.mobilecoronatracker.ui.chart.williamchart.extensions.toDataPoints
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.toLabels
 import com.mobilecoronatracker.ui.chart.williamchart.renderer.executor.DebugWithLabelsFrame
 import com.mobilecoronatracker.ui.chart.williamchart.renderer.executor.MeasureHorizontalBarChartPaddings
+import com.mobilecoronatracker.ui.chart.williamchart.strategy.HorizontalBarChartStrategy
 import kotlin.math.max
 
 class HorizontalBarChartRenderer(
     private val view: ChartContract.BarView,
     private val painter: Painter,
-    private var animation: ChartAnimation<DataPoint>
+    private var animation: ChartAnimation<DataPoint>,
+    private val xLabelsPlacingStrategy: ChartContract.HorizontalAxisLabelsPlacingStrategy = HorizontalBarChartStrategy()
 ) : ChartContract.Renderer {
 
     private var data = emptyList<DataPoint>()
@@ -38,10 +41,12 @@ class HorizontalBarChartRenderer(
 
     private lateinit var chartConfiguration: BarChartConfiguration
 
-    private val xLabels: List<Label> by lazy {
+    private var xLabels: List<Label> = emptyList()
+
+    private fun createLabels(): List<Label> {
         val scaleStep = chartConfiguration.scale.size / RendererConstants.defaultScaleNumberOfSteps
 
-        List(RendererConstants.defaultScaleNumberOfSteps + 1) {
+        return List(RendererConstants.defaultScaleNumberOfSteps + 1) {
             val scaleValue = chartConfiguration.scale.min + scaleStep * it
             Label(
                 label = chartConfiguration.labelsFormatter(scaleValue),
@@ -148,18 +153,8 @@ class HorizontalBarChartRenderer(
     }
 
     private fun placeLabelsX(innerFrame: Frame) {
-
-        val widthBetweenLabels =
-            (innerFrame.right - innerFrame.left) / RendererConstants.defaultScaleNumberOfSteps
-        val xLabelsVerticalPosition =
-            innerFrame.bottom -
-                painter.measureLabelAscent(chartConfiguration.labelsSize) +
-                    RendererConstants.labelsPaddingToInnerChart
-
-        xLabels.forEachIndexed { index, label ->
-            label.screenPositionX = innerFrame.left + widthBetweenLabels * index
-            label.screenPositionY = xLabelsVerticalPosition
-        }
+        xLabels = xLabelsPlacingStrategy.placeLabels(innerFrame, chartConfiguration.labelsSize,
+            painter, createLabels())
     }
 
     private fun placeLabelsY(outerFrame: Frame, innerFrame: Frame) {

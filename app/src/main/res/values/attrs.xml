@@ -8,7 +8,7 @@
             <enum name="xy" value="3" />
         </attr>
         <attr name="horizontal_labels_strategy">
-            <enum name="basic" value="0" />
+            <enum name="defaultStrategy" value="0" />
             <enum name="pickAndMatch" value="1" />
         </attr>
         <attr name="chart_labelsColor" format="color" />

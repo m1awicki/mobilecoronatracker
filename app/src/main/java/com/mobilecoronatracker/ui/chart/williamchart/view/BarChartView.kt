@@ -9,25 +9,21 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import androidx.annotation.ColorInt
-import com.mobilecoronatracker.ui.chart.williamchart.ChartContract
+import androidx.core.view.doOnPreDraw
 import com.mobilecoronatracker.R
+import com.mobilecoronatracker.ui.chart.williamchart.ChartContract.*
 import com.mobilecoronatracker.ui.chart.williamchart.animation.NoAnimation
-import com.mobilecoronatracker.ui.chart.williamchart.data.BarChartConfiguration
-import com.mobilecoronatracker.ui.chart.williamchart.data.ChartConfiguration
-import com.mobilecoronatracker.ui.chart.williamchart.data.DataPoint
-import com.mobilecoronatracker.ui.chart.williamchart.data.Frame
-import com.mobilecoronatracker.ui.chart.williamchart.data.Label
-import com.mobilecoronatracker.ui.chart.williamchart.data.Paddings
-import com.mobilecoronatracker.ui.chart.williamchart.data.toRect
+import com.mobilecoronatracker.ui.chart.williamchart.data.*
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.drawChartBar
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.obtainStyledAttributes
 import com.mobilecoronatracker.ui.chart.williamchart.renderer.BarChartRenderer
+import com.mobilecoronatracker.ui.chart.williamchart.strategy.BarChartStrategy
 
 class BarChartView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AxisChartView(context, attrs, defStyleAttr), ChartContract.BarView {
+) : AxisChartView(context, attrs, defStyleAttr), BarView {
 
     @Suppress("MemberVisibilityCanBePrivate")
     var spacing = defaultSpacing
@@ -41,6 +37,14 @@ class BarChartView @JvmOverloads constructor(
 
     @Suppress("MemberVisibilityCanBePrivate")
     var barsBackgroundColor: Int = -1
+
+    private val renderer by lazy {
+        BarChartRenderer(this, painter, NoAnimation(), horizontalLabelsStrategy)
+    }
+
+    override fun draw() {
+        renderer.draw()
+    }
 
     override val chartConfiguration: ChartConfiguration
         get() =
@@ -60,8 +64,11 @@ class BarChartView @JvmOverloads constructor(
                 labelsFormatter = labelsFormatter
             )
 
+    override fun getDefaultHorizontalLabelsStrategy(): HorizontalAxisLabelsPlacingStrategy {
+        return defaultBarChartHorizontalLabelsStrategy
+    }
+
     init {
-        renderer = BarChartRenderer(this, painter, NoAnimation())
         handleAttributes(obtainStyledAttributes(attrs, R.styleable.BarChartAttrs))
         handleEditMode()
     }
@@ -138,9 +145,26 @@ class BarChartView @JvmOverloads constructor(
         }
     }
 
+    fun show(entries: LinkedHashMap<String, Float>) {
+        doOnPreDraw { renderer.preDraw(chartConfiguration) }
+        renderer.render(entries)
+    }
+
+    fun animate(entries: LinkedHashMap<String, Float>) {
+        doOnPreDraw { renderer.preDraw(chartConfiguration) }
+        renderer.anim(entries, animation)
+    }
+
+    override fun handleEditMode() {
+        if (isInEditMode) {
+            show(AxisChartData.editModeSampleData)
+        }
+    }
+
     companion object {
         private const val defaultSpacing = 10f
         private const val defaultBarsColor = Color.BLACK
         private const val defaultBarsRadius = 0F
+        private val defaultBarChartHorizontalLabelsStrategy: HorizontalAxisLabelsPlacingStrategy = BarChartStrategy()
     }
 }

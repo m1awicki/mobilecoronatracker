@@ -32,12 +32,13 @@ abstract class CountryDataDao : BaseDao<CountryData> {
         """
         SELECT * 
         FROM country_data 
-        WHERE entry_date>=:timestampStart AND entry_date<=:timestampEnd
+        WHERE entry_date>=:timestampStart AND entry_date<=:timestampEnd AND country_id=:countryId
         """
     )
-    abstract fun getCountryByTimestampRangeFlow(
+    abstract fun getCountryDataRangeByTimestampRangeFlow(
         timestampStart: Long,
-        timestampEnd: Long
+        timestampEnd: Long,
+        countryId: Long
     ): Flow<List<CountryData>>
 
     @Query(

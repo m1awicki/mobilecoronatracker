@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 
-class AccumulatedDataRepoImpl(
+class AccumulatedDataRepoRoomImpl(
     private val accumulatedDataDao: AccumulatedDataDao,
     private val covidDataRepo: CovidDataRepo
 ) : AccumulatedDataRepo {

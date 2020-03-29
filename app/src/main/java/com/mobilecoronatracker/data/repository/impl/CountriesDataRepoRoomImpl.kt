@@ -13,7 +13,7 @@ import com.mobilecoronatracker.utils.getTodayTimestamp
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class CountriesDataRepoImpl(
+class CountriesDataRepoRoomImpl(
     private val countryDataDao: CountryDataDao,
     private val countryDao: CountryDao,
     private val covidDataRepo: CovidDataRepo,

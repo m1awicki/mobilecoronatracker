@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 @Entity(
     tableName = "province_data",
     indices = [
-        Index(value = ["id", "entry_date"], unique = true)
+        Index(value = ["province_id", "entry_date"], unique = true)
     ],
     foreignKeys = [
         androidx.room.ForeignKey(
@@ -23,8 +23,8 @@ import androidx.room.PrimaryKey
 )
 class ProvinceData(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val infected: Int = 0,
-    val dead: Int = 0,
+    val cases: Int = 0,
+    val deaths: Int = 0,
     val recovered: Int = 0,
     @ColumnInfo(name = "entry_date") val entryDate: Long = System.currentTimeMillis(),
     @ColumnInfo(name = "province_id") val provinceId: Long

@@ -14,8 +14,8 @@ import androidx.room.PrimaryKey
 )
 data class AccumulatedData(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val infected: Int = 0,
-    val dead: Int = 0,
+    val cases: Int = 0,
+    val deaths: Int = 0,
     val recovered: Int = 0,
     @ColumnInfo(name = "entry_date") val entryDate: Long = System.currentTimeMillis()
 )

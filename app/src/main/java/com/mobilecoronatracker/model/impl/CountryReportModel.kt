@@ -1,12 +1,13 @@
 package com.mobilecoronatracker.model.impl
 
-import com.mobilecoronatracker.data.persistence.entity.CountryDataWithCountryName
+import com.mobilecoronatracker.data.persistence.entity.CountryDataWithCountryInfo
 import com.mobilecoronatracker.model.CountryReportModelable
 import com.mobilecoronatracker.model.pojo.CovidCountryEntry
 import kotlin.math.max
 
 data class CountryReportModel(
     override val country: String,
+    override val iso2: String,
     override val cases: Int,
     override val todayCases: Int,
     override val deaths: Int,
@@ -19,6 +20,7 @@ data class CountryReportModel(
     constructor(data: CovidCountryEntry) :
             this(
                 data.country,
+                data.countryInfo.iso2 ?: "",
                 data.cases,
                 data.todayCases,
                 data.deaths,
@@ -29,17 +31,18 @@ data class CountryReportModel(
                 followed = false
             )
 
-    constructor(data: CountryDataWithCountryName) :
+    constructor(data: CountryDataWithCountryInfo) :
             this(
                 data.countryName,
-                data.countryData.infected,
-                data.countryData.todayInfected,
-                data.countryData.dead,
-                data.countryData.todayDead,
+                "",
+                data.countryData.cases,
+                data.countryData.todayCases,
+                data.countryData.deaths,
+                data.countryData.todayDeaths,
                 data.countryData.recovered,
                 data.countryData.critical,
                 max(
-                    data.countryData.infected - data.countryData.recovered - data.countryData.dead,
+                    data.countryData.cases - data.countryData.recovered - data.countryData.deaths,
                     0
                 ),
                 followed = false

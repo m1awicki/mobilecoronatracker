@@ -2,6 +2,7 @@ package com.mobilecoronatracker.model.pojo
 
 data class CovidCountryEntry(
     val country: String = "",
+    val countryInfo: CovidCountryInfo = CovidCountryInfo(""),
     val cases: Int = 0,
     val todayCases: Int = 0,
     val deaths: Int = 0,

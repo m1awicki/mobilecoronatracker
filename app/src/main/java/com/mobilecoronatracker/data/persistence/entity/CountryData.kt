@@ -25,10 +25,10 @@ import androidx.room.PrimaryKey
 )
 data class CountryData(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val infected: Int = 0,
-    val todayInfected: Int = 0,
-    val dead: Int = 0,
-    val todayDead: Int = 0,
+    val cases: Int = 0,
+    @ColumnInfo(name = "today_cases") val todayCases: Int = 0,
+    val deaths: Int = 0,
+    @ColumnInfo(name = "today_deaths") val todayDeaths: Int = 0,
     val recovered: Int = 0,
     val critical: Int = 0,
     @ColumnInfo(name = "cases_per_million") val casesPerMillion: Int = 0,

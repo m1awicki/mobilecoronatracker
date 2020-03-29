@@ -10,5 +10,5 @@ class GeneralReportModel(
     override var recovered: Int
 ) : GeneralReportModelable {
     constructor(data: CovidCumulatedData) : this(data.cases, data.deaths, data.recovered)
-    constructor(data: AccumulatedData) : this(data.infected, data.dead, data.recovered)
+    constructor(data: AccumulatedData) : this(data.cases, data.deaths, data.recovered)
 }

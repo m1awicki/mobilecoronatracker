@@ -3,21 +3,21 @@ package com.mobilecoronatracker.data.persistence.dao
 import androidx.room.Dao
 import androidx.room.Query
 import com.mobilecoronatracker.data.persistence.entity.CountryData
-import com.mobilecoronatracker.data.persistence.entity.CountryDataWithCountryName
+import com.mobilecoronatracker.data.persistence.entity.CountryDataWithCountryInfo
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class CountryDataDao : BaseDao<CountryData> {
     @Query(
         """
-        SELECT country_data.*, country.name 
+        SELECT country_data.*, country.name, country.iso2
         FROM country_data 
         INNER JOIN country ON country_data.country_id = country.id 
         WHERE entry_date=:timestamp 
-        ORDER BY infected DESC
+        ORDER BY cases DESC
         """
     )
-    abstract fun getAllCountryByTimestampFlow(timestamp: Long): Flow<List<CountryDataWithCountryName>>
+    abstract fun getAllCountriesByTimestampFlow(timestamp: Long): Flow<List<CountryDataWithCountryInfo>>
 
     @Query(
         """

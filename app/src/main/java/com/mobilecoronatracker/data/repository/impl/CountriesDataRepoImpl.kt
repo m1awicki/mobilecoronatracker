@@ -21,7 +21,7 @@ class CountriesDataRepoImpl(
 ) : CountriesDataRepo {
     override fun getAllCountriesTodayData(): Flow<List<CountryReportModelable>> {
         val todayTimestamp = getTodayTimestamp()
-        return countryDataDao.getAllCountryByTimestampFlow(todayTimestamp).map { list ->
+        return countryDataDao.getAllCountriesByTimestampFlow(todayTimestamp).map { list ->
             list.map {
                 CountryReportModel(it)
             }

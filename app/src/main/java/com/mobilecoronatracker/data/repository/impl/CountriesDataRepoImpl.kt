@@ -4,11 +4,11 @@ import com.mobilecoronatracker.data.persistence.AppDatabase
 import com.mobilecoronatracker.data.persistence.dao.CountryDao
 import com.mobilecoronatracker.data.persistence.dao.CountryDataDao
 import com.mobilecoronatracker.data.persistence.entity.Country
-import com.mobilecoronatracker.data.persistence.entity.CountryData
 import com.mobilecoronatracker.data.repository.CountriesDataRepo
 import com.mobilecoronatracker.data.repository.CovidDataRepo
 import com.mobilecoronatracker.model.CountryReportModelable
 import com.mobilecoronatracker.model.impl.CountryReportModel
+import com.mobilecoronatracker.model.toCountryData
 import com.mobilecoronatracker.utils.getTodayTimestamp
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -36,10 +36,10 @@ class CountriesDataRepoImpl(
     }
 
     override suspend fun refreshCountriesData() {
-        val countriesData = covidDataRepo.getCountriesData()
+        val countiesReportModelable = covidDataRepo.getCountriesData()
         val todayTimestamp = getTodayTimestamp()
         appDatabase.withTransactionWrapper {
-            countriesData.forEach {
+            countiesReportModelable.forEach {
                 var countryId = countryDao.insert(Country(0, it.country, it.country))
                 if (countryId == -1L) {
                     countryId = countryDao.getByCountryName(it.country)?.id ?: 0L
@@ -47,27 +47,13 @@ class CountriesDataRepoImpl(
                 val countryData =
                     countryDataDao.getCountryByTimestamp(countryId, todayTimestamp)
                 if (countryData == null) {
-                    countryDataDao.insert(
-                        CountryData(
-                            infected = it.cases,
-                            todayInfected = it.todayCases,
-                            critical = it.critical,
-                            recovered = it.recovered,
-                            dead = it.deaths,
-                            todayDead = it.todayDeaths,
-                            countryId = countryId,
-                            entryDate = todayTimestamp
-                        )
-                    )
+                    countryDataDao.insert(it.toCountryData(0, countryId, todayTimestamp))
                 } else {
                     countryDataDao.update(
-                        countryData.copy(
-                            infected = it.cases,
-                            todayInfected = it.todayCases,
-                            dead = it.deaths,
-                            todayDead = it.todayDeaths,
-                            critical = it.critical,
-                            recovered = it.recovered
+                        it.toCountryData(
+                            countryData.id,
+                            countryData.countryId,
+                            countryData.entryDate
                         )
                     )
                 }

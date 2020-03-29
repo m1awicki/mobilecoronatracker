@@ -1,5 +1,7 @@
 package com.mobilecoronatracker.model
 
+import com.mobilecoronatracker.data.persistence.entity.CountryData
+
 interface CountryReportModelable {
     val country: String
     val cases: Int
@@ -11,3 +13,19 @@ interface CountryReportModelable {
     val active: Int
     var followed: Boolean
 }
+
+fun CountryReportModelable.toCountryData(
+    id: Long,
+    countryId: Long,
+    timestamp: Long
+): CountryData = CountryData(
+    id = id,
+    infected = cases,
+    todayInfected = todayCases,
+    critical = critical,
+    recovered = recovered,
+    dead = deaths,
+    todayDead = todayDeaths,
+    countryId = countryId,
+    entryDate = timestamp
+)

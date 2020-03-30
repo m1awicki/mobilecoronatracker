@@ -15,9 +15,4 @@
         android:id="@+id/navigation_about"
         android:icon="@drawable/ic_info"
         android:title="@string/about_title" />
-
-    <item
-        android:id="@+id/navigation_chart_test"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="Chart test" />
 </menu>

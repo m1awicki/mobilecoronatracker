@@ -18,7 +18,6 @@ import com.mobilecoronatracker.ui.chart.williamchart.data.toOuterFrame
 import com.mobilecoronatracker.ui.chart.williamchart.data.withPaddings
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.maxValueBy
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.toDataPoints
-import com.mobilecoronatracker.ui.chart.williamchart.extensions.toLabels
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.toScale
 import com.mobilecoronatracker.ui.chart.williamchart.renderer.executor.DebugWithLabelsFrame
 import com.mobilecoronatracker.ui.chart.williamchart.renderer.executor.MeasureLineChartPaddings
@@ -29,7 +28,7 @@ class LineChartRenderer(
     private val painter: Painter,
     private var animation: ChartAnimation<DataPoint>,
     private val xLabelsPlacingStrategy: ChartContract.HorizontalAxisLabelsPlacingStrategy = DefaultStrategy()
-) : ChartContract.Renderer {
+) : ChartContract.Renderer<List<Float>, List<String>> {
 
     private var data = emptyList<DataPoint>()
 
@@ -40,6 +39,8 @@ class LineChartRenderer(
     private lateinit var chartConfiguration: LineChartConfiguration
 
     private var xLabels: List<Label> = emptyList()
+
+    private var xLabelsFinal: List<Label> = emptyList()
 
     private val yLabels by lazy {
         val scaleStep = chartConfiguration.scale.size / RendererConstants.defaultScaleNumberOfSteps
@@ -55,7 +56,6 @@ class LineChartRenderer(
     }
 
     override fun preDraw(configuration: ChartConfiguration): Boolean {
-
         if (data.isEmpty()) return true
 
         this.chartConfiguration = configuration as LineChartConfiguration
@@ -99,11 +99,10 @@ class LineChartRenderer(
     }
 
     override fun draw() {
-
         if (data.isEmpty()) return
 
         if (chartConfiguration.axis.shouldDisplayAxisX())
-            view.drawLabels(xLabels)
+            view.drawLabels(xLabelsFinal)
 
         if (chartConfiguration.axis.shouldDisplayAxisY())
             view.drawLabels(yLabels)
@@ -123,7 +122,7 @@ class LineChartRenderer(
                 DebugWithLabelsFrame()(
                     painter = painter,
                     axisType = chartConfiguration.axis,
-                    xLabels = xLabels,
+                    xLabels = xLabelsFinal,
                     yLabels = yLabels,
                     labelsSize = chartConfiguration.labelsSize
                 )
@@ -131,24 +130,29 @@ class LineChartRenderer(
         }
     }
 
-    override fun render(entries: LinkedHashMap<String, Float>) {
+    override fun render(labels: List<String>, entries: List<Float>) {
         data = entries.toDataPoints()
+        xLabels = labels.map { Label(it, 0f, 0f) }
         view.postInvalidate()
     }
 
-    override fun anim(entries: LinkedHashMap<String, Float>, animation: ChartAnimation<DataPoint>) {
+    override fun anim(
+        labels: List<String>,
+        entries: List<Float>,
+        animation: ChartAnimation<DataPoint>
+    ) {
         data = entries.toDataPoints()
         this.animation = animation
+        xLabels = labels.map { Label(it, 0f, 0f) }
         view.postInvalidate()
     }
 
     private fun placeLabelsX(innerFrame: Frame) {
-        xLabels = xLabelsPlacingStrategy.placeLabels(
-            innerFrame, chartConfiguration.labelsSize, painter, data.toLabels())
+        xLabelsFinal = xLabelsPlacingStrategy.placeLabels(
+            innerFrame, chartConfiguration.labelsSize, painter, xLabels)
     }
 
     private fun placeLabelsY(innerFrame: Frame) {
-
         val heightBetweenLabels =
             (innerFrame.bottom - innerFrame.top) / RendererConstants.defaultScaleNumberOfSteps
         val labelsBottomPosition =
@@ -164,15 +168,13 @@ class LineChartRenderer(
     }
 
     private fun placeDataPoints(innerFrame: Frame) {
-
         val scaleSize = chartConfiguration.scale.size
         val chartHeight = innerFrame.bottom - innerFrame.top
         val widthBetweenLabels = (innerFrame.right - innerFrame.left) / (xLabels.size - 1)
 
         data.forEachIndexed { index, dataPoint ->
             dataPoint.screenPositionX = innerFrame.left + (widthBetweenLabels * index)
-            dataPoint.screenPositionY =
-                innerFrame.bottom -
+            dataPoint.screenPositionY = innerFrame.bottom -
                     (chartHeight * (dataPoint.value - chartConfiguration.scale.min) / scaleSize)
         }
     }

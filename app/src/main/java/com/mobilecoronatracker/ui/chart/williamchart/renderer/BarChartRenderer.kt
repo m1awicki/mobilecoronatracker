@@ -19,7 +19,6 @@ import com.mobilecoronatracker.ui.chart.williamchart.data.withPaddings
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.limits
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.maxValueBy
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.toDataPoints
-import com.mobilecoronatracker.ui.chart.williamchart.extensions.toLabels
 import com.mobilecoronatracker.ui.chart.williamchart.renderer.executor.DebugWithLabelsFrame
 import com.mobilecoronatracker.ui.chart.williamchart.renderer.executor.MeasureBarChartPaddings
 import com.mobilecoronatracker.ui.chart.williamchart.strategy.BarChartStrategy
@@ -30,7 +29,7 @@ class BarChartRenderer(
     private val painter: Painter,
     private var animation: ChartAnimation<DataPoint>,
     private val xLabelsPlacingStrategy: ChartContract.HorizontalAxisLabelsPlacingStrategy = BarChartStrategy()
-) : ChartContract.Renderer {
+)  : ChartContract.Renderer<List<Float>, List<String>> {
 
     private var data = emptyList<DataPoint>()
 
@@ -41,6 +40,8 @@ class BarChartRenderer(
     private lateinit var chartConfiguration: BarChartConfiguration
 
     private var xLabels: List<Label> = emptyList()
+
+    private var xLabelsText: List<String> = emptyList()
 
     private val yLabels by lazy {
         val scaleStep = chartConfiguration.scale.size / RendererConstants.defaultScaleNumberOfSteps
@@ -130,20 +131,26 @@ class BarChartRenderer(
         }
     }
 
-    override fun render(entries: LinkedHashMap<String, Float>) {
+    override fun render(labels: List<String>, entries: List<Float>) {
         data = entries.toDataPoints()
+        xLabelsText = labels
         view.postInvalidate()
     }
 
-    override fun anim(entries: LinkedHashMap<String, Float>, animation: ChartAnimation<DataPoint>) {
+    override fun anim(
+        labels: List<String>,
+        entries: List<Float>,
+        animation: ChartAnimation<DataPoint>
+    ) {
         data = entries.toDataPoints()
+        xLabelsText = labels
         this.animation = animation
         view.postInvalidate()
     }
 
     private fun placeLabelsX(innerFrame: Frame) {
         xLabels = xLabelsPlacingStrategy.placeLabels(innerFrame, chartConfiguration.labelsSize,
-            painter, data.toLabels())
+            painter, xLabelsText.map { Label(it, 0f, 0f) })
     }
 
     private fun placeLabelsY(innerFrame: Frame) {

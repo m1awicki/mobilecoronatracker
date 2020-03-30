@@ -8,7 +8,6 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.util.AttributeSet
 import androidx.annotation.DrawableRes
-import androidx.core.view.doOnPreDraw
 import com.mobilecoronatracker.ui.chart.williamchart.ChartContract
 import com.mobilecoronatracker.R
 import com.mobilecoronatracker.ui.chart.williamchart.animation.NoAnimation
@@ -21,11 +20,15 @@ import com.mobilecoronatracker.ui.chart.williamchart.extensions.toSmoothLinePath
 import com.mobilecoronatracker.ui.chart.williamchart.renderer.MultiLineChartRenderer
 import com.mobilecoronatracker.ui.chart.williamchart.strategy.DefaultStrategy
 
-class MultiLineChartView  @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
-) : AxisChartView(context, attrs, defStyleAttr), ChartContract.MultiLineView {
+class MultiLineChartView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : AxisChartView<List<LinkedHashMap<String, Float>>, List<String>>(
+    context,
+    attrs,
+    defStyleAttr
+), ChartContract.MultiLineView {
 
     @Suppress("MemberVisibilityCanBePrivate")
     var smooth: Boolean = defaultSmooth
@@ -42,14 +45,6 @@ class MultiLineChartView  @JvmOverloads constructor(
     @DrawableRes
     @Suppress("MemberVisibilityCanBePrivate")
     var pointsDrawableRes = -1
-
-    private val renderer: MultiLineChartRenderer by lazy {
-        MultiLineChartRenderer(this, painter, NoAnimation(), horizontalLabelsStrategy)
-    }
-
-    override fun draw() {
-        renderer.draw()
-    }
 
     override val chartConfiguration: ChartConfiguration
         get() =
@@ -77,18 +72,9 @@ class MultiLineChartView  @JvmOverloads constructor(
         return defaultLineChartHorizontalLabelsStrategy
     }
 
-    fun show(entries: List<LinkedHashMap<String, Float>>) {
-        doOnPreDraw { renderer.preDraw(chartConfiguration) }
-        renderer.render(entries)
-    }
-
-    fun animate(labels: List<String>, entries: List<LinkedHashMap<String, Float>>) {
-        doOnPreDraw { renderer.preDraw(chartConfiguration) }
-        renderer.anim(labels, entries, animation)
-    }
-
     init {
         handleAttributes(obtainStyledAttributes(attrs, R.styleable.LineChartAttrs))
+        renderer = MultiLineChartRenderer(this, painter, NoAnimation(), horizontalLabelsStrategy)
         handleEditMode()
     }
 
@@ -117,7 +103,6 @@ class MultiLineChartView  @JvmOverloads constructor(
     }
 
     override fun drawLabels(xLabels: List<Label>) {
-
         painter.prepare(
                 textSize = labelsSize,
                 color = labelsColor,
@@ -164,11 +149,8 @@ class MultiLineChartView  @JvmOverloads constructor(
         }
     }
 
-    override fun handleEditMode() {
-        if (isInEditMode) {
-            this.show(AxisChartData.editModeMultiLineSampleData)
-        }
-    }
+    override fun getEditModeData(): List<LinkedHashMap<String, Float>> = AxisChartData.editModeMultiLineSampleData
+    override fun getEditModeLabels(): List<String> = AxisChartData.editModeMultiLineSampleDataLabels
 
     companion object {
         private const val defaultSmoothFactor = 0.20f
@@ -177,4 +159,5 @@ class MultiLineChartView  @JvmOverloads constructor(
         private const val defaultLineColor = Color.BLACK
         private val defaultLineChartHorizontalLabelsStrategy = DefaultStrategy()
     }
+
 }

@@ -59,18 +59,11 @@ interface ChartContract {
         fun drawDebugFrame(innerFrame: Frame)
     }
 
-    interface Renderer {
+    interface Renderer <in T, in S> {
         fun preDraw(configuration: ChartConfiguration): Boolean
         fun draw()
-        fun render(entries: LinkedHashMap<String, Float>)
-        fun anim(entries: LinkedHashMap<String, Float>, animation: ChartAnimation<DataPoint>)
-    }
-
-    interface MultiLineRenderer {
-        fun preDraw(configuration: ChartConfiguration): Boolean
-        fun draw()
-        fun render(entries: List<LinkedHashMap<String, Float>>)
-        fun anim(labels: List<String>, entries: List<LinkedHashMap<String, Float>>, animation: ChartAnimation<DataPoint>)
+        fun render(labels: S, entries: T)
+        fun anim(labels: S, entries: T, animation: ChartAnimation<DataPoint>)
     }
 
     interface DonutRenderer {

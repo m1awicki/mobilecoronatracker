@@ -7,21 +7,19 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.doOnPreDraw
 import com.mobilecoronatracker.R
 import com.mobilecoronatracker.ui.chart.williamchart.ChartContract
 import com.mobilecoronatracker.ui.chart.williamchart.Painter
 import com.mobilecoronatracker.ui.chart.williamchart.animation.ChartAnimation
 import com.mobilecoronatracker.ui.chart.williamchart.animation.DefaultAnimation
-import com.mobilecoronatracker.ui.chart.williamchart.data.AxisType
-import com.mobilecoronatracker.ui.chart.williamchart.data.ChartConfiguration
-import com.mobilecoronatracker.ui.chart.williamchart.data.DataPoint
-import com.mobilecoronatracker.ui.chart.williamchart.data.Scale
+import com.mobilecoronatracker.ui.chart.williamchart.data.*
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.obtainStyledAttributes
 import com.mobilecoronatracker.ui.chart.williamchart.renderer.RendererConstants
 import com.mobilecoronatracker.ui.chart.williamchart.strategy.DefaultStrategy
 import com.mobilecoronatracker.ui.chart.williamchart.strategy.PickAndMatchStrategy
 
-abstract class AxisChartView @JvmOverloads constructor(
+abstract class AxisChartView <T, S> @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
@@ -47,6 +45,8 @@ abstract class AxisChartView @JvmOverloads constructor(
 
     protected var horizontalLabelsStrategy: ChartContract.HorizontalAxisLabelsPlacingStrategy =
         defaultHorizontalLabelsStrategy
+
+    protected lateinit var renderer: ChartContract.Renderer<T, S>
 
     init {
         handleAttributes(obtainStyledAttributes(attrs, R.styleable.ChartAttrs))
@@ -75,12 +75,10 @@ abstract class AxisChartView @JvmOverloads constructor(
         )
     }
 
-    protected abstract fun draw()
-
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         this.canvas = canvas
-        draw()
+        renderer.draw()
     }
 
     abstract val chartConfiguration: ChartConfiguration
@@ -120,7 +118,24 @@ abstract class AxisChartView @JvmOverloads constructor(
         }
     }
 
-    protected abstract fun handleEditMode()
+    fun show(labels: S, entries: T) {
+        doOnPreDraw { renderer.preDraw(chartConfiguration) }
+        renderer.render(labels, entries)
+    }
+
+    fun animate(labels: S, entries: T) {
+        doOnPreDraw { renderer.preDraw(chartConfiguration) }
+        renderer.anim(labels, entries, animation)
+    }
+
+    protected abstract fun getEditModeData(): T
+    protected abstract fun getEditModeLabels(): S
+
+    protected fun handleEditMode() {
+        if (isInEditMode) {
+            this.show(getEditModeLabels(), getEditModeData())
+        }
+    }
 
     companion object {
         private const val defaultFrameWidth = 200

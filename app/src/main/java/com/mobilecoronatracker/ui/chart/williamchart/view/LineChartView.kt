@@ -28,7 +28,7 @@ class LineChartView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AxisChartView(context, attrs, defStyleAttr), ChartContract.LineView {
+) : AxisChartView<List<Float>, List<String>>(context, attrs, defStyleAttr), ChartContract.LineView {
 
     @Suppress("MemberVisibilityCanBePrivate")
     var smooth: Boolean = defaultSmooth
@@ -49,14 +49,6 @@ class LineChartView @JvmOverloads constructor(
     @DrawableRes
     @Suppress("MemberVisibilityCanBePrivate")
     var pointsDrawableRes = -1
-
-    private val renderer by lazy {
-        LineChartRenderer(this, painter, NoAnimation(), horizontalLabelsStrategy)
-    }
-
-    override fun draw() {
-        renderer.draw()
-    }
 
     override val chartConfiguration: ChartConfiguration
     get() =
@@ -88,6 +80,7 @@ class LineChartView @JvmOverloads constructor(
 
     init {
         handleAttributes(obtainStyledAttributes(attrs, R.styleable.LineChartAttrs))
+        renderer = LineChartRenderer(this, painter, NoAnimation(), horizontalLabelsStrategy)
         handleEditMode()
     }
 
@@ -181,22 +174,6 @@ class LineChartView @JvmOverloads constructor(
         }
     }
 
-    fun show(entries: LinkedHashMap<String, Float>) {
-        doOnPreDraw { renderer.preDraw(chartConfiguration) }
-        renderer.render(entries)
-    }
-
-    fun animate(entries: LinkedHashMap<String, Float>) {
-        doOnPreDraw { renderer.preDraw(chartConfiguration) }
-        renderer.anim(entries, animation)
-    }
-
-    override fun handleEditMode() {
-        if (isInEditMode) {
-            show(AxisChartData.editModeSampleData)
-        }
-    }
-
     companion object {
         private const val defaultSmoothFactor = 0.20f
         private const val defaultSmooth = false
@@ -205,4 +182,7 @@ class LineChartView @JvmOverloads constructor(
         private const val defaultLineColor = Color.BLACK
         private val defaultLineChartHorizontalLabelsStrategy = DefaultStrategy()
     }
+
+    override fun getEditModeData(): List<Float> = AxisChartData.editModeSampleData.map { it.value }
+    override fun getEditModeLabels(): List<String> = AxisChartData.editModeSampleData.map { it.key }
 }

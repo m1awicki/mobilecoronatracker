@@ -9,7 +9,6 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import androidx.annotation.ColorInt
-import androidx.core.view.doOnPreDraw
 import com.mobilecoronatracker.R
 import com.mobilecoronatracker.ui.chart.williamchart.ChartContract.*
 import com.mobilecoronatracker.ui.chart.williamchart.animation.NoAnimation
@@ -23,7 +22,11 @@ class BarChartView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AxisChartView(context, attrs, defStyleAttr), BarView {
+) : AxisChartView<LinkedHashMap<String, Float>, List<String>>(
+    context,
+    attrs,
+    defStyleAttr
+), BarView {
 
     @Suppress("MemberVisibilityCanBePrivate")
     var spacing = defaultSpacing
@@ -37,14 +40,6 @@ class BarChartView @JvmOverloads constructor(
 
     @Suppress("MemberVisibilityCanBePrivate")
     var barsBackgroundColor: Int = -1
-
-    private val renderer by lazy {
-        BarChartRenderer(this, painter, NoAnimation(), horizontalLabelsStrategy)
-    }
-
-    override fun draw() {
-        renderer.draw()
-    }
 
     override val chartConfiguration: ChartConfiguration
         get() =
@@ -70,6 +65,12 @@ class BarChartView @JvmOverloads constructor(
 
     init {
         handleAttributes(obtainStyledAttributes(attrs, R.styleable.BarChartAttrs))
+        renderer = BarChartRenderer(
+            this,
+            painter,
+            NoAnimation(),
+            defaultBarChartHorizontalLabelsStrategy
+        )
         handleEditMode()
     }
 
@@ -145,26 +146,14 @@ class BarChartView @JvmOverloads constructor(
         }
     }
 
-    fun show(entries: LinkedHashMap<String, Float>) {
-        doOnPreDraw { renderer.preDraw(chartConfiguration) }
-        renderer.render(entries)
-    }
-
-    fun animate(entries: LinkedHashMap<String, Float>) {
-        doOnPreDraw { renderer.preDraw(chartConfiguration) }
-        renderer.anim(entries, animation)
-    }
-
-    override fun handleEditMode() {
-        if (isInEditMode) {
-            show(AxisChartData.editModeSampleData)
-        }
-    }
-
     companion object {
         private const val defaultSpacing = 10f
         private const val defaultBarsColor = Color.BLACK
         private const val defaultBarsRadius = 0F
-        private val defaultBarChartHorizontalLabelsStrategy: HorizontalAxisLabelsPlacingStrategy = BarChartStrategy()
+        private val defaultBarChartHorizontalLabelsStrategy:
+                HorizontalAxisLabelsPlacingStrategy = BarChartStrategy()
     }
+
+    override fun getEditModeData(): LinkedHashMap<String, Float> = AxisChartData.editModeSampleData
+    override fun getEditModeLabels(): List<String> = AxisChartData.editModeSampleData.map { it.key }
 }

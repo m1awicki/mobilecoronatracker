@@ -20,7 +20,6 @@ import com.mobilecoronatracker.ui.chart.williamchart.data.withPaddings
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.limits
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.maxValueBy
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.toDataPoints
-import com.mobilecoronatracker.ui.chart.williamchart.extensions.toLabels
 import com.mobilecoronatracker.ui.chart.williamchart.renderer.executor.DebugWithLabelsFrame
 import com.mobilecoronatracker.ui.chart.williamchart.renderer.executor.MeasureHorizontalBarChartPaddings
 import com.mobilecoronatracker.ui.chart.williamchart.strategy.HorizontalBarChartStrategy
@@ -31,7 +30,7 @@ class HorizontalBarChartRenderer(
     private val painter: Painter,
     private var animation: ChartAnimation<DataPoint>,
     private val xLabelsPlacingStrategy: ChartContract.HorizontalAxisLabelsPlacingStrategy = HorizontalBarChartStrategy()
-) : ChartContract.Renderer {
+) : ChartContract.Renderer<List<Float>, List<String>> {
 
     private var data = emptyList<DataPoint>()
 
@@ -56,9 +55,7 @@ class HorizontalBarChartRenderer(
         }
     }
 
-    private val yLabels by lazy {
-        data.toLabels()
-    }
+    private var yLabels: List<Label> = emptyList()
 
     override fun preDraw(configuration: ChartConfiguration): Boolean {
 
@@ -141,13 +138,19 @@ class HorizontalBarChartRenderer(
         }
     }
 
-    override fun render(entries: LinkedHashMap<String, Float>) {
+    override fun render(labels: List<String>, entries: List<Float>) {
         data = entries.toDataPoints()
+        yLabels = labels.map { Label(it, 0f, 0f) }
         view.postInvalidate()
     }
 
-    override fun anim(entries: LinkedHashMap<String, Float>, animation: ChartAnimation<DataPoint>) {
+    override fun anim(
+        labels: List<String>,
+        entries: List<Float>,
+        animation: ChartAnimation<DataPoint>
+    ) {
         data = entries.toDataPoints()
+        yLabels = labels.map { Label(it, 0f, 0f) }
         this.animation = animation
         view.postInvalidate()
     }

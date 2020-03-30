@@ -7,6 +7,17 @@ import com.mobilecoronatracker.ui.chart.williamchart.data.DataPoint
 import com.mobilecoronatracker.ui.chart.williamchart.data.Label
 import com.mobilecoronatracker.ui.chart.williamchart.data.Scale
 
+fun List<Float>.toDataPoints(): List<DataPoint> {
+    return map {
+        DataPoint(
+            label = it.toString(),
+            value = it,
+            screenPositionY = 0f,
+            screenPositionX = 0f
+        )
+    }
+}
+
 fun List<DataPoint>.limits(): Pair<Float, Float> {
 
     if (isEmpty())

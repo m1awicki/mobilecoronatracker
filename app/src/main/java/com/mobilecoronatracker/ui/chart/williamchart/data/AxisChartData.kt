@@ -1,7 +1,6 @@
 package com.mobilecoronatracker.ui.chart.williamchart.data
 
-class AxisChartData {
-    companion object {
+object AxisChartData {
         val editModeSampleData =
             linkedMapOf(
                 "Label1" to 1f,
@@ -23,5 +22,5 @@ class AxisChartData {
                 "Label4" to 5f
             )
         )
-    }
+    val editModeMultiLineSampleDataLabels = editModeMultiLineSampleData[0].map { it.key }
 }

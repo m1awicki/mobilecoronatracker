@@ -9,10 +9,17 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import androidx.annotation.ColorInt
 import com.mobilecoronatracker.R
-import com.mobilecoronatracker.ui.chart.williamchart.ChartContract.*
+import com.mobilecoronatracker.ui.chart.williamchart.ChartContract
 import com.mobilecoronatracker.ui.chart.williamchart.animation.DefaultHorizontalAnimation
 import com.mobilecoronatracker.ui.chart.williamchart.animation.NoAnimation
-import com.mobilecoronatracker.ui.chart.williamchart.data.*
+import com.mobilecoronatracker.ui.chart.williamchart.data.AxisChartData
+import com.mobilecoronatracker.ui.chart.williamchart.data.BarChartConfiguration
+import com.mobilecoronatracker.ui.chart.williamchart.data.ChartConfiguration
+import com.mobilecoronatracker.ui.chart.williamchart.data.DataPoint
+import com.mobilecoronatracker.ui.chart.williamchart.data.Frame
+import com.mobilecoronatracker.ui.chart.williamchart.data.Label
+import com.mobilecoronatracker.ui.chart.williamchart.data.Paddings
+import com.mobilecoronatracker.ui.chart.williamchart.data.toRect
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.obtainStyledAttributes
 import com.mobilecoronatracker.ui.chart.williamchart.renderer.HorizontalBarChartRenderer
 import com.mobilecoronatracker.ui.chart.williamchart.strategy.HorizontalBarChartStrategy
@@ -25,7 +32,7 @@ class HorizontalBarChartView @JvmOverloads constructor(
     context,
     attrs,
     defStyleAttr
-), BarView {
+), ChartContract.BarView {
 
     @Suppress("MemberVisibilityCanBePrivate")
     var spacing = defaultSpacing
@@ -57,7 +64,7 @@ class HorizontalBarChartView @JvmOverloads constructor(
             barsBackgroundColor
         )
 
-    override fun getDefaultHorizontalLabelsStrategy(): HorizontalAxisLabelsPlacingStrategy {
+    override fun getDefaultHorizontalLabelsStrategy(): ChartContract.HorizontalAxisLabelsPlacingStrategy {
         return defaultBarChartHorizontalLabelsStrategy
     }
 
@@ -77,7 +84,6 @@ class HorizontalBarChartView @JvmOverloads constructor(
         points: List<DataPoint>,
         innerFrame: Frame
     ) {
-
         val halfBarWidth =
             (innerFrame.bottom - innerFrame.top - (points.size + 1) * spacing) / points.size / 2
 
@@ -98,7 +104,6 @@ class HorizontalBarChartView @JvmOverloads constructor(
     }
 
     override fun drawBarsBackground(points: List<DataPoint>, innerFrame: Frame) {
-
         val halfBarWidth =
             (innerFrame.bottom - innerFrame.top - (points.size + 1) * spacing) / points.size / 2
 
@@ -119,7 +124,6 @@ class HorizontalBarChartView @JvmOverloads constructor(
     }
 
     override fun drawLabels(xLabels: List<Label>) {
-
         painter.prepare(
             textSize = labelsSize,
             color = labelsColor,
@@ -158,7 +162,7 @@ class HorizontalBarChartView @JvmOverloads constructor(
         private const val defaultSpacing = 10f
         private const val defaultBarsColor = -0x1000000
         private const val defaultBarsRadius = 0F
-        private val defaultBarChartHorizontalLabelsStrategy: HorizontalAxisLabelsPlacingStrategy = HorizontalBarChartStrategy()
+        private val defaultBarChartHorizontalLabelsStrategy: ChartContract.HorizontalAxisLabelsPlacingStrategy = HorizontalBarChartStrategy()
     }
 
     override fun getEditModeData(): List<Float> = AxisChartData.editModeSampleData.map { it.value }

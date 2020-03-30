@@ -11,7 +11,14 @@ import androidx.annotation.DrawableRes
 import com.mobilecoronatracker.ui.chart.williamchart.ChartContract
 import com.mobilecoronatracker.R
 import com.mobilecoronatracker.ui.chart.williamchart.animation.NoAnimation
-import com.mobilecoronatracker.ui.chart.williamchart.data.*
+import com.mobilecoronatracker.ui.chart.williamchart.data.AxisChartData
+import com.mobilecoronatracker.ui.chart.williamchart.data.ChartConfiguration
+import com.mobilecoronatracker.ui.chart.williamchart.data.DataPoint
+import com.mobilecoronatracker.ui.chart.williamchart.data.Frame
+import com.mobilecoronatracker.ui.chart.williamchart.data.Label
+import com.mobilecoronatracker.ui.chart.williamchart.data.MultiLineChartConfiguration
+import com.mobilecoronatracker.ui.chart.williamchart.data.Paddings
+import com.mobilecoronatracker.ui.chart.williamchart.data.toRect
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.centerAt
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.getDrawable
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.obtainStyledAttributes
@@ -159,5 +166,4 @@ class MultiLineChartView @JvmOverloads constructor(
         private const val defaultLineColor = Color.BLACK
         private val defaultLineChartHorizontalLabelsStrategy = DefaultStrategy()
     }
-
 }

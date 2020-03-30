@@ -11,11 +11,18 @@ import android.graphics.Path
 import android.util.AttributeSet
 import androidx.annotation.DrawableRes
 import androidx.annotation.Size
-import androidx.core.view.doOnPreDraw
 import com.mobilecoronatracker.ui.chart.williamchart.ChartContract
 import com.mobilecoronatracker.R
 import com.mobilecoronatracker.ui.chart.williamchart.animation.NoAnimation
-import com.mobilecoronatracker.ui.chart.williamchart.data.*
+import com.mobilecoronatracker.ui.chart.williamchart.data.AxisChartData
+import com.mobilecoronatracker.ui.chart.williamchart.data.ChartConfiguration
+import com.mobilecoronatracker.ui.chart.williamchart.data.DataPoint
+import com.mobilecoronatracker.ui.chart.williamchart.data.Frame
+import com.mobilecoronatracker.ui.chart.williamchart.data.Label
+import com.mobilecoronatracker.ui.chart.williamchart.data.LineChartConfiguration
+import com.mobilecoronatracker.ui.chart.williamchart.data.Paddings
+import com.mobilecoronatracker.ui.chart.williamchart.data.toLinearGradient
+import com.mobilecoronatracker.ui.chart.williamchart.data.toRect
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.centerAt
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.getDrawable
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.obtainStyledAttributes
@@ -85,7 +92,6 @@ class LineChartView @JvmOverloads constructor(
     }
 
     override fun drawLine(points: List<DataPoint>) {
-
         val linePath =
             if (!smooth) points.toLinePath()
             else points.toSmoothLinePath(defaultSmoothFactor)
@@ -95,7 +101,6 @@ class LineChartView @JvmOverloads constructor(
     }
 
     override fun drawLineBackground(innerFrame: Frame, points: List<DataPoint>) {
-
         val linePath =
             if (!smooth) points.toLinePath()
             else points.toSmoothLinePath(defaultSmoothFactor)
@@ -113,7 +118,6 @@ class LineChartView @JvmOverloads constructor(
     }
 
     override fun drawLabels(xLabels: List<Label>) {
-
         painter.prepare(
             textSize = labelsSize,
             color = labelsColor,
@@ -152,13 +156,10 @@ class LineChartView @JvmOverloads constructor(
         points: List<DataPoint>,
         innerFrameBottom: Float
     ): Path {
-
         val res = Path(path)
-
         res.lineTo(points.last().screenPositionX, innerFrameBottom)
         res.lineTo(points.first().screenPositionX, innerFrameBottom)
         res.close()
-
         return res
     }
 

@@ -13,7 +13,10 @@ import com.mobilecoronatracker.ui.chart.williamchart.ChartContract
 import com.mobilecoronatracker.ui.chart.williamchart.Painter
 import com.mobilecoronatracker.ui.chart.williamchart.animation.ChartAnimation
 import com.mobilecoronatracker.ui.chart.williamchart.animation.DefaultAnimation
-import com.mobilecoronatracker.ui.chart.williamchart.data.*
+import com.mobilecoronatracker.ui.chart.williamchart.data.AxisType
+import com.mobilecoronatracker.ui.chart.williamchart.data.ChartConfiguration
+import com.mobilecoronatracker.ui.chart.williamchart.data.DataPoint
+import com.mobilecoronatracker.ui.chart.williamchart.data.Scale
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.obtainStyledAttributes
 import com.mobilecoronatracker.ui.chart.williamchart.renderer.RendererConstants
 import com.mobilecoronatracker.ui.chart.williamchart.strategy.DefaultStrategy

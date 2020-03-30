@@ -3,7 +3,17 @@ package com.mobilecoronatracker.ui.chart.williamchart.renderer
 import com.mobilecoronatracker.ui.chart.williamchart.ChartContract
 import com.mobilecoronatracker.ui.chart.williamchart.Painter
 import com.mobilecoronatracker.ui.chart.williamchart.animation.ChartAnimation
-import com.mobilecoronatracker.ui.chart.williamchart.data.*
+import com.mobilecoronatracker.ui.chart.williamchart.data.ChartConfiguration
+import com.mobilecoronatracker.ui.chart.williamchart.data.DataPoint
+import com.mobilecoronatracker.ui.chart.williamchart.data.Frame
+import com.mobilecoronatracker.ui.chart.williamchart.data.Label
+import com.mobilecoronatracker.ui.chart.williamchart.data.MultiLineChartConfiguration
+import com.mobilecoronatracker.ui.chart.williamchart.data.Scale
+import com.mobilecoronatracker.ui.chart.williamchart.data.notInitialized
+import com.mobilecoronatracker.ui.chart.williamchart.data.shouldDisplayAxisX
+import com.mobilecoronatracker.ui.chart.williamchart.data.shouldDisplayAxisY
+import com.mobilecoronatracker.ui.chart.williamchart.data.toOuterFrame
+import com.mobilecoronatracker.ui.chart.williamchart.data.withPaddings
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.maxValueBy
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.toDataPoints
 import com.mobilecoronatracker.ui.chart.williamchart.extensions.toScale
@@ -49,10 +59,12 @@ class MultiLineChartRenderer(
 
         if (chartConfiguration.scale.notInitialized()) {
             val scales = data.map { it.toScale() }
-            val mergedScale = scales.reduce {acc, scale -> Scale(
-                if (acc.min < scale.min) acc.min else scale.min,
-                if (acc.max > scale.max) acc.max else scale.max
-            ) }
+            val mergedScale = scales.reduce { acc, scale ->
+                Scale(
+                    if (acc.min < scale.min) acc.min else scale.min,
+                    if (acc.max > scale.max) acc.max else scale.max
+                )
+            }
             chartConfiguration = chartConfiguration.copy(scale = mergedScale)
         }
 
@@ -144,7 +156,8 @@ class MultiLineChartRenderer(
 
     private fun placeLabelsX(innerFrame: Frame) {
         xLabelsFinal = xLabelsPlacingStrategy.placeLabels(
-            innerFrame, chartConfiguration.labelsSize, painter, xLabels)
+            innerFrame, chartConfiguration.labelsSize, painter, xLabels
+        )
     }
 
     private fun placeLabelsY(innerFrame: Frame) {

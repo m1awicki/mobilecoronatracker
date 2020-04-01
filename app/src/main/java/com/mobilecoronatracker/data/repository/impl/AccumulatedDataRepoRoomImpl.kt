@@ -50,4 +50,6 @@ class AccumulatedDataRepoRoomImpl(
 
     override suspend fun hasTodayData(): Boolean =
         accumulatedDataDao.getByTimestamp(getTodayTimestamp()) != null
+
+    override suspend fun hasAnyData(): Boolean = accumulatedDataDao.getRecordsCount() > 0
 }

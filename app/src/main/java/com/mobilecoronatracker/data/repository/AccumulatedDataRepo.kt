@@ -7,4 +7,5 @@ interface AccumulatedDataRepo {
     fun getTodayData(): Flow<GeneralReportModelable>
     suspend fun refreshAccumulatedData()
     suspend fun hasTodayData(): Boolean
+    suspend fun hasAnyData(): Boolean
 }

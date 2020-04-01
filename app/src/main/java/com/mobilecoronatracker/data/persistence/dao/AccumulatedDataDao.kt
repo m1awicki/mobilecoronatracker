@@ -36,4 +36,12 @@ abstract class AccumulatedDataDao : BaseDao<AccumulatedData> {
         timestampStart: Long,
         timestampEnd: Long
     ): Flow<AccumulatedData>
+
+    @Query(
+        """
+        SELECT COUNT(*)
+        FROM accumulated_data
+        """
+    )
+    abstract fun getRecordsCount() : Int
 }

@@ -6,7 +6,8 @@ data class CovidCountryHistory(
     val timeline: Timeline = Timeline()
 ) {
     data class Timeline(
-        val cases: Map<String, Int> = emptyMap(),
-        val deaths: Map<String, Int> = emptyMap()
+        val cases: LinkedHashMap<String, Int> = LinkedHashMap(),
+        val deaths: LinkedHashMap<String, Int> = LinkedHashMap(),
+        val recovered: LinkedHashMap<String, Int> = LinkedHashMap()
     )
 }

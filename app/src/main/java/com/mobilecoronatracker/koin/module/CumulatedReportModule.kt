@@ -5,5 +5,5 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val cumulatedReportModule = module {
-    viewModel { CumulatedReportViewModel(get()) }
+    viewModel { CumulatedReportViewModel(get(), get()) }
 }

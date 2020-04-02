@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#77112F</color>
+    <color name="colorPrimary">#363865</color>
     <color name="colorPrimaryDark">#640C26</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="background">#FFFFFF</color>
+    <color name="existing">#FF8C5E</color>
+    <color name="dead">#C62121</color>
+    <color name="cardBackground">#C62759</color>
+    <color name="recovered">#368E4C</color>
 </resources>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#03063e">
+
+    <com.mobilecoronatracker.ui.chart.williamchart.view.DonutChartView
+        android:id="@+id/general_info_chart"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:chart_donutBackgroundColor="@android:color/transparent"
+        app:chart_donutRoundCorners="false"
+        app:chart_donutThickness="30dp"
+        android:layout_width="370dp"
+        android:layout_height="370dp"
+        app:chart_donutTotal="200"
+        android:background="@android:color/transparent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_marginRight="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_height="370dp">
+        <LinearLayout
+            android:id="@+id/cumulated_deaths_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/cumulated_cases_container">
+
+            <TextView
+                android:id="@+id/cumulated_deaths"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@{viewModel.deaths}"
+                android:textColor="#FF0000"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                tools:text="1112324" />
+            <TextView
+                android:id="@+id/cumulated_deaths_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="#DDFFFFFF"
+                android:text="@string/all_deaths_label_text"
+                android:textSize="18sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/cumulated_cases_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cumulated_deaths_container"
+            app:layout_constraintBottom_toTopOf="@id/cumulated_recovered_container">
+
+            <TextView
+                android:id="@+id/cumulated_cases"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@{viewModel.cases}"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="#BBFFFFFF"
+                tools:text="123456789" />
+            <TextView
+                android:id="@+id/cumulated_cases_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/all_identified_cases_label_text"
+                android:textColor="#DDFFFFFF"
+                android:textSize="18sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/cumulated_recovered_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cumulated_cases_container"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/cumulated_recovered"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@{viewModel.recovered}"
+                android:textColor="@android:color/holo_green_dark"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                tools:text="11234231" />
+            <TextView
+                android:id="@+id/cumulated_recovered_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="#DDFFFFFF"
+                android:text="@string/cumulated_recovered_label_text"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+<data>
+
+<variable
+    name="viewModel"
+    type="com.mobilecoronatracker.ui.cumulatedreport.CumulatedReportViewModelable" />
+</data>
+</layout>

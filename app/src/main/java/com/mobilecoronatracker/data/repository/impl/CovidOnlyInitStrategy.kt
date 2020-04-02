@@ -70,7 +70,9 @@ class CovidOnlyInitStrategy(
         val historical = covidDataRepo.getHistoricalData()
         val countriesMap = countryDao.getAllCountries().map { it.name to it }.toMap()
         val accumulatedHistory: MutableMap<Long, AccumulatedData> = mutableMapOf()
-        val countriesTimelines = historical.map { historicalEntry ->
+        val countriesTimelines = historical.filter {
+            it.province == null
+        }.map { historicalEntry ->
             val timeline = historicalEntry.timeline.toCountryDataList(
                 historicalEntry.country,
                 countriesMap
@@ -95,8 +97,8 @@ class CovidOnlyInitStrategy(
                     }
                 }
             }
+            accumulatedDataDao.insert(*accumulatedHistory.values.toTypedArray())
         }
-        accumulatedDataDao.insert(*accumulatedHistory.values.toTypedArray())
     }
 
     override suspend fun execute() {

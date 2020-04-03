@@ -16,6 +16,7 @@ class CumulatedReportViewModel(
 ) : ViewModel(),
     CumulatedReportViewModelable {
     override val cases = MutableLiveData<String>()
+    override val active = MutableLiveData<String>()
     override val deaths = MutableLiveData<String>()
     override val recovered = MutableLiveData<String>()
     override val isRefreshing = MutableLiveData<Boolean>()
@@ -50,6 +51,7 @@ class CumulatedReportViewModel(
 
     private fun onCumulatedData(data: GeneralReportModelable) {
         cases.postValue(data.cases.toString())
+        active.postValue((data.cases - data.deaths - data.recovered).toString())
         deaths.postValue(data.deaths.toString())
         recovered.postValue(data.recovered.toString())
         isRefreshing.postValue(false)

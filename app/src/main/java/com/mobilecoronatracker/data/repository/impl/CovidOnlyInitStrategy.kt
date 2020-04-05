@@ -4,10 +4,10 @@ import com.mobilecoronatracker.data.persistence.CoronaTrackerDatabase
 import com.mobilecoronatracker.data.persistence.dao.AccumulatedDataDao
 import com.mobilecoronatracker.data.persistence.dao.CountryDao
 import com.mobilecoronatracker.data.persistence.dao.CountryDataDao
-import com.mobilecoronatracker.data.persistence.entity.AccumulatedData
 import com.mobilecoronatracker.data.persistence.entity.Country
 import com.mobilecoronatracker.data.repository.CovidDataRepo
 import com.mobilecoronatracker.data.repository.RepoInitStrategy
+import com.mobilecoronatracker.model.pojo.toAccumulatedDataList
 import com.mobilecoronatracker.model.pojo.toCountryDataList
 import com.mobilecoronatracker.model.toAccumulatedData
 import com.mobilecoronatracker.model.toCountryData
@@ -25,7 +25,8 @@ class CovidOnlyInitStrategy(
         val generalReport = covidDataRepo.getCumulatedData()
         val storedData = accumulatedDataDao.getByTimestamp(todayTimestamp)
         if (storedData != null) {
-            accumulatedDataDao.update(generalReport.toAccumulatedData(
+            accumulatedDataDao.update(
+                generalReport.toAccumulatedData(
                     storedData.id,
                     storedData.entryDate
                 )
@@ -67,28 +68,21 @@ class CovidOnlyInitStrategy(
     }
 
     private suspend fun fetchHistoricalData() {
-        val historical = covidDataRepo.getHistoricalData()
+        val countryHistorical = covidDataRepo.getCountryHistoricalData()
         val countriesMap = countryDao.getAllCountries().map { it.name to it }.toMap()
-        val accumulatedHistory: MutableMap<Long, AccumulatedData> = mutableMapOf()
-        val countriesTimelines = historical.filter {
+        val countriesTimelines = countryHistorical.filter {
             it.province == null
         }.map { historicalEntry ->
             val timeline = historicalEntry.timeline.toCountryDataList(
                 historicalEntry.country,
                 countriesMap
             )
-            timeline.forEach {
-                val entry = accumulatedHistory[it.entryDate]
-                accumulatedHistory[it.entryDate] = AccumulatedData(
-                    id = entry?.id ?: 0,
-                    cases = entry?.cases?.plus(it.cases) ?: it.cases,
-                    deaths = entry?.deaths?.plus(it.deaths) ?: it.deaths,
-                    recovered = entry?.recovered?.plus(it.recovered) ?: it.recovered,
-                    entryDate = it.entryDate
-                )
-            }
             timeline
         }
+
+        val accumulatedHistorical = covidDataRepo.getAccumulatedHistoricalData()
+        val accumulatedDataList = accumulatedHistorical.timeline.toAccumulatedDataList()
+
         coronaTrackerDatabase.withTransactionWrapper {
             countriesTimelines.forEach { timeline ->
                 timeline.forEach { countryData ->
@@ -97,7 +91,7 @@ class CovidOnlyInitStrategy(
                     }
                 }
             }
-            accumulatedDataDao.insert(*accumulatedHistory.values.toTypedArray())
+            accumulatedDataDao.insert(*accumulatedDataList.toTypedArray())
         }
     }
 

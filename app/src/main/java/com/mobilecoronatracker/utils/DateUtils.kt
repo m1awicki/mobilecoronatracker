@@ -9,7 +9,7 @@ fun parseDate(date: String, separator: Char = '/'): Calendar {
     val firstSeparator = date.indexOf(separator, 0)
     val secondSeparator = date.indexOf(separator, firstSeparator + 1)
     val day = date.substring(firstSeparator + 1, secondSeparator).toInt()
-    val month = date.substring(0, firstSeparator).toInt()
+    val month = date.substring(0, firstSeparator).toInt() - 1
     var year = date.substring(secondSeparator + 1).toInt()
     if (date.substring(secondSeparator + 1).length == 2) {
         year += 2000

@@ -1,6 +1,5 @@
 package com.mobilecoronatracker.data.repository.impl
 
-import android.util.Log
 import com.mobilecoronatracker.data.persistence.CoronaTrackerDatabase
 import com.mobilecoronatracker.data.persistence.dao.AccumulatedDataDao
 import com.mobilecoronatracker.data.persistence.dao.CountryDao
@@ -25,6 +24,12 @@ class CovidOnlyInitStrategy(
     private val accumulatedDataDao: AccumulatedDataDao,
     private val coronaTrackerDatabase: CoronaTrackerDatabase
 ) : RepoInitStrategy {
+    override suspend fun execute() {
+        fetchNewestAccumulatedData()
+        fetchNewestCountriesData()
+        fetchHistoricalData()
+    }
+
     private suspend fun fetchNewestAccumulatedData() {
         val todayTimestamp = getTodayTimestamp()
         val generalReport = covidDataRepo.getCumulatedData()
@@ -74,23 +79,20 @@ class CovidOnlyInitStrategy(
 
     private suspend fun fetchHistoricalData() {
         val countryHistorical = covidDataRepo.getCountryHistoricalData()
-        val countriesMap =
-            countryDao.getAllCountries().map { it.name.toLowerCase(Locale.ROOT) to it }.toMap()
+        val countriesMap = prepareCountriesMap()
+
         val (normalCountries, countriesFromProvinces) =
             countryHistorical.partition {
                 !countriesMap.containsKey(it.province?.toLowerCase(Locale.ROOT))
             }
 
-        val mergedCountriesHistory = getMergedCountriesHistory(normalCountries)
+        val mergedCountriesHistory = mergeCountriesHistory(normalCountries)
         val countriesTimelines: MutableList<List<CountryData>> =
             mergedCountriesHistory.map { historicalEntry ->
                 val timeline = historicalEntry.timeline.toCountryDataList(
                     historicalEntry.country.toLowerCase(Locale.ROOT),
                     countriesMap
                 )
-                if (timeline[0].countryId == 0L) {
-                    Log.d("MDMD", historicalEntry.country)
-                }
                 timeline
             }.toMutableList()
 
@@ -117,7 +119,22 @@ class CovidOnlyInitStrategy(
         }
     }
 
-    private fun getMergedCountriesHistory(normalCountries: List<CovidCountryHistory>): List<CovidCountryHistory> {
+    private suspend fun prepareCountriesMap(): Map<String, Country> {
+        val countriesMap =
+            countryDao.getAllCountries().map {
+                it.name.toLowerCase(Locale.ROOT) to it
+            }.toMap().toMutableMap()
+
+        countryNamesMapping.forEach { entry ->
+            countriesMap[entry.key.toLowerCase(Locale.ROOT)]?.let {
+                countriesMap[entry.value.toLowerCase(Locale.ROOT)] = it
+            }
+        }
+
+        return countriesMap
+    }
+
+    private fun mergeCountriesHistory(normalCountries: List<CovidCountryHistory>): List<CovidCountryHistory> {
         val groupedCountryHistory = normalCountries.groupBy { it.country }.values
         return groupedCountryHistory.map { countryEntryList: List<CovidCountryHistory> ->
             if (countryEntryList.size == 1) {
@@ -146,10 +163,21 @@ class CovidOnlyInitStrategy(
         }
     }
 
-
-    override suspend fun execute() {
-        fetchNewestAccumulatedData()
-        fetchNewestCountriesData()
-        fetchHistoricalData()
+    companion object {
+        val countryNamesMapping = mapOf(
+            "Réunion" to "reunion",
+            "Côte d'Ivoire" to "Cote d'Ivoire",
+            "Palestinian Territory, Occupied" to "West Bank and Gaza",
+            "Macao" to "Macau",
+            "Saint Martin" to "st martin",
+            "Myanmar" to "Burma",
+            "Curaçao" to "curacao",
+            "Lao People's Democratic Republic" to "Lao People\"s Democratic Republic",
+            "Holy See (Vatican City State)" to "Holy See",
+            "St. Barth" to "saint barthelemy",
+            "Caribbean Netherlands" to "bonaire, sint eustatius and saba",
+            "Falkland Islands (Malvinas)" to "falkland islands (islas malvinas)",
+            "Saint Pierre Miquelon" to "saint pierre and miquelon"
+        )
     }
 }

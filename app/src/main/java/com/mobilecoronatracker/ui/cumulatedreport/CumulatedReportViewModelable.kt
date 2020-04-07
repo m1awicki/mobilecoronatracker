@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 
 interface CumulatedReportViewModelable {
     val cases: LiveData<String>
+    val active: LiveData<String>
     val deaths: LiveData<String>
     val recovered: LiveData<String>
     val isRefreshing: MutableLiveData<Boolean>

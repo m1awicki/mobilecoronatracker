@@ -1,6 +1,5 @@
 package com.mobilecoronatracker.ui.cumulatedreport
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -8,14 +7,13 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.mobilecoronatracker.R
-import com.mobilecoronatracker.databinding.ExperimentalFragmentBinding
+import com.mobilecoronatracker.databinding.FragmentCumulatedReportBinding
 import com.mobilecoronatracker.ui.chart.williamchart.view.ImplementsAlphaChart
-import kotlinx.android.synthetic.main.experimental_fragment.*
+import kotlinx.android.synthetic.main.fragment_cumulated_report.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @ImplementsAlphaChart
@@ -29,8 +27,8 @@ class FragmentCumulatedReport : Fragment() {
     ): View? {
         setHasOptionsMenu(true)
 
-        val binding = DataBindingUtil.inflate<ExperimentalFragmentBinding>(
-            inflater, R.layout.experimental_fragment, container, false
+        val binding = DataBindingUtil.inflate<FragmentCumulatedReportBinding>(
+            inflater, R.layout.fragment_cumulated_report, container, false
         )
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -40,25 +38,7 @@ class FragmentCumulatedReport : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViews()
-        general_info_chart.donutColors = intArrayOf(
-            Color.parseColor("#FFFF8C5E"),//existing
-            Color.parseColor("#FF368E4C"),//recovered
-            Color.parseColor("#FFC62121") //dead
-        )
-        general_info_chart.animation.duration = 1500L
-        viewModel.recovered.observe(viewLifecycleOwner, Observer {
-            if (it != "???") {
-                val donutdata = listOf(
-                    viewModel.deaths.value?.toFloat() ?: 0f,
-                    it.toFloat(),
-                    (viewModel.cases.value?.toFloat() ?: 0f) - it.toFloat() - (viewModel.deaths.value?.toFloat() ?: 0f)
-                )
-                general_info_chart.donutTotal = (viewModel.cases.value?.toFloat() ?: 0f) - it.toFloat() - (viewModel.deaths.value?.toFloat() ?: 0f)
-                general_info_chart.animate(
-                    donutdata
-                )
-            }
-        })
+        bindObservers()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -76,9 +56,53 @@ class FragmentCumulatedReport : Fragment() {
         }
     }
 
+    private fun setupDonutChart() {
+        cumulated_data_chart.donutColors = intArrayOf(
+            resources.getColor(R.color.existing, null),
+            resources.getColor(R.color.recovered, null),
+            resources.getColor(R.color.dead, null)
+        )
+        cumulated_data_chart.animation.duration = chartAnimationDuration
+        cumulated_data_chart.animate(initialDonutChartData)
+    }
+
+    private fun setupLinearChart() {
+        cumulated_history_chart.animation.duration = chartAnimationDuration
+        cumulated_history_chart.labelsFormatter = { data -> data.toInt().toString() }
+        cumulated_history_chart.setLineColors(listOf(
+            resources.getColor(R.color.existing, null),
+            resources.getColor(R.color.recovered, null),
+            resources.getColor(R.color.dead, null)
+        ))
+    }
+
     private fun setupViews() {
         cumulated_report_swipe_refresh.setOnRefreshListener {
             viewModel.onRefreshRequested()
         }
+        setupDonutChart()
+        setupLinearChart()
+    }
+
+    private fun bindObservers() {
+        viewModel.historyUpdated.observe(viewLifecycleOwner, Observer {
+            cumulated_history_chart.animate(viewModel.historyLabels, viewModel.history)
+        })
+        viewModel.todayUpdated.observe(viewLifecycleOwner, Observer {
+            val donutData = listOf(
+                viewModel.deathsCount.toFloat(),
+                viewModel.recoveredCount.toFloat(),
+                (viewModel.casesCount - viewModel.recoveredCount - viewModel.deathsCount).toFloat()
+            )
+            cumulated_data_chart.donutTotal = donutData[2]
+            cumulated_data_chart.animate(
+                donutData
+            )
+        })
+    }
+
+    companion object {
+        const val chartAnimationDuration = 1500L
+        val initialDonutChartData = listOf(0f, 0f, 0f)
     }
 }

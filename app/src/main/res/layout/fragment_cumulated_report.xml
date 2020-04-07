@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#03063e">
+        android:background="#263238">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/cumulated_report_swipe_refresh"
@@ -19,24 +19,24 @@
             app:refreshing="@{viewModel.isRefreshing}">
 
             <ScrollView
+                android:fillViewport="true"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fillViewport="true">
-
+                android:layout_height="match_parent">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="#263238">
 
                     <LinearLayout
                         android:id="@+id/total_cases_container"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="32dp"
                         android:orientation="vertical"
+                        android:layout_marginTop="32dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/general_info_chart"
+                        app:layout_constraintTop_toBottomOf="@+id/cumulated_data_chart"
                         app:layout_constraintVertical_bias="0.0">
 
                         <TextView
@@ -45,7 +45,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:text="@{viewModel.cases}"
-                            android:textColor="#BBFFFFFF"
+                            android:textColor="#FAFAFA"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             tools:text="1112324" />
@@ -56,37 +56,64 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:text="@string/all_identified_cases_label_text"
-                            android:textColor="#DDFFFFFF"
+                            android:textColor="#FAFAFA"
                             android:textSize="18sp" />
 
                     </LinearLayout>
 
+                    <com.mobilecoronatracker.ui.chart.williamchart.view.MultiLineChartView
+                        android:id="@+id/cumulated_history_chart"
+                        android:layout_width="0dp"
+                        android:layout_height="280dp"
+                        android:layout_marginTop="25dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:background="#37474F"
+                        android:padding="10dp"
+                        app:chart_axis="xy"
+                        app:horizontal_labels_strategy="pickAndMatch"
+                        app:chart_lineColor="#ffffff"
+                        app:chart_lineThickness="2.5dp"
+                        app:chart_smoothLine="true"
+                        app:chart_labelsSize="10sp"
+                        app:chart_labelsColor="#FAFAFA"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/total_cases_container"/>
+
+                    <View
+                        android:layout_marginTop="25dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/cumulated_history_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp" />
+
                     <com.mobilecoronatracker.ui.chart.williamchart.view.DonutChartView
-                        android:id="@+id/general_info_chart"
+                        android:id="@+id/cumulated_data_chart"
                         android:layout_width="370dp"
                         android:layout_height="370dp"
+                        android:layout_marginTop="40dp"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
                         android:background="@android:color/transparent"
                         app:chart_donutBackgroundColor="@android:color/transparent"
                         app:chart_donutRoundCorners="true"
-                        app:chart_donutThickness="40dp"
+                        app:chart_donutThickness="13dp"
                         app:chart_donutTotal="200"
-                        app:layout_constraintBottom_toTopOf="@+id/total_cases_container"
+                        app:layout_constraintVertical_chainStyle="packed"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_chainStyle="packed" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="@+id/general_info_chart"
-                        app:layout_constraintTop_toTopOf="@+id/general_info_chart"
+                        app:layout_constraintBottom_toBottomOf="@+id/cumulated_data_chart"
+                        app:layout_constraintTop_toTopOf="@+id/cumulated_data_chart"
                         tools:layout_editor_absoluteX="40dp">
 
                         <LinearLayout
-                            android:id="@+id/cumulated_deaths_container"
+                            android:id="@+id/cumulated_recovered_container"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
@@ -96,24 +123,25 @@
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintVertical_chainStyle="packed">
 
-                            <TextView
-                                android:id="@+id/cumulated_deaths"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:text="@{viewModel.deaths}"
-                                android:textColor="#FF0000"
-                                android:textSize="28sp"
-                                android:textStyle="bold"
-                                tools:text="1112324" />
 
                             <TextView
-                                android:id="@+id/cumulated_deaths_label"
+                                android:id="@+id/cumulated_recovered"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@string/all_deaths_label_text"
-                                android:textColor="#DDFFFFFF"
+                                android:text="@{viewModel.recovered}"
+                                android:textColor="@color/recovered"
+                                android:textSize="28sp"
+                                android:textStyle="bold"
+                                tools:text="112342" />
+
+                            <TextView
+                                android:id="@+id/cumulated_recovered_label"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/cumulated_recovered_label_text"
+                                android:textColor="#FAFAFA"
                                 android:textSize="18sp" />
 
                         </LinearLayout>
@@ -135,7 +163,7 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:text="@{viewModel.active}"
-                                android:textColor="#FFFF8C5E"
+                                android:textColor="@color/existing"
                                 android:textSize="28sp"
                                 android:textStyle="bold"
                                 tools:text="123456789" />
@@ -146,13 +174,13 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:text="@string/all_active_label_text"
-                                android:textColor="#DDFFFFFF"
+                                android:textColor="#FAFAFA"
                                 android:textSize="18sp" />
 
                         </LinearLayout>
 
                         <LinearLayout
-                            android:id="@+id/cumulated_recovered_container"
+                            android:id="@+id/cumulated_deaths_container"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
@@ -163,28 +191,29 @@
                             app:layout_constraintTop_toBottomOf="@id/cumulated_cases_container">
 
                             <TextView
-                                android:id="@+id/cumulated_recovered"
+                                android:id="@+id/cumulated_deaths"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@{viewModel.recovered}"
-                                android:textColor="@android:color/holo_green_dark"
+                                android:text="@{viewModel.deaths}"
+                                android:textColor="@color/dead"
                                 android:textSize="28sp"
                                 android:textStyle="bold"
-                                tools:text="11234231" />
+                                tools:text="11123" />
 
                             <TextView
-                                android:id="@+id/cumulated_recovered_label"
+                                android:id="@+id/cumulated_deaths_label"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@string/cumulated_recovered_label_text"
-                                android:textColor="#DDFFFFFF"
+                                android:text="@string/all_deaths_label_text"
+                                android:textColor="#FAFAFA"
                                 android:textSize="18sp" />
 
                         </LinearLayout>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </ScrollView>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

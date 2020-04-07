@@ -31,7 +31,7 @@ class MultiLineChartView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AxisChartView<List<LinkedHashMap<String, Float>>, List<String>>(
+) : AxisChartView<List<List<Float>>, List<String>>(
     context,
     attrs,
     defStyleAttr
@@ -156,7 +156,7 @@ class MultiLineChartView @JvmOverloads constructor(
         }
     }
 
-    override fun getEditModeData(): List<LinkedHashMap<String, Float>> = AxisChartData.editModeMultiLineSampleData
+    override fun getEditModeData(): List<List<Float>> = AxisChartData.editModeMultiLineSampleData
     override fun getEditModeLabels(): List<String> = AxisChartData.editModeMultiLineSampleDataLabels
 
     companion object {

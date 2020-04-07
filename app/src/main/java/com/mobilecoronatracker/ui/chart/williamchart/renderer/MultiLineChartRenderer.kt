@@ -26,7 +26,7 @@ class MultiLineChartRenderer(
     private val painter: Painter,
     private var animation: ChartAnimation<DataPoint>,
     private val xLabelsPlacingStrategy: ChartContract.HorizontalAxisLabelsPlacingStrategy = DefaultStrategy()
-) : ChartContract.Renderer<List<LinkedHashMap<String, Float>>, List<String>> {
+) : ChartContract.Renderer<List<List<Float>>, List<String>> {
     private var data = emptyList<List<DataPoint>>()
 
     private lateinit var outerFrame: Frame
@@ -137,7 +137,7 @@ class MultiLineChartRenderer(
         }
     }
 
-    override fun render(labels: List<String>, entries: List<LinkedHashMap<String, Float>>) {
+    override fun render(labels: List<String>, entries: List<List<Float>>) {
         data = entries.map { it.toDataPoints() }
         xLabels = labels.map { Label(it, 0f, 0f) }
         view.postInvalidate()
@@ -145,7 +145,7 @@ class MultiLineChartRenderer(
 
     override fun anim(
         labels: List<String>,
-        entries: List<LinkedHashMap<String, Float>>,
+        entries: List<List<Float>>,
         animation: ChartAnimation<DataPoint>
     ) {
         data = entries.map { it.toDataPoints() }

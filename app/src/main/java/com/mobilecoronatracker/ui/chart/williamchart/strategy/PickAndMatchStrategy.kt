@@ -19,7 +19,7 @@ class PickAndMatchStrategy : ChartContract.HorizontalAxisLabelsPlacingStrategy {
                 it.label, labelSize)
         }.reduce { acc, fl ->
             acc + fl
-        }.div(labels.size.toFloat())
+        }.div(labels.size.toFloat()).times(1.2f)
         val labelsLeftPosition = bounds.left +
                     painter.measureLabelWidth(labels.first().label, labelSize) / 2
         val labelsRightPosition = bounds.right -

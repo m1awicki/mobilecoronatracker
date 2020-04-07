@@ -4,12 +4,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mobilecoronatracker.data.repository.AccumulatedDataRepo
+import com.mobilecoronatracker.data.repository.RepoInitializer
 import com.mobilecoronatracker.model.GeneralReportModelable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class CumulatedReportViewModel(private val accumulatedDataRepo: AccumulatedDataRepo) : ViewModel(),
+class CumulatedReportViewModel(
+    private val accumulatedDataRepo: AccumulatedDataRepo,
+    private val repoInitializer: RepoInitializer
+) : ViewModel(),
     CumulatedReportViewModelable {
     override val cases = MutableLiveData<String>()
     override val deaths = MutableLiveData<String>()
@@ -21,6 +25,9 @@ class CumulatedReportViewModel(private val accumulatedDataRepo: AccumulatedDataR
         deaths.value = "???"
         recovered.value = "???"
         viewModelScope.launch(Dispatchers.IO) {
+            if (!accumulatedDataRepo.hasAnyData()) {
+                repoInitializer.start()
+            }
             if (!accumulatedDataRepo.hasTodayData()) {
                 refreshData()
             }

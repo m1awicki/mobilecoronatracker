@@ -14,4 +14,12 @@ abstract class CountryDao : BaseDao<Country> {
         """
     )
     abstract suspend fun getByCountryName(countryName: String): Country?
+
+    @Query(
+        """
+        SELECT *
+        FROM country
+        """
+    )
+    abstract suspend fun getAllCountries(): List<Country>
 }

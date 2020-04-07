@@ -6,10 +6,14 @@ import com.mobilecoronatracker.data.repository.AccumulatedDataRepo
 import com.mobilecoronatracker.data.repository.CountriesDataRepo
 import com.mobilecoronatracker.data.repository.CountriesFollowRepo
 import com.mobilecoronatracker.data.repository.CovidDataRepo
+import com.mobilecoronatracker.data.repository.RepoInitStrategy
+import com.mobilecoronatracker.data.repository.RepoInitializer
 import com.mobilecoronatracker.data.repository.impl.AccumulatedDataRepoRoomImpl
 import com.mobilecoronatracker.data.repository.impl.CountriesDataRepoRoomImpl
 import com.mobilecoronatracker.data.repository.impl.CovidDataRepoImpl
+import com.mobilecoronatracker.data.repository.impl.RepoInitializerImpl
 import com.mobilecoronatracker.data.repository.impl.SharedPreferencesCountriesFollowRepo
+import com.mobilecoronatracker.data.repository.impl.CovidOnlyInitStrategy
 import com.mobilecoronatracker.data.source.CovidApi
 import org.koin.dsl.module
 
@@ -28,4 +32,6 @@ val appModule = module {
             get()
         )
     }
+    factory<RepoInitStrategy> { CovidOnlyInitStrategy(get(), get(), get(), get(), get()) }
+    factory<RepoInitializer> { RepoInitializerImpl(get()) }
 }

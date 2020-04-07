@@ -39,18 +39,7 @@ class MultiLineChartRenderer(
 
     private var xLabelsFinal: List<Label> = emptyList()
 
-    private val yLabels by lazy {
-        val scaleStep = chartConfiguration.scale.size / RendererConstants.defaultScaleNumberOfSteps
-
-        List(RendererConstants.defaultScaleNumberOfSteps + 1) {
-            val scaleValue = chartConfiguration.scale.min + scaleStep * it
-            Label(
-                label = chartConfiguration.labelsFormatter(scaleValue),
-                screenPositionX = 0F,
-                screenPositionY = 0F
-            )
-        }
-    }
+    private var yLabels: List<Label> = emptyList()
 
     override fun preDraw(configuration: ChartConfiguration): Boolean {
         if (data.isEmpty()) return true
@@ -68,6 +57,7 @@ class MultiLineChartRenderer(
             chartConfiguration = chartConfiguration.copy(scale = mergedScale)
         }
 
+        rebuildLabelsY()
         val longestChartLabelWidth =
             yLabels.maxValueBy {
                 painter.measureLabelWidth(
@@ -152,6 +142,19 @@ class MultiLineChartRenderer(
         xLabels = labels.map { Label(it, 0f, 0f) }
         this.animation = animation
         view.postInvalidate()
+    }
+
+    private fun rebuildLabelsY() {
+        val scaleStep = chartConfiguration.scale.size / RendererConstants.defaultScaleNumberOfSteps
+
+        yLabels = List(RendererConstants.defaultScaleNumberOfSteps + 1) {
+            val scaleValue = chartConfiguration.scale.min + scaleStep * it
+            Label(
+                label = chartConfiguration.labelsFormatter(scaleValue),
+                screenPositionX = 0F,
+                screenPositionY = 0F
+            )
+        }
     }
 
     private fun placeLabelsX(innerFrame: Frame) {

@@ -77,8 +77,8 @@ class FragmentCumulatedReport : Fragment() {
     }
 
     private fun setupViews() {
-//        cumulated_report_swipe_refresh.setOnRefreshListener {
-//            viewModel.onRefreshRequested()
-//        }
+        cumulated_report_swipe_refresh.setOnRefreshListener {
+            viewModel.onRefreshRequested()
+        }
     }
 }

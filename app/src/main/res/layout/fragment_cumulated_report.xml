@@ -6,9 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg1"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp">
+        android:background="#03063e">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/cumulated_report_swipe_refresh"
@@ -20,115 +18,176 @@
             app:layout_constraintTop_toTopOf="parent"
             app:refreshing="@{viewModel.isRefreshing}">
 
-            <FrameLayout
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:fillViewport="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center">
+                    android:layout_height="wrap_content">
 
                     <LinearLayout
-                        android:id="@+id/cumulated_cases_container"
+                        android:id="@+id/total_cases_container"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/rounded_rect_bg"
+                        android:layout_marginTop="32dp"
                         android:orientation="vertical"
-                        android:padding="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toBottomOf="@+id/general_info_chart"
+                        app:layout_constraintVertical_bias="0.0">
 
                         <TextView
-                            android:id="@+id/cumulated_cases_label"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/rounded_rect_bg"
-                            android:gravity="center"
-                            android:text="@string/all_identified_cases_label_text"
-                            android:textSize="20sp" />
-
-                        <TextView
-                            android:id="@+id/cumulated_cases"
+                            android:id="@+id/total_cases"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:text="@{viewModel.cases}"
-                            android:textSize="20sp"
+                            android:textColor="#BBFFFFFF"
+                            android:textSize="28sp"
                             android:textStyle="bold"
-                            tools:text="123456789" />
+                            tools:text="1112324" />
+
+                        <TextView
+                            android:id="@+id/total_cases_label"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/all_identified_cases_label_text"
+                            android:textColor="#DDFFFFFF"
+                            android:textSize="18sp" />
+
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/cumulated_deaths_container"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:background="@drawable/rounded_rect_bg"
-                        android:orientation="vertical"
-                        android:padding="10dp"
+                    <com.mobilecoronatracker.ui.chart.williamchart.view.DonutChartView
+                        android:id="@+id/general_info_chart"
+                        android:layout_width="370dp"
+                        android:layout_height="370dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@android:color/transparent"
+                        app:chart_donutBackgroundColor="@android:color/transparent"
+                        app:chart_donutRoundCorners="true"
+                        app:chart_donutThickness="40dp"
+                        app:chart_donutTotal="200"
+                        app:layout_constraintBottom_toTopOf="@+id/total_cases_container"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/cumulated_cases_container">
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_chainStyle="packed" />
 
-                        <TextView
-                            android:id="@+id/cumulated_deaths_label"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/all_deaths_label_text"
-                            android:textSize="20sp" />
-
-                        <TextView
-                            android:id="@+id/cumulated_deaths"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@{viewModel.deaths}"
-                            android:textColor="@android:color/holo_red_dark"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            tools:text="111" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/cumulated_recovered_container"
-                        android:layout_width="0dp"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:background="@drawable/rounded_rect_bg"
-                        android:orientation="vertical"
-                        android:padding="10dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/cumulated_deaths_container">
+                        app:layout_constraintBottom_toBottomOf="@+id/general_info_chart"
+                        app:layout_constraintTop_toTopOf="@+id/general_info_chart"
+                        tools:layout_editor_absoluteX="40dp">
 
-                        <TextView
-                            android:id="@+id/cumulated_recovered_label"
-                            android:layout_width="match_parent"
+                        <LinearLayout
+                            android:id="@+id/cumulated_deaths_container"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/cumulated_recovered_label_text"
-                            android:textSize="20sp" />
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toTopOf="@id/cumulated_cases_container"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_chainStyle="packed">
 
-                        <TextView
-                            android:id="@+id/cumulated_recovered"
-                            android:layout_width="match_parent"
+                            <TextView
+                                android:id="@+id/cumulated_deaths"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@{viewModel.deaths}"
+                                android:textColor="#FF0000"
+                                android:textSize="28sp"
+                                android:textStyle="bold"
+                                tools:text="1112324" />
+
+                            <TextView
+                                android:id="@+id/cumulated_deaths_label"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/all_deaths_label_text"
+                                android:textColor="#DDFFFFFF"
+                                android:textSize="18sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/cumulated_cases_container"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@{viewModel.recovered}"
-                            android:textColor="@android:color/holo_green_dark"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            tools:text="111" />
-                    </LinearLayout>
+                            android:layout_marginTop="8dp"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toTopOf="@id/cumulated_recovered_container"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/cumulated_deaths_container">
+
+                            <TextView
+                                android:id="@+id/cumulated_cases"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@{viewModel.active}"
+                                android:textColor="#FFFF8C5E"
+                                android:textSize="28sp"
+                                android:textStyle="bold"
+                                tools:text="123456789" />
+
+                            <TextView
+                                android:id="@+id/cumulated_cases_label"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/all_active_label_text"
+                                android:textColor="#DDFFFFFF"
+                                android:textSize="18sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/cumulated_recovered_container"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/cumulated_cases_container">
+
+                            <TextView
+                                android:id="@+id/cumulated_recovered"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@{viewModel.recovered}"
+                                android:textColor="@android:color/holo_green_dark"
+                                android:textSize="28sp"
+                                android:textStyle="bold"
+                                tools:text="11234231" />
+
+                            <TextView
+                                android:id="@+id/cumulated_recovered_label"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/cumulated_recovered_label_text"
+                                android:textColor="#DDFFFFFF"
+                                android:textSize="18sp" />
+
+                        </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </FrameLayout>
-
+            </ScrollView>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <data>

@@ -68,7 +68,7 @@
                         android:layout_marginTop="25dp"
                         android:layout_marginLeft="15dp"
                         android:layout_marginRight="15dp"
-                        android:background="#37474F"
+                        android:background="#9937474F"
                         android:padding="10dp"
                         app:chart_axis="xy"
                         app:horizontal_labels_strategy="pickAndMatch"

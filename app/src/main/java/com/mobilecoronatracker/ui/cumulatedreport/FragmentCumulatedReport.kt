@@ -85,19 +85,17 @@ class FragmentCumulatedReport : Fragment() {
     }
 
     private fun bindObservers() {
-        viewModel.historyUpdated.observe(viewLifecycleOwner, Observer {
-            cumulated_history_chart.animate(viewModel.historyLabels, viewModel.history)
+        viewModel.historyChartUpdate.observe(viewLifecycleOwner, Observer {
+            cumulated_history_chart.animate(it.labels, it.timeLines)
         })
-        viewModel.todayUpdated.observe(viewLifecycleOwner, Observer {
+        viewModel.currentStateChart.observe(viewLifecycleOwner, Observer {
             val donutData = listOf(
-                viewModel.deathsCount.toFloat(),
-                viewModel.recoveredCount.toFloat(),
-                (viewModel.casesCount - viewModel.recoveredCount - viewModel.deathsCount).toFloat()
+                it.deaths.toFloat(),
+                it.recovered.toFloat(),
+                it.active.toFloat()
             )
-            cumulated_data_chart.donutTotal = donutData[2]
-            cumulated_data_chart.animate(
-                donutData
-            )
+            cumulated_data_chart.donutTotal = it.active.toFloat()
+            cumulated_data_chart.animate(donutData)
         })
     }
 

@@ -26,7 +26,7 @@ class MultiLineChartRenderer(
     private val painter: Painter,
     private var animation: ChartAnimation<DataPoint>,
     private val xLabelsPlacingStrategy: ChartContract.HorizontalAxisLabelsPlacingStrategy = DefaultStrategy()
-) : ChartContract.Renderer<List<LinkedHashMap<String, Float>>, List<String>> {
+) : ChartContract.Renderer<List<List<Float>>, List<String>> {
     private var data = emptyList<List<DataPoint>>()
 
     private lateinit var outerFrame: Frame
@@ -39,18 +39,7 @@ class MultiLineChartRenderer(
 
     private var xLabelsFinal: List<Label> = emptyList()
 
-    private val yLabels by lazy {
-        val scaleStep = chartConfiguration.scale.size / RendererConstants.defaultScaleNumberOfSteps
-
-        List(RendererConstants.defaultScaleNumberOfSteps + 1) {
-            val scaleValue = chartConfiguration.scale.min + scaleStep * it
-            Label(
-                label = chartConfiguration.labelsFormatter(scaleValue),
-                screenPositionX = 0F,
-                screenPositionY = 0F
-            )
-        }
-    }
+    private var yLabels: List<Label> = emptyList()
 
     override fun preDraw(configuration: ChartConfiguration): Boolean {
         if (data.isEmpty()) return true
@@ -68,6 +57,7 @@ class MultiLineChartRenderer(
             chartConfiguration = chartConfiguration.copy(scale = mergedScale)
         }
 
+        rebuildLabelsY()
         val longestChartLabelWidth =
             yLabels.maxValueBy {
                 painter.measureLabelWidth(
@@ -137,7 +127,7 @@ class MultiLineChartRenderer(
         }
     }
 
-    override fun render(labels: List<String>, entries: List<LinkedHashMap<String, Float>>) {
+    override fun render(labels: List<String>, entries: List<List<Float>>) {
         data = entries.map { it.toDataPoints() }
         xLabels = labels.map { Label(it, 0f, 0f) }
         view.postInvalidate()
@@ -145,13 +135,26 @@ class MultiLineChartRenderer(
 
     override fun anim(
         labels: List<String>,
-        entries: List<LinkedHashMap<String, Float>>,
+        entries: List<List<Float>>,
         animation: ChartAnimation<DataPoint>
     ) {
         data = entries.map { it.toDataPoints() }
         xLabels = labels.map { Label(it, 0f, 0f) }
         this.animation = animation
         view.postInvalidate()
+    }
+
+    private fun rebuildLabelsY() {
+        val scaleStep = chartConfiguration.scale.size / RendererConstants.defaultScaleNumberOfSteps
+
+        yLabels = List(RendererConstants.defaultScaleNumberOfSteps + 1) {
+            val scaleValue = chartConfiguration.scale.min + scaleStep * it
+            Label(
+                label = chartConfiguration.labelsFormatter(scaleValue),
+                screenPositionX = 0F,
+                screenPositionY = 0F
+            )
+        }
     }
 
     private fun placeLabelsX(innerFrame: Frame) {

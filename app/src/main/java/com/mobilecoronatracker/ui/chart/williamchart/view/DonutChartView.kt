@@ -86,6 +86,7 @@ class DonutChartView @JvmOverloads constructor(
 
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = donutThickness
+        paint.isAntiAlias = true
 
         degrees.forEachIndexed { index, degree ->
             paint.color = donutColors[index]

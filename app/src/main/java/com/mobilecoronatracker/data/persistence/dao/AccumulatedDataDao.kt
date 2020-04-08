@@ -44,4 +44,14 @@ abstract class AccumulatedDataDao : BaseDao<AccumulatedData> {
         """
     )
     abstract fun getRecordsCount() : Int
+
+    @Query(
+        """
+        SELECT *
+        FROM accumulated_data
+        ORDER BY entry_date
+        ASC
+        """
+    )
+    abstract fun getAllFlow(): Flow<List<AccumulatedData>>
 }

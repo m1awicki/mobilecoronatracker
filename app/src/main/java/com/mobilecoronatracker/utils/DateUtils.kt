@@ -1,5 +1,6 @@
 package com.mobilecoronatracker.utils
 
+import java.text.SimpleDateFormat
 import java.util.Calendar
 
 fun getTodayTimestamp(): Long = (System.currentTimeMillis() / MILLIS_PER_DAY) * MILLIS_PER_DAY
@@ -17,6 +18,13 @@ fun parseDate(date: String, separator: Char = '/'): Calendar {
     cal.set(year, month, day)
     cal.timeInMillis = (cal.timeInMillis / MILLIS_PER_DAY) * MILLIS_PER_DAY
     return cal
+}
+
+fun Long.asSimpleDate(): String {
+    val cal = Calendar.getInstance()
+    cal.timeInMillis = this
+    val sdf = SimpleDateFormat("dd/MM")
+    return sdf.format(cal.time)
 }
 
 private const val MILLIS_PER_DAY = 1000 * 60 * 60 * 24

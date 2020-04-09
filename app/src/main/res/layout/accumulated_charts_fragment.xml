@@ -19,9 +19,9 @@
                 android:id="@+id/accumulated_history_chart"
                 android:layout_width="0dp"
                 android:layout_height="280dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="25dp"
-                android:layout_marginEnd="15dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
                 android:background="#9937474F"
                 android:padding="10dp"
                 app:chart_axis="xy"
@@ -47,7 +47,7 @@
                 app:layout_constraintTop_toBottomOf="@id/accumulated_history_chart">
 
                 <TextView
-                    android:id="@+id/first_layout"
+                    android:id="@+id/cases_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_circle"
@@ -60,7 +60,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/second_layout"
+                    android:id="@+id/recovered_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -74,7 +74,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/third_label"
+                    android:id="@+id/deaths_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -93,9 +93,9 @@
                 android:id="@+id/active_cases_history_chart"
                 android:layout_width="0dp"
                 android:layout_height="280dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="25dp"
-                android:layout_marginEnd="15dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
                 android:background="#9937474F"
                 android:padding="10dp"
                 app:chart_axis="xy"
@@ -114,7 +114,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="40dp"
+                android:layout_marginBottom="16dp"
                 android:drawableStart="@drawable/ic_circle"
                 android:drawablePadding="8dp"
                 android:drawableTint="@color/existing"

@@ -16,7 +16,7 @@
             tools:context=".ui.accumulatedcharts.AccumulatedChartsFragment">
 
             <com.mobilecoronatracker.ui.chart.williamchart.view.MultiLineChartView
-                android:id="@+id/cumulated_history_chart"
+                android:id="@+id/accumulated_history_chart"
                 android:layout_width="0dp"
                 android:layout_height="280dp"
                 android:layout_marginStart="15dp"
@@ -28,19 +28,72 @@
                 app:chart_labelsColor="#FAFAFA"
                 app:chart_labelsSize="10sp"
                 app:chart_lineColor="#ffffff"
-                app:chart_lineThickness="2.5dp"
+                app:chart_lineThickness="3dp"
                 app:chart_smoothLine="true"
                 app:horizontal_labels_strategy="pickAndMatch"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <LinearLayout
+                android:id="@+id/accumulated_history_legend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/accumulated_history_chart">
+
+                <TextView
+                    android:id="@+id/first_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_circle"
+                    android:drawablePadding="8dp"
+                    android:drawableTint="@color/existing"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/all_identified_cases_label_text"
+                    android:textColor="@color/background"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/second_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:drawableStart="@drawable/ic_circle"
+                    android:drawablePadding="8dp"
+                    android:drawableTint="@color/recovered"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/cumulated_recovered_label_text"
+                    android:textColor="@color/background"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/third_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:drawableStart="@drawable/ic_circle"
+                    android:drawablePadding="8dp"
+                    android:drawableTint="@color/dead"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/all_deaths_label_text"
+                    android:textColor="@color/background"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
             <com.mobilecoronatracker.ui.chart.williamchart.view.MultiLineChartView
                 android:id="@+id/active_cases_history_chart"
                 android:layout_width="0dp"
                 android:layout_height="280dp"
                 android:layout_marginStart="15dp"
-                android:layout_marginBottom="40dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="15dp"
                 android:background="#9937474F"
@@ -49,13 +102,29 @@
                 app:chart_labelsColor="#FAFAFA"
                 app:chart_labelsSize="10sp"
                 app:chart_lineColor="#ffffff"
-                app:chart_lineThickness="2.5dp"
+                app:chart_lineThickness="3dp"
                 app:chart_smoothLine="true"
                 app:horizontal_labels_strategy="pickAndMatch"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/accumulated_history_legend" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="40dp"
+                android:drawableStart="@drawable/ic_circle"
+                android:drawablePadding="8dp"
+                android:drawableTint="@color/existing"
+                android:text="@string/all_active_label_text"
+                android:textColor="@color/background"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cumulated_history_chart" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/active_cases_history_chart" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

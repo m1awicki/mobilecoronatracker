@@ -26,7 +26,7 @@ class AccumulatedChartsFragment : Fragment() {
         setupLinearChart()
 
         viewModel.historyChartUpdate.observe(viewLifecycleOwner, Observer {
-            cumulated_history_chart.animate(it.labels, it.timeLines)
+            accumulated_history_chart.animate(it.labels, it.timeLines)
         })
         viewModel.activeCasesChartUpdate.observe(viewLifecycleOwner, Observer {
             active_cases_history_chart.animate(it.labels, it.timeLines)
@@ -34,9 +34,9 @@ class AccumulatedChartsFragment : Fragment() {
     }
 
     private fun setupLinearChart() {
-        cumulated_history_chart.animation.duration = chartAnimationDuration
-        cumulated_history_chart.labelsFormatter = { data -> data.toInt().toString() }
-        cumulated_history_chart.setLineColors(
+        accumulated_history_chart.animation.duration = chartAnimationDuration
+        accumulated_history_chart.labelsFormatter = { data -> data.toInt().toString() }
+        accumulated_history_chart.setLineColors(
             listOf(
                 resources.getColor(R.color.existing, null),
                 resources.getColor(R.color.recovered, null),

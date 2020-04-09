@@ -29,6 +29,7 @@ class CumulatedReportViewModel(
         cases.value = "???"
         deaths.value = "???"
         recovered.value = "???"
+        active.value = "???"
         viewModelScope.launch(Dispatchers.IO) {
             if (!accumulatedDataRepo.hasAnyData()) {
                 repoInitializer.start()

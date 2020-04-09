@@ -19,91 +19,31 @@
             app:refreshing="@{viewModel.isRefreshing}">
 
             <ScrollView
-                android:fillViewport="true"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:fillViewport="true">
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#263238">
 
-                    <LinearLayout
-                        android:id="@+id/total_cases_container"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginTop="32dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/cumulated_data_chart"
-                        app:layout_constraintVertical_bias="0.0">
-
-                        <TextView
-                            android:id="@+id/total_cases"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@{viewModel.cases}"
-                            android:textColor="#FAFAFA"
-                            android:textSize="28sp"
-                            android:textStyle="bold"
-                            tools:text="1112324" />
-
-                        <TextView
-                            android:id="@+id/total_cases_label"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/all_identified_cases_label_text"
-                            android:textColor="#FAFAFA"
-                            android:textSize="18sp" />
-
-                    </LinearLayout>
-
-                    <com.mobilecoronatracker.ui.chart.williamchart.view.MultiLineChartView
-                        android:id="@+id/cumulated_history_chart"
-                        android:layout_width="0dp"
-                        android:layout_height="280dp"
-                        android:layout_marginTop="25dp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
-                        android:background="#9937474F"
-                        android:padding="10dp"
-                        app:chart_axis="xy"
-                        app:horizontal_labels_strategy="pickAndMatch"
-                        app:chart_lineColor="#ffffff"
-                        app:chart_lineThickness="2.5dp"
-                        app:chart_smoothLine="true"
-                        app:chart_labelsSize="10sp"
-                        app:chart_labelsColor="#FAFAFA"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/total_cases_container"/>
-
-                    <View
-                        android:layout_marginTop="25dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/cumulated_history_chart"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp" />
-
                     <com.mobilecoronatracker.ui.chart.williamchart.view.DonutChartView
                         android:id="@+id/cumulated_data_chart"
                         android:layout_width="370dp"
                         android:layout_height="370dp"
-                        android:layout_marginTop="40dp"
                         android:layout_marginLeft="20dp"
+                        android:layout_marginTop="40dp"
                         android:layout_marginRight="20dp"
                         android:background="@android:color/transparent"
                         app:chart_donutBackgroundColor="@android:color/transparent"
                         app:chart_donutRoundCorners="true"
                         app:chart_donutThickness="13dp"
                         app:chart_donutTotal="200"
-                        app:layout_constraintVertical_chainStyle="packed"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_chainStyle="packed" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -214,9 +154,56 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
+                    <LinearLayout
+                        android:id="@+id/total_cases_container"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="40dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cumulated_data_chart"
+                        app:layout_constraintVertical_bias="0.0">
+
+                        <TextView
+                            android:id="@+id/total_cases"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@{viewModel.cases}"
+                            android:textColor="#FAFAFA"
+                            android:textSize="28sp"
+                            android:textStyle="bold"
+                            tools:text="1112324" />
+
+                        <TextView
+                            android:id="@+id/total_cases_label"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/all_identified_cases_label_text"
+                            android:textColor="#FAFAFA"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </ScrollView>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/show_charts_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="32dp"
+            android:onClick="@{() -> viewModel.onShowChartClicked()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:backgroundTint="@color/existing"
+            app:srcCompat="@drawable/ic_timeline" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <data>

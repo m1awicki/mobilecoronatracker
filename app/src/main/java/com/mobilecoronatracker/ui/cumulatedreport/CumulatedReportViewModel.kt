@@ -6,9 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.mobilecoronatracker.data.repository.AccumulatedDataRepo
 import com.mobilecoronatracker.data.repository.RepoInitializer
 import com.mobilecoronatracker.model.GeneralReportModelable
-import com.mobilecoronatracker.model.GeneralReportTimePointModelable
-import com.mobilecoronatracker.utils.asSimpleDate
-import com.mobilecoronatracker.ui.cumulatedreport.CumulatedReportViewModelable.HistoryChartData
 import com.mobilecoronatracker.ui.cumulatedreport.CumulatedReportViewModelable.CurrentStateChartData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -23,9 +20,10 @@ class CumulatedReportViewModel(
     override val active = MutableLiveData<String>()
     override val deaths = MutableLiveData<String>()
     override val recovered = MutableLiveData<String>()
-    override val historyChartUpdate = MutableLiveData<HistoryChartData>()
     override val currentStateChart = MutableLiveData<CurrentStateChartData>()
     override val isRefreshing = MutableLiveData<Boolean>()
+    override val showChartEvent = MutableLiveData<Boolean>()
+
 
     init {
         cases.value = "???"
@@ -39,11 +37,6 @@ class CumulatedReportViewModel(
                 refreshData()
             }
 
-            accumulatedDataRepo.getFullHistory().collect {
-                onCumulatedHistory(it)
-            }
-        }
-        viewModelScope.launch(Dispatchers.IO) {
             accumulatedDataRepo.getTodayData().collect {
                 onCumulatedData(it)
             }
@@ -61,6 +54,10 @@ class CumulatedReportViewModel(
         refreshData()
     }
 
+    override fun onShowChartClicked() {
+        showChartEvent.value = true
+    }
+
     private fun onCumulatedData(data: GeneralReportModelable) {
         cases.postValue(data.cases.toString())
         active.postValue((data.cases - data.deaths - data.recovered).toString())
@@ -75,24 +72,5 @@ class CumulatedReportViewModel(
             )
         )
         isRefreshing.postValue(false)
-    }
-
-    private fun onCumulatedHistory(data: List<GeneralReportTimePointModelable>) {
-        val cases = mutableListOf<Float>()
-        val deaths = mutableListOf<Float>()
-        val recovered = mutableListOf<Float>()
-        val labels = mutableListOf<String>()
-        data.forEach {
-            cases.add(it.cases.toFloat())
-            deaths.add(it.deaths.toFloat())
-            recovered.add(it.recovered.toFloat())
-            labels.add(it.timestamp.asSimpleDate())
-        }
-        historyChartUpdate.postValue(
-            HistoryChartData(
-                listOf(cases, recovered, deaths),
-                labels
-            )
-        )
     }
 }

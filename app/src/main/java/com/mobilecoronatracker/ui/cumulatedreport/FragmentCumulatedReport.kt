@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.mobilecoronatracker.R
 import com.mobilecoronatracker.databinding.FragmentCumulatedReportBinding
 import com.mobilecoronatracker.ui.chart.williamchart.view.ImplementsAlphaChart
@@ -66,28 +67,22 @@ class FragmentCumulatedReport : Fragment() {
         cumulated_data_chart.animate(initialDonutChartData)
     }
 
-    private fun setupLinearChart() {
-        cumulated_history_chart.animation.duration = chartAnimationDuration
-        cumulated_history_chart.labelsFormatter = { data -> data.toInt().toString() }
-        cumulated_history_chart.setLineColors(listOf(
-            resources.getColor(R.color.existing, null),
-            resources.getColor(R.color.recovered, null),
-            resources.getColor(R.color.dead, null)
-        ))
-    }
 
     private fun setupViews() {
         cumulated_report_swipe_refresh.setOnRefreshListener {
             viewModel.onRefreshRequested()
         }
         setupDonutChart()
-        setupLinearChart()
     }
 
     private fun bindObservers() {
-        viewModel.historyChartUpdate.observe(viewLifecycleOwner, Observer {
-            cumulated_history_chart.animate(it.labels, it.timeLines)
+        viewModel.showChartEvent.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                viewModel.showChartEvent.value = false
+                findNavController().navigate(FragmentCumulatedReportDirections.actionNavigationCumulatedToAccumulatedChartsFragment())
+            }
         })
+
         viewModel.currentStateChart.observe(viewLifecycleOwner, Observer {
             val donutData = listOf(
                 it.deaths.toFloat(),

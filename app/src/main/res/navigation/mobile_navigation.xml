@@ -9,7 +9,12 @@
         android:id="@+id/navigation_cumulated"
         android:name="com.mobilecoronatracker.ui.cumulatedreport.FragmentCumulatedReport"
         android:label="@string/cumulated_report_title"
-        tools:layout="@layout/fragment_cumulated_report" />
+        tools:layout="@layout/fragment_cumulated_report">
+
+        <action
+            android:id="@+id/action_navigation_cumulated_to_accumulatedChartsFragment"
+            app:destination="@id/accumulatedChartsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_per_country"
@@ -22,4 +27,9 @@
         android:name="com.mobilecoronatracker.ui.about.FragmentAbout"
         android:label="@string/about_title"
         tools:layout="@layout/fragment_about" />
+    <fragment
+        android:id="@+id/accumulatedChartsFragment"
+        android:name="com.mobilecoronatracker.ui.accumulatedcharts.AccumulatedChartsFragment"
+        android:label="accumulated_charts_fragment"
+        tools:layout="@layout/accumulated_charts_fragment" />
 </navigation>

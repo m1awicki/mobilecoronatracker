@@ -76,9 +76,9 @@ class FragmentCumulatedReport : Fragment() {
     }
 
     private fun bindObservers() {
-        viewModel.showChartEvent.observe(viewLifecycleOwner, Observer {
+        viewModel.navigateToChartsEvent.observe(viewLifecycleOwner, Observer {
             if (it) {
-                viewModel.showChartEvent.value = false
+                viewModel.navigateToChartsEvent.value = false
                 findNavController().navigate(FragmentCumulatedReportDirections.actionNavigationCumulatedToAccumulatedChartsFragment())
             }
         })

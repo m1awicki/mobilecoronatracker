@@ -11,9 +11,9 @@ interface CumulatedReportViewModelable {
     val currentStateChart: LiveData<CurrentStateChartData>
     val isRefreshing: MutableLiveData<Boolean>
     fun onRefreshRequested()
-    fun onShowChartClicked()
+    fun onChartsButtonClicked()
 
     data class CurrentStateChartData(val active: Int, val recovered: Int, val deaths: Int)
 
-    val showChartEvent: MutableLiveData<Boolean>
+    val navigateToChartsEvent: MutableLiveData<Boolean>
 }

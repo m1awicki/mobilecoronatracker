@@ -22,7 +22,7 @@ class CumulatedReportViewModel(
     override val recovered = MutableLiveData<String>()
     override val currentStateChart = MutableLiveData<CurrentStateChartData>()
     override val isRefreshing = MutableLiveData<Boolean>()
-    override val showChartEvent = MutableLiveData<Boolean>()
+    override val navigateToChartsEvent = MutableLiveData<Boolean>()
 
 
     init {
@@ -55,8 +55,8 @@ class CumulatedReportViewModel(
         refreshData()
     }
 
-    override fun onShowChartClicked() {
-        showChartEvent.value = true
+    override fun onChartsButtonClicked() {
+        navigateToChartsEvent.value = true
     }
 
     private fun onCumulatedData(data: GeneralReportModelable) {

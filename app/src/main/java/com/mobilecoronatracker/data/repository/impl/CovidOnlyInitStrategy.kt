@@ -53,7 +53,7 @@ class CovidOnlyInitStrategy(
         val todayTimestamp = getTodayTimestamp()
         coronaTrackerDatabase.withTransactionWrapper {
             countryDao.insert(
-                *countiesReportModelable.map { Country(0, it.country, it.iso2) }.toTypedArray()
+                *countiesReportModelable.map { Country(0, it.country, it.iso2, it.flagPath) }.toTypedArray()
             )
             val countries = countryDao.getAllCountries().map {
                 it.name to it

@@ -1,10 +1,7 @@
-package com.mobilecoronatracker.ui.countriesreports
+package com.mobilecoronatracker.ui.countrieslist
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
@@ -12,12 +9,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.mobilecoronatracker.R
-import com.mobilecoronatracker.databinding.FragmentCountriesReportsBinding
+import com.mobilecoronatracker.databinding.FragmentCountriesListBinding
 import com.mobilecoronatracker.ui.utils.hideKeyboard
-import kotlinx.android.synthetic.main.fragment_countries_reports.*
+import kotlinx.android.synthetic.main.fragment_countries_list.*
+import kotlinx.android.synthetic.main.item_country_report.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FragmentCountriesReports : Fragment() {
+class FragmentCountriesList : Fragment() {
     private val viewModel: CountriesListViewModelable by viewModel<CountriesListViewModel>()
     private val adapter by lazy {
         CountriesListAdapter()
@@ -28,12 +26,12 @@ class FragmentCountriesReports : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        setHasOptionsMenu(true)
-
-        val binding = DataBindingUtil.inflate<FragmentCountriesReportsBinding>(
-            inflater, R.layout.fragment_countries_reports, container, false
+        val binding = DataBindingUtil.inflate<FragmentCountriesListBinding>(
+            inflater, R.layout.fragment_countries_list, container, false
         )
-        adapter.listener = viewModel
+        adapter.followListener = viewModel
+        adapter.shareReportListener = viewModel
+        adapter.countryAnalysisRequestListener = viewModel
         binding.adapter = adapter
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -46,32 +44,12 @@ class FragmentCountriesReports : Fragment() {
         bindObservers()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        adapter.listener = null
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.reports_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menu_refresh -> {
-                viewModel.onRefreshRequested()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
     private fun setupViews() {
-        countries_reports_search_view.setOnQueryTextListener(object :
+        countries_search_view.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(text: String?): Boolean {
                 viewModel.onFilterTextChanged(text ?: "")
-                context?.let { hideKeyboard(it, countries_reports_search_view) }
+                context?.let { hideKeyboard(it, countries_search_view) }
                 return true
             }
 
@@ -88,8 +66,15 @@ class FragmentCountriesReports : Fragment() {
 
     private fun bindObservers() {
         viewModel.countryReports.observe(viewLifecycleOwner, Observer {
-            adapter.reports = it
+            adapter.deltas = it
             adapter.notifyDataSetChanged()
+        })
+        viewModel.toggleCollapse.observe(viewLifecycleOwner, Observer {
+            if (collapsible_container.visibility == View.VISIBLE) {
+                collapsible_container.visibility = View.GONE
+            } else {
+                collapsible_container.visibility = View.VISIBLE
+            }
         })
     }
 }

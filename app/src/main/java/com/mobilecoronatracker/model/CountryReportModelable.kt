@@ -5,6 +5,7 @@ import com.mobilecoronatracker.data.persistence.entity.CountryData
 interface CountryReportModelable {
     val country: String
     val iso2: String
+    val flagPath: String
     val cases: Int
     val todayCases: Int
     val deaths: Int

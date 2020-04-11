@@ -30,4 +30,5 @@
     <string name="credits_elite_da_myth_github" translatable="false">provided by https://github.com/NovelCOVID/API</string>
     <string name="more_data">More data</string>
     <string name="plus_sign" translatable="false">+</string>
+    <string name="accumulated_charts_title">Accumulated charts</string>
 </resources>

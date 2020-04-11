@@ -10,7 +10,7 @@ import com.mobilecoronatracker.databinding.ItemCountryReportBinding
 class CountriesListAdapter :
     RecyclerView.Adapter<CountriesListAdapter.ViewHolder>()
 {
-    var deltas = emptyList<CountriesListViewModelable.CountryReport>()
+    var countriesReports = emptyList<CountriesListViewModelable.CountryReport>()
     var followListener: CountryFollowListener? = null
     var shareReportListener: ShareCountryReportListener? = null
     var countryAnalysisRequestListener: ShowCountryAnalysisListener? = null
@@ -48,16 +48,16 @@ class CountriesListAdapter :
         return ViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = deltas.size
+    override fun getItemCount(): Int = countriesReports.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =
-        holder.bind(deltas[position])
+        holder.bind(countriesReports[position])
 
-    private fun setDetailsVisible(detailsContainer: ItemCountryReportBinding, visible: Boolean) {
+    private fun setDetailsVisible(binding: ItemCountryReportBinding, visible: Boolean) {
         if (visible) {
-            detailsContainer.collapsibleContainer.visibility = View.VISIBLE
+            binding.collapsibleContainer.visibility = View.VISIBLE
         } else {
-            detailsContainer.collapsibleContainer.visibility = View.GONE
+            binding.collapsibleContainer.visibility = View.GONE
         }
     }
 }

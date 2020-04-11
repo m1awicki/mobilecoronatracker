@@ -13,7 +13,6 @@ interface CountriesListViewModelable :
 
     val countryReports: LiveData<List<CountryReport>>
     val isRefreshing: LiveData<Boolean>
-    val toggleCollapse: LiveData<Void>
 
     data class CountryReport(val casesDelta: Int, val deathsDelta: Int, val recoveredDelta: Int,
                              val countryReport: CountryReportModelable)

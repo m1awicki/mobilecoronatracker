@@ -22,7 +22,6 @@ class CountriesListViewModel(
     private var currentFilterText: String = ""
     override val countryReports = MutableLiveData<List<CountriesListViewModelable.CountryReport>>()
     override val isRefreshing = MutableLiveData<Boolean>()
-    override val toggleCollapse = MutableLiveData<Void>()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {

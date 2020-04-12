@@ -1,11 +1,12 @@
 package com.mobilecoronatracker.ui.countrieslist
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -27,6 +28,7 @@ class FragmentCountriesList : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
         val binding = DataBindingUtil.inflate<FragmentCountriesListBinding>(
             inflater, R.layout.fragment_countries_list, container, false
         )
@@ -43,6 +45,29 @@ class FragmentCountriesList : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupViews()
         bindObservers()
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        adapter.followListener = null
+        adapter.shareReportListener = null
+        adapter.countryAnalysisRequestListener = null
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.reports_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_refresh -> {
+                viewModel.onRefreshRequested()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun setupViews() {

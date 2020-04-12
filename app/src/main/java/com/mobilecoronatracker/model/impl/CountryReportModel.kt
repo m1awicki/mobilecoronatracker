@@ -8,6 +8,7 @@ import kotlin.math.max
 data class CountryReportModel(
     override val country: String,
     override val iso2: String,
+    override val flagPath: String,
     override val cases: Int,
     override val todayCases: Int,
     override val deaths: Int,
@@ -21,6 +22,7 @@ data class CountryReportModel(
             this(
                 data.country,
                 data.countryInfo.iso2 ?: "",
+                data.countryInfo.flag ?: "",
                 data.cases,
                 data.todayCases,
                 data.deaths,
@@ -34,7 +36,8 @@ data class CountryReportModel(
     constructor(data: CountryDataWithCountryInfo) :
             this(
                 data.countryName,
-                "",
+                data.iso2,
+                data.flagPath,
                 data.countryData.cases,
                 data.countryData.todayCases,
                 data.countryData.deaths,

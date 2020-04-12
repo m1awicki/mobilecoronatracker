@@ -3,7 +3,7 @@ package com.mobilecoronatracker
 import android.app.Application
 import com.facebook.stetho.Stetho
 import com.mobilecoronatracker.koin.module.appModule
-import com.mobilecoronatracker.koin.module.countriesReportsModule
+import com.mobilecoronatracker.koin.module.countriesListModule
 import com.mobilecoronatracker.koin.module.cumulatedReportModule
 import com.mobilecoronatracker.koin.module.dbModule
 import org.koin.android.ext.koin.androidContext
@@ -21,7 +21,7 @@ class CoronaTrackerApp : Application() {
             androidContext(this@CoronaTrackerApp)
             modules(
                 appModule,
-                countriesReportsModule,
+                countriesListModule,
                 cumulatedReportModule,
                 dbModule
             )

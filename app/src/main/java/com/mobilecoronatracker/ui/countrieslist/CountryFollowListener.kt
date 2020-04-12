@@ -1,4 +1,4 @@
-package com.mobilecoronatracker.ui.countriesreports
+package com.mobilecoronatracker.ui.countrieslist
 
 interface CountryFollowListener {
     fun onCountryFollowed(countryName: String)

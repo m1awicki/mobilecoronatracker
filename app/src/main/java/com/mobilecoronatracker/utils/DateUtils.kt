@@ -2,11 +2,13 @@ package com.mobilecoronatracker.utils
 
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.TimeZone
 
 fun getTodayTimestamp(): Long = (System.currentTimeMillis() / MILLIS_PER_DAY) * MILLIS_PER_DAY
+fun getYesterdayTimestamp(): Long = getTodayTimestamp() - MILLIS_PER_DAY
 
 fun parseDate(date: String, separator: Char = '/'): Calendar {
-    val cal = Calendar.getInstance()
+    val cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
     val firstSeparator = date.indexOf(separator, 0)
     val secondSeparator = date.indexOf(separator, firstSeparator + 1)
     val day = date.substring(firstSeparator + 1, secondSeparator).toInt()

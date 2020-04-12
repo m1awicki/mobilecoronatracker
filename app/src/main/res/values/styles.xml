@@ -8,4 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="SearchView" parent="Widget.AppCompat.SearchView">
+        <item name="colorAccent">@color/background</item>
+        <item name="android:tint">@color/gray</item>
+        <item name="android:editTextColor">@color/gray</item>
+        <item name="android:backgroundTint">@color/gray</item>
+    </style>
 </resources>

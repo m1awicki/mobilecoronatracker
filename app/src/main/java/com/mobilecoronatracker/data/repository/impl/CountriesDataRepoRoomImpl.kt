@@ -10,6 +10,7 @@ import com.mobilecoronatracker.model.CountryReportModelable
 import com.mobilecoronatracker.model.impl.CountryReportModel
 import com.mobilecoronatracker.model.toCountryData
 import com.mobilecoronatracker.utils.getTodayTimestamp
+import com.mobilecoronatracker.utils.getYesterdayTimestamp
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -21,7 +22,16 @@ class CountriesDataRepoRoomImpl(
 ) : CountriesDataRepo {
     override fun getAllCountriesTodayData(): Flow<List<CountryReportModelable>> {
         val todayTimestamp = getTodayTimestamp()
-        return countryDataDao.getAllCountriesByTimestampFlow(todayTimestamp).map { list ->
+        return getAllCountriesForDate(todayTimestamp)
+    }
+
+    override fun getAllCountriesYesterdayData(): Flow<List<CountryReportModelable>> {
+        val yesterdayTimestamp = getYesterdayTimestamp()
+        return getAllCountriesForDate(yesterdayTimestamp)
+    }
+
+    private fun getAllCountriesForDate(timestamp: Long): Flow<List<CountryReportModelable>> {
+        return countryDataDao.getAllCountriesByTimestampFlow(timestamp).map { list ->
             list.map {
                 CountryReportModel(it)
             }

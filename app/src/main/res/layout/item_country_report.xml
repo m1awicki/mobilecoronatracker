@@ -6,181 +6,264 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/rounded_rect_bg"
-        android:paddingBottom="@dimen/country_report_padding">
+        android:animateLayoutChanges="true"
+        android:background="@color/colorPrimaryDark">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/always_visible"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/country_iso2_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minEms="2"
+                android:padding="10dp"
+                android:text="@{item.countryReport.iso2}"
+                android:textColor="#adadad"
+                android:textSize="21sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="PL" />
+
+            <ImageView
+                android:id="@+id/country_flag"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/country_iso2_code"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/cases_delta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|end"
+                android:minEms="4"
+                android:padding="10dp"
+                android:text="@{item.casesDelta >= 0 ?  @string/plus_sign + String.valueOf(item.casesDelta) : String.valueOf(item.casesDelta)}"
+                android:textColor="@color/existing"
+                android:textSize="21sp"
+                app:layout_constraintEnd_toStartOf="@id/deaths_delta"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="+382" />
+
+            <TextView
+                android:id="@+id/deaths_delta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|end"
+                android:minEms="3"
+                android:padding="10dp"
+                android:text="@{item.deathsDelta >= 0 ?  @string/plus_sign + String.valueOf(item.deathsDelta) : String.valueOf(item.deathsDelta)}"
+                android:textColor="@color/dead"
+                android:textSize="21sp"
+                app:layout_constraintEnd_toStartOf="@id/recovered_delta"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="+12" />
+
+            <TextView
+                android:id="@+id/recovered_delta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:gravity="center_vertical|end"
+                android:minEms="3"
+                android:padding="10dp"
+                android:text="@{item.recoveredDelta >= 0 ?  @string/plus_sign + String.valueOf(item.recoveredDelta) : String.valueOf(item.recoveredDelta)}"
+                android:textColor="@color/recovered"
+                android:textSize="21sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="+2" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/collapsible_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/countryListCollapsibleBackground"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.6" />
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/always_visible"
+            tools:visibility="visible">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/start_guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_begin="10dp" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/collapsible_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/always_visible">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/end_guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_end="10dp" />
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/details_guideline_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
 
-        <TextView
-            android:id="@+id/country_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingBottom="10dp"
-            android:text="@{item.country}"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
-            app:layout_constraintStart_toStartOf="@+id/start_guideline"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="China" />
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/details_guideline_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.7" />
 
-        <ImageView
-            android:id="@+id/bookmark_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_flag"
-            android:onClick="@{() -> item.followed ? listener.onCountryUnfollowed(item.country) : listener.onCountryFollowed(item.country) }"
-            android:tint="@{item.followed ? @color/colorAccent : @android:color/darker_gray}"
-            app:layout_constraintBottom_toBottomOf="@+id/country_name"
-            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
-            app:layout_constraintTop_toTopOf="@+id/country_name" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toStartOf="@id/details_guideline_1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/cases_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cases_label_text"
-            app:layout_constraintStart_toStartOf="@+id/start_guideline"
-            app:layout_constraintTop_toBottomOf="@id/country_name" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical|end"
+                        android:padding="10dp"
+                        android:text="@string/cases_label_text"
+                        android:textColor="@color/gray"
+                        android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/cases"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@{String.valueOf(item.cases)}"
-            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
-            app:layout_constraintStart_toStartOf="@id/guideline"
-            app:layout_constraintTop_toBottomOf="@id/country_name"
-            tools:text="123" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical|end"
+                        android:minEms="3"
+                        android:padding="10dp"
+                        android:text="@string/active_label_text"
+                        android:textColor="@color/gray"
+                        android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/today_cases_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/today_cases_label_text"
-            app:layout_constraintStart_toStartOf="@+id/start_guideline"
-            app:layout_constraintTop_toBottomOf="@id/cases_label" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical|end"
+                        android:padding="10dp"
+                        android:text="@string/deaths_label_text"
+                        android:textColor="@color/gray"
+                        android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/today_cases"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@{String.valueOf(item.todayCases)}"
-            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
-            app:layout_constraintStart_toStartOf="@id/guideline"
-            app:layout_constraintTop_toBottomOf="@id/cases"
-            tools:text="123" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical|end"
+                        android:padding="10dp"
+                        android:text="@string/recovered_label_text"
+                        android:textColor="@color/gray"
+                        android:textSize="16sp" />
+                </LinearLayout>
 
-        <TextView
-            android:id="@+id/deaths_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/deaths_label_text"
-            app:layout_constraintStart_toStartOf="@+id/start_guideline"
-            app:layout_constraintTop_toBottomOf="@id/today_cases_label" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="@id/details_guideline_2"
+                    app:layout_constraintStart_toEndOf="@id/details_guideline_1"
+                    app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/deaths"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@{String.valueOf(item.deaths)}"
-            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
-            app:layout_constraintStart_toStartOf="@id/guideline"
-            app:layout_constraintTop_toBottomOf="@id/today_cases"
-            tools:text="123" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical|end"
+                        android:minEms="3"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@{String.valueOf(item.countryReport.cases)}"
+                        android:textColor="@color/gray"
+                        android:textSize="16sp"
+                        tools:text="123456789" />
 
-        <TextView
-            android:id="@+id/today_deaths_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/today_deaths_label_text"
-            app:layout_constraintStart_toStartOf="@+id/start_guideline"
-            app:layout_constraintTop_toBottomOf="@id/deaths_label" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical|end"
+                        android:minEms="3"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@{String.valueOf(item.countryReport.active)}"
+                        android:textColor="@color/existing"
+                        android:textSize="16sp"
+                        tools:text="23456789" />
 
-        <TextView
-            android:id="@+id/today_deaths"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@{String.valueOf(item.todayDeaths)}"
-            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
-            app:layout_constraintStart_toStartOf="@id/guideline"
-            app:layout_constraintTop_toBottomOf="@id/deaths"
-            tools:text="123" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical|end"
+                        android:minEms="3"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@{String.valueOf(item.countryReport.deaths)}"
+                        android:textColor="@color/dead"
+                        android:textSize="16sp"
+                        tools:text="23456" />
 
-        <TextView
-            android:id="@+id/recovered_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/recovered_label_text"
-            app:layout_constraintStart_toStartOf="@+id/start_guideline"
-            app:layout_constraintTop_toBottomOf="@id/today_deaths_label" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical|end"
+                        android:minEms="3"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@{String.valueOf(item.countryReport.recovered)}"
+                        android:textColor="@color/recovered"
+                        android:textSize="16sp"
+                        tools:text="234567" />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/recovered"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@{String.valueOf(item.recovered)}"
-            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
-            app:layout_constraintStart_toStartOf="@id/guideline"
-            app:layout_constraintTop_toBottomOf="@id/today_deaths"
-            tools:text="123" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/collapsible_details">
 
-        <TextView
-            android:id="@+id/critical_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/critical_label_text"
-            app:layout_constraintStart_toStartOf="@+id/start_guideline"
-            app:layout_constraintTop_toBottomOf="@id/recovered_label" />
+                <ImageView
+                    android:id="@+id/bookmark_button"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:onClick="@{() -> item.countryReport.followed ? followListener.onCountryUnfollowed(item.countryReport.country) : followListener.onCountryFollowed(item.countryReport.country) }"
+                    android:src="@drawable/ic_bookmark"
+                    android:tint="@{item.countryReport.followed ? @color/colorAccent : @color/gray}" />
 
-        <TextView
-            android:id="@+id/critical"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@{String.valueOf(item.critical)}"
-            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
-            app:layout_constraintStart_toStartOf="@id/guideline"
-            app:layout_constraintTop_toBottomOf="@id/recovered"
-            tools:text="123" />
+                <ImageView
+                    android:id="@+id/show_more_button"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginEnd="40dp"
+                    android:onClick="@{() -> analysisRequestListener.onCountryAnalysisRequested(item.countryReport.country)}"
+                    android:src="@drawable/ic_more"
+                    android:tint="@color/gray" />
 
-        <TextView
-            android:id="@+id/active_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/active_label_text"
-            app:layout_constraintStart_toStartOf="@+id/start_guideline"
-            app:layout_constraintTop_toBottomOf="@id/critical_label" />
+                <ImageView
+                    android:id="@+id/share_button"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:onClick="@{() -> shareListener.onShareReport(item)}"
+                    android:src="@drawable/ic_share"
+                    android:tint="@color/gray" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/active"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@{String.valueOf(item.active)}"
-            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
-            app:layout_constraintStart_toStartOf="@id/guideline"
-            app:layout_constraintTop_toBottomOf="@id/critical"
-            tools:text="123" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@color/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -189,11 +272,19 @@
         <import type="android.view.View" />
 
         <variable
-            name="item"
-            type="com.mobilecoronatracker.model.CountryReportModelable" />
+            name="followListener"
+            type="com.mobilecoronatracker.ui.countrieslist.CountryFollowListener" />
 
         <variable
-            name="listener"
-            type="com.mobilecoronatracker.ui.countriesreports.CountryFollowListener" />
+            name="shareListener"
+            type="com.mobilecoronatracker.ui.countrieslist.ShareCountryReportListener" />
+
+        <variable
+            name="analysisRequestListener"
+            type="com.mobilecoronatracker.ui.countrieslist.ShowCountryAnalysisListener" />
+
+        <variable
+            name="item"
+            type="com.mobilecoronatracker.ui.countrieslist.CountriesListViewModelable.CountryReport" />
     </data>
 </layout>

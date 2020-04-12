@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 abstract class CountryDataDao : BaseDao<CountryData> {
     @Query(
         """
-        SELECT country_data.*, country.name, country.iso2
+        SELECT country_data.*, country.name, country.iso2, country.country_flag_path
         FROM country_data 
         INNER JOIN country ON country_data.country_id = country.id 
         WHERE entry_date=:timestamp 

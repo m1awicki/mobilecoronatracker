@@ -18,9 +18,9 @@
 
     <fragment
         android:id="@+id/navigation_per_country"
-        android:name="com.mobilecoronatracker.ui.countriesreports.FragmentCountriesReports"
+        android:name="com.mobilecoronatracker.ui.countrieslist.FragmentCountriesList"
         android:label="@string/reports_by_country_title"
-        tools:layout="@layout/fragment_countries_reports" />
+        tools:layout="@layout/fragment_countries_list" />
 
     <fragment
         android:id="@+id/navigation_about"

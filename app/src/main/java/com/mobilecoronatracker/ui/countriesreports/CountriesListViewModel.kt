@@ -63,7 +63,7 @@ class CountriesListViewModel(
                 .contains(
                     currentFilterText.toLowerCase(Locale.getDefault())
                 )
-        }
+        }.sortedByDescending { it.cases }
     }
 
     private fun getFollowStatusList(filtered: List<CountryReportModelable>): List<CountryReportModelable> {

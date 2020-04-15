@@ -1,6 +1,7 @@
 package com.mobilecoronatracker.ui.countrieslist
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.mobilecoronatracker.model.CountryReportModelable
 
 interface CountriesListViewModelable :
@@ -8,6 +9,8 @@ interface CountriesListViewModelable :
     ShareCountryReportListener,
     ShowCountryAnalysisListener
 {
+    val navigationToCountryRequested: MutableLiveData<String>
+
     fun onFilterTextChanged(text: String)
     fun onRefreshRequested()
 

@@ -35,9 +35,7 @@ class CountryAnalysisFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (viewModel as CountryAnalysisViewModel).apply {
-            start(args.countryName)
-        }
+        viewModel.setCountry(args.countryName)
         setupViews()
         bindObservers()
     }

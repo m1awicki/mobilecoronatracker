@@ -22,6 +22,7 @@ class CountriesListViewModel(
     private var currentFilterText: String = ""
     override val countryReports = MutableLiveData<List<CountriesListViewModelable.CountryReport>>()
     override val isRefreshing = MutableLiveData<Boolean>()
+    override val navigationToCountryRequested = MutableLiveData<String>()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -78,7 +79,7 @@ class CountriesListViewModel(
     }
 
     override fun onCountryAnalysisRequested(country: String) {
-        Log.d(CountriesListViewModel::class.java.simpleName, "onCountryAnalysisRequested() not implemented!")
+        navigationToCountryRequested.postValue(country)
     }
 
     private fun refreshData() {

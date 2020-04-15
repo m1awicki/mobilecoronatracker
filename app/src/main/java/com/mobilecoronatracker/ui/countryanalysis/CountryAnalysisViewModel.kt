@@ -32,12 +32,12 @@ class CountryAnalysisViewModel(
     override val countryFlagPath = MutableLiveData<String>()
     override val countryName = MutableLiveData<String>()
 
-    fun start(country: String) {
+    override fun setCountry(name: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            loadData(country)
+            loadData(name)
         }
         viewModelScope.launch(Dispatchers.IO) {
-            loadCountryInfo(country)
+            loadCountryInfo(name)
         }
     }
 
@@ -46,11 +46,12 @@ class CountryAnalysisViewModel(
             onCountryHistory(it)
         }
     }
-    private suspend fun loadCountryInfo(country: String) {
-        val country = countriesDao.getByCountryName(country)
+
+    private suspend fun loadCountryInfo(countryName: String) {
+        val country = countriesDao.getByCountryName(countryName)
         country?.let {
             countryFlagPath.postValue(it.countryFlagPath)
-            countryName.postValue(it.name)
+            this.countryName.postValue(it.name)
         }
     }
 

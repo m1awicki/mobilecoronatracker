@@ -14,6 +14,8 @@ interface CountryAnalysisViewModelable {
     val countryFlagPath: LiveData<String>
     val countryName: LiveData<String>
 
+    fun setCountry(name: String)
+
     data class CasesPerMillionData(val values: List<Float>, val labels: List<String>)
     data class HistoryChartData(val timeLines: List<List<Float>>, val labels: List<String>)
     data class SingleLineChartData(val values: List<Float>, val labels: List<String>)

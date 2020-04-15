@@ -7,7 +7,9 @@ import com.mobilecoronatracker.data.persistence.entity.Country
 import com.mobilecoronatracker.data.repository.CountriesDataRepo
 import com.mobilecoronatracker.data.repository.CovidDataRepo
 import com.mobilecoronatracker.model.CountryReportModelable
+import com.mobilecoronatracker.model.CountryReportTimePointModelable
 import com.mobilecoronatracker.model.impl.CountryReportModel
+import com.mobilecoronatracker.model.impl.CountryReportTimePointModel
 import com.mobilecoronatracker.model.toCountryData
 import com.mobilecoronatracker.utils.getTodayTimestamp
 import com.mobilecoronatracker.utils.getYesterdayTimestamp
@@ -28,6 +30,14 @@ class CountriesDataRepoRoomImpl(
     override fun getAllCountriesYesterdayData(): Flow<List<CountryReportModelable>> {
         val yesterdayTimestamp = getYesterdayTimestamp()
         return getAllCountriesForDate(yesterdayTimestamp)
+    }
+
+    override fun getCountryHistory(countryName: String): Flow<List<CountryReportTimePointModelable>> {
+        return countryDataDao.getAllCountryEntries(countryName).map { list ->
+            list.map {
+                CountryReportTimePointModel(it)
+            }
+        }
     }
 
     private fun getAllCountriesForDate(timestamp: Long): Flow<List<CountryReportModelable>> {

@@ -1,0 +1,125 @@
+package com.mobilecoronatracker.ui.countryanalysis
+
+import android.content.Context
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.mobilecoronatracker.R
+import com.mobilecoronatracker.data.persistence.dao.CountryDao
+import com.mobilecoronatracker.data.repository.CountriesDataRepo
+import com.mobilecoronatracker.model.CountryReportTimePointModelable
+import com.mobilecoronatracker.utils.asSimpleDate
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+
+class CountryAnalysisViewModel(
+    private val context: Context,
+    private val countriesDataRepo: CountriesDataRepo,
+    private val countriesDao: CountryDao
+) :
+    ViewModel(),
+    CountryAnalysisViewModelable
+{
+    override val countryHistoryData = MutableLiveData<CountryAnalysisViewModelable.HistoryChartData>()
+    override val countryActiveCasesData = MutableLiveData<CountryAnalysisViewModelable.SingleLineChartData>()
+    override val dailyIncreaseData = MutableLiveData<CountryAnalysisViewModelable.SingleLineChartData>()
+    override val dailyIncreaseAsPercentOfAllData = MutableLiveData<CountryAnalysisViewModelable.SingleLineChartData>()
+    override val casesPerMillionData = MutableLiveData<CountryAnalysisViewModelable.CasesPerMillionData>()
+    override val testedToIdentifiedData = MutableLiveData<List<Float>>()
+    override val tested = MutableLiveData<Int>()
+    override val infected = MutableLiveData<Int>()
+    override val countryFlagPath = MutableLiveData<String>()
+    override val countryName = MutableLiveData<String>()
+
+    fun start(country: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            loadData(country)
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            loadCountryInfo(country)
+        }
+    }
+
+    private suspend fun loadData(country: String) {
+        countriesDataRepo.getCountryHistory(country).collect {
+            onCountryHistory(it)
+        }
+    }
+    private suspend fun loadCountryInfo(country: String) {
+        val country = countriesDao.getByCountryName(country)
+        country?.let {
+            countryFlagPath.postValue(it.countryFlagPath)
+            countryName.postValue(it.name)
+        }
+    }
+
+    private fun onCountryHistory(history: List<CountryReportTimePointModelable>) {
+        tested.postValue(history.last().tests)
+        infected.postValue(history.last().cases)
+        testedToIdentifiedData.postValue(listOf(
+            history.last().cases.toFloat(), history.last().tests.toFloat()
+        ))
+        casesPerMillionData.postValue(
+            CountryAnalysisViewModelable.CasesPerMillionData(
+                listOf(
+                    history.last().casesPerMillion.toFloat(),
+                    history.last().deathsPerMillion.toFloat(),
+                    history.last().testsPerMillion.toFloat()
+                ),
+                listOf(
+                    context.resources.getString(R.string.cases_label_text),
+                    context.resources.getString(R.string.deaths_label_text),
+                    context.resources.getString(R.string.tested)
+                )
+        ))
+        val cases = mutableListOf<Float>()
+        val deaths = mutableListOf<Float>()
+        val recovered = mutableListOf<Float>()
+        val active = mutableListOf<Float>()
+        val labels = mutableListOf<String>()
+        val dailyIncrease = mutableListOf<Float>()
+        val dailyIncreaseAsPercent = mutableListOf<Float>()
+        history.forEach { timePoint ->
+            if (timePoint.cases > 0) {
+                cases.add(timePoint.cases.toFloat())
+                deaths.add(timePoint.deaths.toFloat())
+                recovered.add(timePoint.recovered.toFloat())
+                active.add((timePoint.cases - timePoint.deaths - timePoint.recovered).toFloat())
+                labels.add(timePoint.timestamp.asSimpleDate())
+            }
+        }
+        cases.forEachIndexed { index, fl ->
+            if (index == 0) {
+                dailyIncrease.add(fl)
+            } else {
+                dailyIncrease.add(
+                    maxOf(fl - cases[index - 1], 0f)
+                )
+            }
+        }
+        dailyIncreaseData.postValue(CountryAnalysisViewModelable.SingleLineChartData(
+            dailyIncrease, labels
+        ))
+
+        cases.forEachIndexed { index, fl ->
+            if (index == 0) {
+                dailyIncreaseAsPercent.add(fl/fl * 100)
+            } else {
+                dailyIncreaseAsPercent.add(
+                    maxOf((fl - cases[index - 1])/fl * 100, 0f)
+                )
+            }
+        }
+        dailyIncreaseAsPercentOfAllData.postValue(CountryAnalysisViewModelable.SingleLineChartData(
+            dailyIncreaseAsPercent, labels
+        ))
+
+        countryHistoryData.postValue(CountryAnalysisViewModelable.HistoryChartData(
+            listOf(cases, recovered, deaths), labels
+        ))
+        countryActiveCasesData.postValue(CountryAnalysisViewModelable.SingleLineChartData(
+            active, labels
+        ))
+    }
+}

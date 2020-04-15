@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name" translatable="false">CoronaTracker</string>
     <string name="country_name_label_text">Country name:</string>
-    <string name="cases_label_text">Cases:</string>
-    <string name="deaths_label_text">Deaths:</string>
+    <string name="cases_colon_label_text">Cases:</string>
+    <string name="cases_label_text">Cases</string>
+    <string name="deaths_colon_label_text">Deaths:</string>
+    <string name="deaths_label_text">Deaths</string>
     <string name="today_cases_label_text">Today cases:</string>
     <string name="today_deaths_label_text">Today deaths:</string>
     <string name="recovered_label_text">Recovered:</string>
@@ -31,4 +33,10 @@
     <string name="more_data">More data</string>
     <string name="plus_sign" translatable="false">+</string>
     <string name="accumulated_charts_title">Accumulated charts</string>
+    <string name="tested">Tested</string>
+    <string name="country_analysis">Country Analysis</string>
+    <string name="country_history_chart_description">Country data from day of first case</string>
+    <string name="per_one_million_of_citizens_chart_description">Cases, deaths and test per one million of citizens</string>
+    <string name="daily_increase_of_infected">Daily increase of infected</string>
+    <string name="daily_increase_of_infected_as_percentage_of_all">Daily increase of infected as % of all</string>
 </resources>

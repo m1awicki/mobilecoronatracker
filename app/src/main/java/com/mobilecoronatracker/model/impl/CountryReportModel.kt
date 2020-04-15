@@ -16,38 +16,50 @@ data class CountryReportModel(
     override val recovered: Int,
     override val critical: Int,
     override val active: Int,
-    override var followed: Boolean
+    override var followed: Boolean,
+    override val casesPerMillion: Double,
+    override val deathsPerMillion: Double,
+    override val tests: Int,
+    override val testsPerMillion: Double
 ) : CountryReportModelable {
     constructor(data: CovidCountryEntry) :
             this(
-                data.country,
-                data.countryInfo.iso2 ?: "",
-                data.countryInfo.flag ?: "",
-                data.cases,
-                data.todayCases,
-                data.deaths,
-                data.todayDeaths,
-                data.recovered,
-                data.critical,
-                data.active,
-                followed = false
+                country = data.country,
+                iso2 = data.countryInfo.iso2 ?: "",
+                flagPath = data.countryInfo.flag ?: "",
+                cases = data.cases,
+                todayCases = data.todayCases,
+                deaths = data.deaths,
+                todayDeaths = data.todayDeaths,
+                recovered = data.recovered,
+                critical = data.critical,
+                active = data.active,
+                followed = false,
+                casesPerMillion = data.casesPerOneMillion,
+                deathsPerMillion = data.deathsPerOneMillion,
+                tests = data.tests,
+                testsPerMillion = data.testsPerOneMillion
             )
 
     constructor(data: CountryDataWithCountryInfo) :
             this(
-                data.countryName,
-                data.iso2,
-                data.flagPath,
-                data.countryData.cases,
-                data.countryData.todayCases,
-                data.countryData.deaths,
-                data.countryData.todayDeaths,
-                data.countryData.recovered,
-                data.countryData.critical,
-                max(
+                country = data.countryName,
+                iso2 = data.iso2,
+                flagPath = data.flagPath,
+                cases = data.countryData.cases,
+                todayCases = data.countryData.todayCases,
+                deaths = data.countryData.deaths,
+                todayDeaths = data.countryData.todayDeaths,
+                recovered = data.countryData.recovered,
+                critical = data.countryData.critical,
+                active = max(
                     data.countryData.cases - data.countryData.recovered - data.countryData.deaths,
                     0
                 ),
-                followed = false
+                followed = false,
+                casesPerMillion = data.countryData.casesPerMillion,
+                deathsPerMillion = data.countryData.deathsPerMillion,
+                tests = data.countryData.tests,
+                testsPerMillion = data.countryData.testsPerMillion
             )
 }

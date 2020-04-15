@@ -14,6 +14,10 @@ interface CountryReportModelable {
     val critical: Int
     val active: Int
     var followed: Boolean
+    val casesPerMillion: Double
+    val deathsPerMillion: Double
+    val tests: Int
+    val testsPerMillion: Double
 }
 
 fun CountryReportModelable.toCountryData(
@@ -28,6 +32,10 @@ fun CountryReportModelable.toCountryData(
     recovered = recovered,
     deaths = deaths,
     todayDeaths = todayDeaths,
+    casesPerMillion = casesPerMillion,
+    deathsPerMillion = deathsPerMillion,
+    tests = tests,
+    testsPerMillion = testsPerMillion,
     countryId = countryId,
     entryDate = timestamp
 )

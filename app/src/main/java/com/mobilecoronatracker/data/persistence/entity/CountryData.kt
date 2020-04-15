@@ -7,7 +7,6 @@ import androidx.room.ForeignKey.CASCADE
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-
 @Entity(
     tableName = "country_data",
     indices = [
@@ -31,7 +30,10 @@ data class CountryData(
     @ColumnInfo(name = "today_deaths") val todayDeaths: Int = 0,
     val recovered: Int = 0,
     val critical: Int = 0,
-    @ColumnInfo(name = "cases_per_million") val casesPerMillion: Int = 0,
+    @ColumnInfo(name = "cases_per_million") val casesPerMillion: Double = 0.0,
+    @ColumnInfo(name = "deaths_per_million") val deathsPerMillion: Double = 0.0,
+    @ColumnInfo(name = "tests") val tests: Int = 0,
+    @ColumnInfo(name = "tests_per_million") val testsPerMillion: Double = 0.0,
     @ColumnInfo(name = "entry_date") val entryDate: Long = System.currentTimeMillis(),
     @ColumnInfo(name = "country_id") val countryId: Long
 )

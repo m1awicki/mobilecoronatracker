@@ -55,32 +55,74 @@ class CountryAnalysisViewModel(
         }
     }
 
-    private fun onCountryHistory(history: List<CountryReportTimePointModelable>) {
-        tested.postValue(history.last().tests)
-        infected.postValue(history.last().cases)
+    private fun updateTestedAndIdentified(today: CountryReportTimePointModelable) {
+        tested.postValue(today.tests)
+        infected.postValue(today.cases)
         testedToIdentifiedData.postValue(listOf(
-            history.last().cases.toFloat(), history.last().tests.toFloat()
+            today.cases.toFloat(),
+            today.tests.toFloat()
         ))
+    }
+
+    private fun updateDataPerMillionCitizens(today: CountryReportTimePointModelable) {
         casesPerMillionData.postValue(
             CountryAnalysisViewModelable.CasesPerMillionData(
                 listOf(
-                    history.last().casesPerMillion.toFloat(),
-                    history.last().deathsPerMillion.toFloat(),
-                    history.last().testsPerMillion.toFloat()
+                    today.casesPerMillion.toFloat(),
+                    today.deathsPerMillion.toFloat(),
+                    today.testsPerMillion.toFloat()
                 ),
                 listOf(
                     context.resources.getString(R.string.cases_label_text),
                     context.resources.getString(R.string.deaths_label_text),
                     context.resources.getString(R.string.tested)
                 )
+            ))
+    }
+
+    private fun updateDailyCasesIncreases(casesTimeLine: List<Float>, casesLabels: List<String>) {
+        val dailyIncrease = mutableListOf<Float>()
+        casesTimeLine.forEachIndexed { index, fl ->
+            if (index == 0) {
+                dailyIncrease.add(fl)
+            } else {
+                dailyIncrease.add(
+                    maxOf(fl - casesTimeLine[index - 1], 0f)
+                )
+            }
+        }
+        dailyIncreaseData.postValue(CountryAnalysisViewModelable.SingleLineChartData(
+            dailyIncrease,
+            casesLabels
         ))
+    }
+
+    private fun updateDailyIncreasesAsPercentOfAll(casesTimeLine: List<Float>, casesLabels: List<String>) {
+        val dailyIncreaseAsPercent = mutableListOf<Float>()
+        casesTimeLine.forEachIndexed { index, fl ->
+            if (index == 0) {
+                dailyIncreaseAsPercent.add(fl/fl * 100)
+            } else {
+                dailyIncreaseAsPercent.add(
+                    maxOf((fl - casesTimeLine[index - 1])/fl * 100, 0f)
+                )
+            }
+        }
+        dailyIncreaseAsPercentOfAllData.postValue(CountryAnalysisViewModelable.SingleLineChartData(
+            dailyIncreaseAsPercent,
+            casesLabels
+        ))
+    }
+
+    private fun onCountryHistory(history: List<CountryReportTimePointModelable>) {
+        updateTestedAndIdentified(history.last())
+        updateDataPerMillionCitizens(history.last())
+
         val cases = mutableListOf<Float>()
         val deaths = mutableListOf<Float>()
         val recovered = mutableListOf<Float>()
         val active = mutableListOf<Float>()
         val labels = mutableListOf<String>()
-        val dailyIncrease = mutableListOf<Float>()
-        val dailyIncreaseAsPercent = mutableListOf<Float>()
         history.forEach { timePoint ->
             if (timePoint.cases > 0) {
                 cases.add(timePoint.cases.toFloat())
@@ -90,37 +132,20 @@ class CountryAnalysisViewModel(
                 labels.add(timePoint.timestamp.asSimpleDate())
             }
         }
-        cases.forEachIndexed { index, fl ->
-            if (index == 0) {
-                dailyIncrease.add(fl)
-            } else {
-                dailyIncrease.add(
-                    maxOf(fl - cases[index - 1], 0f)
-                )
-            }
-        }
-        dailyIncreaseData.postValue(CountryAnalysisViewModelable.SingleLineChartData(
-            dailyIncrease, labels
-        ))
-
-        cases.forEachIndexed { index, fl ->
-            if (index == 0) {
-                dailyIncreaseAsPercent.add(fl/fl * 100)
-            } else {
-                dailyIncreaseAsPercent.add(
-                    maxOf((fl - cases[index - 1])/fl * 100, 0f)
-                )
-            }
-        }
-        dailyIncreaseAsPercentOfAllData.postValue(CountryAnalysisViewModelable.SingleLineChartData(
-            dailyIncreaseAsPercent, labels
-        ))
-
         countryHistoryData.postValue(CountryAnalysisViewModelable.HistoryChartData(
-            listOf(cases, recovered, deaths), labels
+            listOf(
+                cases,
+                recovered,
+                deaths
+            ),
+            labels
         ))
         countryActiveCasesData.postValue(CountryAnalysisViewModelable.SingleLineChartData(
-            active, labels
+            active,
+            labels
         ))
+
+        updateDailyCasesIncreases(cases, labels)
+        updateDailyIncreasesAsPercentOfAll(cases, labels)
     }
 }

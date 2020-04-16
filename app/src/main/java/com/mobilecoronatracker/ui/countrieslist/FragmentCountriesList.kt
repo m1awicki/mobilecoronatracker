@@ -97,7 +97,9 @@ class FragmentCountriesList : Fragment() {
             adapter.notifyDataSetChanged()
         })
         viewModel.navigationToCountryRequested.observe(viewLifecycleOwner, Observer {
-            if (it.isBlank()) return@Observer
+            if (it.isBlank()) {
+                return@Observer
+            }
             val action = FragmentCountriesListDirections.actionNavigationCountriesListToCountryAnalysisFragment(it)
             viewModel.navigationToCountryRequested.value = ""
             findNavController().navigate(action)

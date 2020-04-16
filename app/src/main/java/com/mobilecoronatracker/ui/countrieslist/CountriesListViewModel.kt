@@ -78,8 +78,8 @@ class CountriesListViewModel(
         Log.d(CountriesListViewModel::class.java.simpleName, "onShareReport() not implemented!")
     }
 
-    override fun onCountryAnalysisRequested(country: String) {
-        navigationToCountryRequested.postValue(country)
+    override fun onCountryAnalysisRequested(countryName: String) {
+        navigationToCountryRequested.postValue(countryName)
     }
 
     private fun refreshData() {

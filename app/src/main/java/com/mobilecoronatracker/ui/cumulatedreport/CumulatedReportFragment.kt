@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_cumulated_report.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @ImplementsAlphaChart
-class FragmentCumulatedReport : Fragment() {
+class CumulatedReportFragment : Fragment() {
     private val viewModel: CumulatedReportViewModelable by viewModel<CumulatedReportViewModel>()
 
     override fun onCreateView(
@@ -79,7 +79,7 @@ class FragmentCumulatedReport : Fragment() {
         viewModel.navigateToChartsEvent.observe(viewLifecycleOwner, Observer {
             if (it) {
                 viewModel.navigateToChartsEvent.value = false
-                findNavController().navigate(FragmentCumulatedReportDirections.actionNavigationCumulatedToAccumulatedChartsFragment())
+                findNavController().navigate(CumulatedReportFragmentDirections.actionNavigationCumulatedToAccumulatedChartsFragment())
             }
         })
 

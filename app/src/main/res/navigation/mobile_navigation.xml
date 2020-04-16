@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_cumulated"
-        android:name="com.mobilecoronatracker.ui.cumulatedreport.FragmentCumulatedReport"
+        android:name="com.mobilecoronatracker.ui.cumulatedreport.CumulatedReportFragment"
         android:label="@string/cumulated_report_title"
         tools:layout="@layout/fragment_cumulated_report">
 
@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/navigation_countries_list"
-        android:name="com.mobilecoronatracker.ui.countrieslist.FragmentCountriesList"
+        android:name="com.mobilecoronatracker.ui.countrieslist.CountriesListFragment"
         android:label="@string/reports_by_country_title"
         tools:layout="@layout/fragment_countries_list" >
         <action
@@ -28,7 +28,7 @@
 
     <fragment
         android:id="@+id/navigation_about"
-        android:name="com.mobilecoronatracker.ui.about.FragmentAbout"
+        android:name="com.mobilecoronatracker.ui.about.AboutFragment"
         android:label="@string/about_title"
         tools:layout="@layout/fragment_about" />
 

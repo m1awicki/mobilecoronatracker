@@ -18,8 +18,8 @@ import java.util.concurrent.TimeUnit
 
 class CovidRestDataReader : CovidDataSource {
     private val baseAddress = "https://corona.lmao.ninja/"
-    private val cumulatedDataEndpoint = "all"
-    private val perCountryDataEndpoint = "countries"
+    private val cumulatedDataEndpoint = "v2/all"
+    private val perCountryDataEndpoint = "v2/countries"
     private val observersCumulated: LinkedList<CovidCumulatedDataObserver> = LinkedList()
     private val observersCountries: LinkedList<CovidCountriesDataObserver> = LinkedList()
     private val taskExecutor: ScheduledThreadPoolExecutor = ScheduledThreadPoolExecutor(1)

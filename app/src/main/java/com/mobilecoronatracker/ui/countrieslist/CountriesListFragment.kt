@@ -18,7 +18,7 @@ import com.mobilecoronatracker.ui.utils.hideKeyboard
 import kotlinx.android.synthetic.main.fragment_countries_list.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FragmentCountriesList : Fragment() {
+class CountriesListFragment : Fragment() {
     private val viewModel: CountriesListViewModelable by viewModel<CountriesListViewModel>()
     private val adapter by lazy {
         CountriesListAdapter()
@@ -100,7 +100,7 @@ class FragmentCountriesList : Fragment() {
             if (it.isBlank()) {
                 return@Observer
             }
-            val action = FragmentCountriesListDirections.actionNavigationCountriesListToCountryAnalysisFragment(it)
+            val action = CountriesListFragmentDirections.actionNavigationCountriesListToCountryAnalysisFragment(it)
             viewModel.navigationToCountryRequested.value = ""
             findNavController().navigate(action)
         })

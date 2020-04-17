@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.fragment_about.*
 import com.mobilecoronatracker.ui.utils.addLinksNoAppend
 import java.util.regex.Pattern
 
-class FragmentAbout : Fragment() {
+class AboutFragment : Fragment() {
     private lateinit var viewModel: CreditsListViewModel
     private val adapter = CreditsListAdapter()
 

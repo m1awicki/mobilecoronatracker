@@ -27,7 +27,7 @@ class CovidDataRepoImpl(
     override suspend fun getCumulatedData(): GeneralReportModelable =
         when (val callResult = safeApiCall(dispatcher) { covidApi.getAccumulatedData() }) {
             is NetworkResult.ResponseResult -> GeneralReportModel(callResult.data)
-            is NetworkResult.ErrorResult -> GeneralReportModel(0, 0, 0)
+            is NetworkResult.ErrorResult -> GeneralReportModel()
         }
 
 

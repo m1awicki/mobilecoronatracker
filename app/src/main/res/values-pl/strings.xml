@@ -15,7 +15,7 @@
     <string name="data_source">Źródło danych</string>
     <string name="cumulated_report_title">Raport ogólny</string>
     <string name="cumulated_recovered_label_text">Wyzdrowienia</string>
-    <string name="critical_label_text">W stanie krytycznym:</string>
+    <string name="critical_colon_label_text">W stanie krytycznym:</string>
     <string name="about_text">Ta aplikacja jest darmowa i została stworzona aby ułatwić śledzenie postępu pandemii COVID-19 - choroby powodowanej przez koronawirusa SARS-CoV-2, który został odkryty w 2019 roku w Wuhan (Chiny).</string>
     <string name="active_label_text">Aktywne:</string>
     <string name="more_data">Więcej danych</string>
@@ -29,4 +29,5 @@
     <string name="daily_increase_of_infected_as_percentage_of_all">Dzienny wzrost zakażeń jako % wszystkich</string>
     <string name="cases_label_text">Przypadki</string>
     <string name="deaths_label_text">Zgony</string>
+    <string name="critical_label_text">W stanie krytycznym</string>
 </resources>

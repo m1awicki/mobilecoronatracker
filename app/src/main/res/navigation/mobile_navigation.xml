@@ -17,10 +17,14 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_per_country"
+        android:id="@+id/navigation_countries_list"
         android:name="com.mobilecoronatracker.ui.countrieslist.FragmentCountriesList"
         android:label="@string/reports_by_country_title"
-        tools:layout="@layout/fragment_countries_list" />
+        tools:layout="@layout/fragment_countries_list" >
+        <action
+            android:id="@+id/action_navigation_countries_list_to_countryAnalysisFragment"
+            app:destination="@id/countryAnalysisFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_about"
@@ -33,4 +37,15 @@
         android:name="com.mobilecoronatracker.ui.accumulatedcharts.AccumulatedChartsFragment"
         android:label="@string/accumulated_charts_title"
         tools:layout="@layout/accumulated_charts_fragment" />
+
+    <fragment
+        android:id="@+id/countryAnalysisFragment"
+        android:name="com.mobilecoronatracker.ui.countryanalysis.CountryAnalysisFragment"
+        android:label="@string/country_analysis"
+        tools:layout="@layout/fragment_country_analysis" >
+        <argument
+            android:name="countryName"
+            app:argType="string"
+            android:defaultValue='""' />
+    </fragment>
 </navigation>

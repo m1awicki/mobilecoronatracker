@@ -11,6 +11,7 @@ import android.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.mobilecoronatracker.R
 import com.mobilecoronatracker.databinding.FragmentCountriesListBinding
 import com.mobilecoronatracker.ui.utils.hideKeyboard
@@ -94,6 +95,14 @@ class FragmentCountriesList : Fragment() {
         viewModel.countryReports.observe(viewLifecycleOwner, Observer {
             adapter.countriesReports = it
             adapter.notifyDataSetChanged()
+        })
+        viewModel.navigationToCountryRequested.observe(viewLifecycleOwner, Observer {
+            if (it.isBlank()) {
+                return@Observer
+            }
+            val action = FragmentCountriesListDirections.actionNavigationCountriesListToCountryAnalysisFragment(it)
+            viewModel.navigationToCountryRequested.value = ""
+            findNavController().navigate(action)
         })
     }
 }

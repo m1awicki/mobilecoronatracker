@@ -128,7 +128,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical|end"
                         android:padding="10dp"
-                        android:text="@string/cases_label_text"
+                        android:text="@string/cases_colon_label_text"
                         android:textColor="@color/gray"
                         android:textSize="16sp" />
 
@@ -147,7 +147,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical|end"
                         android:padding="10dp"
-                        android:text="@string/deaths_label_text"
+                        android:text="@string/deaths_colon_label_text"
                         android:textColor="@color/gray"
                         android:textSize="16sp" />
 

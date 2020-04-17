@@ -49,4 +49,15 @@ abstract class CountryDataDao : BaseDao<CountryData> {
         """
     )
     abstract fun getCountryByTimestamp(countryId: Long, todayTimestamp: Long): CountryData?
+
+    @Query(
+        """
+        SELECT country_data.*
+        FROM country_data
+        INNER JOIN country ON country_data.country_id = country.id
+        WHERE name=:countryName
+        ORDER BY entry_date ASC
+        """
+    )
+    abstract fun getAllCountryEntries(countryName: String): Flow<List<CountryData>>
 }

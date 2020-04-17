@@ -4,14 +4,14 @@
     <string name="country_name_label_text">Nazwa kraju:</string>
     <string name="all_deaths_label_text">Zgony</string>
     <string name="all_identified_cases_label_text">Zakażenia</string>
-    <string name="cases_label_text">Przypadki:</string>
+    <string name="cases_colon_label_text">Przypadki:</string>
     <string name="today_deaths_label_text">Dzisiejsze zgony:</string>
     <string name="today_cases_label_text">Dzisiejsze przypadki:</string>
     <string name="reports_by_country_title">Raport dla krajów</string>
     <string name="recovered_label_text">Wyzdrowiały:</string>
     <string name="menu_refresh">Odśwież</string>
     <string name="github_repo_label">Repozytorium na GitHub-ie</string>
-    <string name="deaths_label_text">Zgony:</string>
+    <string name="deaths_colon_label_text">Zgony:</string>
     <string name="data_source">Źródło danych</string>
     <string name="cumulated_report_title">Raport ogólny</string>
     <string name="cumulated_recovered_label_text">Wyzdrowienia</string>
@@ -21,4 +21,12 @@
     <string name="more_data">Więcej danych</string>
     <string name="all_active_label_text">Aktywne</string>
     <string name="accumulated_charts_title">Wykresy raportu ogólnego</string>
+    <string name="country_analysis">Analiza dla kraju</string>
+    <string name="tested">Testy</string>
+    <string name="country_history_chart_description">Dane kraju od dnia pierwszego zakażenia</string>
+    <string name="per_one_million_of_citizens_chart_description">Przypadki, zgony i testy na milion mieszkańców</string>
+    <string name="daily_increase_of_infected">Dzienny wzrost zakażeń</string>
+    <string name="daily_increase_of_infected_as_percentage_of_all">Dzienny wzrost zakażeń jako % wszystkich</string>
+    <string name="cases_label_text">Przypadki</string>
+    <string name="deaths_label_text">Zgony</string>
 </resources>

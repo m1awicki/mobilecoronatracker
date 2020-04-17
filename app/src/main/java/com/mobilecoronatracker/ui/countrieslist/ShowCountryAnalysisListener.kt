@@ -1,5 +1,5 @@
 package com.mobilecoronatracker.ui.countrieslist
 
 interface ShowCountryAnalysisListener {
-    fun onCountryAnalysisRequested(country: String)
+    fun onCountryAnalysisRequested(countryName: String)
 }

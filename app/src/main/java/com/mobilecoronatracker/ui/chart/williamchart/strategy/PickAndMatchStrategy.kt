@@ -14,6 +14,9 @@ class PickAndMatchStrategy : ChartContract.HorizontalAxisLabelsPlacingStrategy {
         painter: Painter,
         labels: List<Label>
     ): List<Label> {
+        if (labels.isEmpty()) {
+            return labels
+        }
         val averageLabelWidth: Float = labels.map {
             painter.measureLabelWidth(
                 it.label, labelSize)

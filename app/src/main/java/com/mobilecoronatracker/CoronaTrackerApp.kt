@@ -2,6 +2,8 @@ package com.mobilecoronatracker
 
 import android.app.Application
 import com.facebook.stetho.Stetho
+import com.mobilecoronatracker.data.workmanager.DataUpdateWorkScheduler
+import com.mobilecoronatracker.data.workmanager.DataUpdateWorkSchedulerImpl
 import com.mobilecoronatracker.koin.module.appModule
 import com.mobilecoronatracker.koin.module.countriesListModule
 import com.mobilecoronatracker.koin.module.countryAnalysisModule
@@ -12,6 +14,8 @@ import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 
 class CoronaTrackerApp : Application() {
+    val dataUpdateWorkScheduler: DataUpdateWorkScheduler = DataUpdateWorkSchedulerImpl()
+
     override fun onCreate() {
         super.onCreate()
         if (BuildConfig.DEBUG) {
@@ -28,5 +32,9 @@ class CoronaTrackerApp : Application() {
                 dbModule
             )
         }
+
+        dataUpdateWorkScheduler.schedule(this)
     }
+
+
 }

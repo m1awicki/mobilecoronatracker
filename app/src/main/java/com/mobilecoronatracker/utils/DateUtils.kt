@@ -5,12 +5,12 @@ import java.util.Calendar
 import java.util.TimeZone
 
 fun getTodayTimestamp(): Long = (System.currentTimeMillis() / MILLIS_PER_DAY) * MILLIS_PER_DAY
+
 fun getYesterdayTimestamp(): Long = getTodayTimestamp() - MILLIS_PER_DAY
+
 fun getTimestampForDaysBefore(daysCount: Int, referenceTimestamp: Long = getTodayTimestamp()): Long {
-    val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-    calendar.timeInMillis = referenceTimestamp
-    calendar.add(Calendar.DATE, daysCount * -1)
-    return calendar.timeInMillis
+    val normalisedReferenceTimestamp = (referenceTimestamp / MILLIS_PER_DAY) * MILLIS_PER_DAY
+    return normalisedReferenceTimestamp - MILLIS_PER_DAY * daysCount
 }
 
 fun parseDate(date: String, separator: Char = '/'): Calendar {

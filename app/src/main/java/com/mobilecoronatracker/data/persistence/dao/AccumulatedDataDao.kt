@@ -30,7 +30,7 @@ abstract class AccumulatedDataDao : BaseDao<AccumulatedData> {
         SELECT * 
         FROM accumulated_data 
         WHERE entry_date>=:timestampStart AND entry_date<=:timestampEnd
-        ORDER By entry_date
+        ORDER BY entry_date
         ASC
         """
     )

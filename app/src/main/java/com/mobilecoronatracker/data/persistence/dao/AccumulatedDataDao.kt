@@ -30,12 +30,14 @@ abstract class AccumulatedDataDao : BaseDao<AccumulatedData> {
         SELECT * 
         FROM accumulated_data 
         WHERE entry_date>=:timestampStart AND entry_date<=:timestampEnd
+        ORDER BY entry_date
+        ASC
         """
     )
     abstract fun getByTimestampRangeFlow(
         timestampStart: Long,
         timestampEnd: Long
-    ): Flow<AccumulatedData>
+    ): Flow<List<AccumulatedData>>
 
     @Query(
         """

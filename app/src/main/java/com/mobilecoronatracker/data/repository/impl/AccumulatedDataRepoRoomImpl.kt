@@ -8,6 +8,7 @@ import com.mobilecoronatracker.model.GeneralReportTimePointModelable
 import com.mobilecoronatracker.model.impl.GeneralReportModel
 import com.mobilecoronatracker.model.impl.GeneralReportTimePointModel
 import com.mobilecoronatracker.model.toAccumulatedData
+import com.mobilecoronatracker.utils.getTimestampForDaysBefore
 import com.mobilecoronatracker.utils.getTodayTimestamp
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
@@ -27,6 +28,14 @@ class AccumulatedDataRepoRoomImpl(
     override fun getFullHistory(): Flow<List<GeneralReportTimePointModelable>> {
         return accumulatedDataDao.getAllFlow().map {
             it.map { data -> GeneralReportTimePointModel(data) }
+        }
+    }
+
+    override fun getDataForLastDays(numberOfDays: Int): Flow<List<GeneralReportModelable>> {
+        val upperBound = getTodayTimestamp()
+        val lowerBound = getTimestampForDaysBefore(numberOfDays - 1, upperBound)
+        return accumulatedDataDao.getByTimestampRangeFlow(lowerBound, upperBound).map {
+            it.map { data -> GeneralReportModel(data) }
         }
     }
 

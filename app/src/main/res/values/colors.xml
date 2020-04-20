@@ -10,4 +10,5 @@
     <color name="dead">#ef5350</color>
     <color name="recovered">#00897B</color>
     <color name="cardBackground">#C62759</color>
+    <color name="critical">#FFAB47BC</color>
 </resources>

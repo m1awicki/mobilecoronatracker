@@ -8,6 +8,7 @@ import com.mobilecoronatracker.data.persistence.entity.Country
 import com.mobilecoronatracker.data.persistence.entity.CountryData
 import com.mobilecoronatracker.data.repository.CountriesDataRepo
 import com.mobilecoronatracker.data.repository.CovidDataRepo
+import com.mobilecoronatracker.data.repository.RepoResult
 import com.mobilecoronatracker.model.CountryReportModelable
 import com.mobilecoronatracker.model.CountryReportTimePointModelable
 import com.mobilecoronatracker.model.impl.CountryReportModel
@@ -51,42 +52,44 @@ class CountriesDataRepoRoomImpl(
         return countryDataDao.getAllCountriesCountByTimestamp(todayTimestamp) != 0
     }
 
-    override suspend fun fetchTodayCountriesData() {
-        val countiesReportModelable = covidDataRepo.getCountriesData()
-        val todayTimestamp = getTodayTimestamp()
-        coronaTrackerDatabase.withTransactionWrapper {
-            countryDao.insert(
-                *countiesReportModelable.map { Country(0, it.country, it.iso2, it.flagPath) }
-                    .toTypedArray()
-            )
-            val countries = countryDao.getAllCountries().map {
-                it.name to it
-            }.toMap()
-            countiesReportModelable.forEach {
-                val countryId = countries[it.country]?.id ?: 0
-                val countryData =
-                    countryDataDao.getCountryByTimestamp(countryId, todayTimestamp)
-                if (countryData == null) {
-                    countryDataDao.insert(it.toCountryData(0, countryId, todayTimestamp))
-                } else {
-                    countryDataDao.update(
-                        it.toCountryData(
-                            countryData.id,
-                            countryData.countryId,
-                            countryData.entryDate
-                        )
+    override suspend fun fetchTodayCountriesData(): RepoResult<Unit> {
+        return when (val repoResult = covidDataRepo.getCountriesData()) {
+            is RepoResult.FailureResult -> RepoResult.FailureResult()
+            is RepoResult.SuccessResult -> {
+                val countriesReports = repoResult.data
+                val todayTimestamp = getTodayTimestamp()
+                coronaTrackerDatabase.withTransactionWrapper {
+                    countryDao.insert(
+                        *countriesReports.map { Country(0, it.country, it.iso2, it.flagPath) }
+                            .toTypedArray()
                     )
+                    val countries = countryDao.getAllCountries().map {
+                        it.name to it
+                    }.toMap()
+                    countriesReports.forEach {
+                        val countryId = countries[it.country]?.id ?: 0
+                        val countryData =
+                            countryDataDao.getCountryByTimestamp(countryId, todayTimestamp)
+                        if (countryData == null) {
+                            countryDataDao.insert(it.toCountryData(0, countryId, todayTimestamp))
+                        } else {
+                            countryDataDao.update(
+                                it.toCountryData(
+                                    countryData.id,
+                                    countryData.countryId,
+                                    countryData.entryDate
+                                )
+                            )
+                        }
+                    }
                 }
+                RepoResult.SuccessResult(Unit)
             }
         }
     }
 
-    private fun getAllCountriesForDate(timestamp: Long): Flow<List<CountryReportModelable>> {
-        return countryDataDao.getAllCountriesByTimestampFlow(timestamp).map { list ->
-            list.map {
-                CountryReportModel(it)
-            }
-        }
+    override suspend fun fetchYesterdayCountriesData(): RepoResult<Unit> {
+        return RepoResult.SuccessResult(Unit)
     }
 
     override suspend fun fetchHistoricalCountriesData() {
@@ -127,6 +130,14 @@ class CountriesDataRepoRoomImpl(
                         countryDataDao.insert(countryData)
                     }
                 }
+            }
+        }
+    }
+
+    private fun getAllCountriesForDate(timestamp: Long): Flow<List<CountryReportModelable>> {
+        return countryDataDao.getAllCountriesByTimestampFlow(timestamp).map { list ->
+            list.map {
+                CountryReportModel(it)
             }
         }
     }

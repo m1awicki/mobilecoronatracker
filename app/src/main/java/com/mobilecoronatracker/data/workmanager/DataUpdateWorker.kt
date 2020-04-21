@@ -5,6 +5,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.mobilecoronatracker.data.repository.AccumulatedDataRepo
 import com.mobilecoronatracker.data.repository.CountriesDataRepo
+import com.mobilecoronatracker.data.repository.RepoResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
@@ -19,13 +20,22 @@ class DataUpdateWorker(
     private val countriesDataRepo: CountriesDataRepo by inject()
 
     override suspend fun doWork(): Result = coroutineScope {
-
-        // TODO: add yesterday call + check status of sync somehow to pass retry
+        var accumulatedSuccessful: RepoResult<Unit> = RepoResult.FailureResult()
+        var todayCountriesSuccessful: RepoResult<Unit> = RepoResult.FailureResult()
+        var yesterdayCountriesSuccessful: RepoResult<Unit> = RepoResult.FailureResult()
         withContext(Dispatchers.IO) {
-            accumulatedDataRepo.fetchTodayAccumulatedData()
-            countriesDataRepo.fetchTodayCountriesData()
+            accumulatedSuccessful = accumulatedDataRepo.fetchTodayAccumulatedData()
+            todayCountriesSuccessful = countriesDataRepo.fetchTodayCountriesData()
+            yesterdayCountriesSuccessful = countriesDataRepo.fetchYesterdayCountriesData()
         }
 
-        Result.success()
+        if (accumulatedSuccessful is RepoResult.SuccessResult
+            && todayCountriesSuccessful is RepoResult.SuccessResult
+            && yesterdayCountriesSuccessful is RepoResult.SuccessResult
+        ) {
+            return@coroutineScope Result.success()
+        }
+
+        Result.retry()
     }
 }

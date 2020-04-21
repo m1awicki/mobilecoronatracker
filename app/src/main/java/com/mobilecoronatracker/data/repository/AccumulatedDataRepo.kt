@@ -8,7 +8,7 @@ interface AccumulatedDataRepo {
     fun getTodayData(): Flow<GeneralReportModelable>
     fun getFullHistory(): Flow<List<GeneralReportTimePointModelable>>
     fun getDataForLastDays(numberOfDays: Int): Flow<List<GeneralReportModelable>>
-    suspend fun fetchTodayAccumulatedData()
+    suspend fun fetchTodayAccumulatedData(): RepoResult<Unit>
     suspend fun hasTodayData(): Boolean
     suspend fun hasAnyData(): Boolean
     suspend fun fetchHistoricalAccumulatedData()

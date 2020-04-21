@@ -3,6 +3,7 @@ package com.mobilecoronatracker.data.repository.impl
 import com.mobilecoronatracker.data.persistence.dao.AccumulatedDataDao
 import com.mobilecoronatracker.data.repository.AccumulatedDataRepo
 import com.mobilecoronatracker.data.repository.CovidDataRepo
+import com.mobilecoronatracker.data.repository.RepoResult
 import com.mobilecoronatracker.model.GeneralReportModelable
 import com.mobilecoronatracker.model.GeneralReportTimePointModelable
 import com.mobilecoronatracker.model.impl.GeneralReportModel
@@ -40,12 +41,16 @@ class AccumulatedDataRepoRoomImpl(
         }
     }
 
-    override suspend fun fetchTodayAccumulatedData() {
-        val generalReportModelable = covidDataRepo.getCumulatedData()
-        val todayTimestamp = getTodayTimestamp()
+    override suspend fun fetchTodayAccumulatedData(): RepoResult<Unit> =
+        when (val repoResult = covidDataRepo.getCumulatedData()) {
+            is RepoResult.FailureResult -> RepoResult.FailureResult(repoResult.throwable)
+            is RepoResult.SuccessResult -> {
+                val todayTimestamp = getTodayTimestamp()
+                insertOrUpdate(todayTimestamp, repoResult.data)
+                RepoResult.SuccessResult(Unit)
+            }
+        }
 
-        insertOrUpdate(todayTimestamp, generalReportModelable)
-    }
 
     override suspend fun fetchHistoricalAccumulatedData() {
         val accumulatedHistorical = covidDataRepo.getAccumulatedHistoricalData()

@@ -8,6 +8,7 @@ interface CountriesDataRepo {
     fun getAllCountriesTodayData(): Flow<List<CountryReportModelable>>
     fun getAllCountriesYesterdayData(): Flow<List<CountryReportModelable>>
     fun getCountryHistory(countryName: String): Flow<List<CountryReportTimePointModelable>>
-    suspend fun refreshCountriesData()
+    suspend fun fetchTodayCountriesData()
     suspend fun hasTodayCountryData(): Boolean
+    suspend fun fetchHistoricalCountriesData()
 }

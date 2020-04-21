@@ -1,7 +1,6 @@
 package com.mobilecoronatracker.data.workmanager
 
 import android.content.Context
-import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.mobilecoronatracker.data.repository.AccumulatedDataRepo
@@ -23,8 +22,8 @@ class DataUpdateWorker(
 
         // TODO: add yesterday call + check status of sync somehow to pass retry
         withContext(Dispatchers.IO) {
-            accumulatedDataRepo.refreshAccumulatedData()
-            countriesDataRepo.refreshCountriesData()
+            accumulatedDataRepo.fetchTodayAccumulatedData()
+            countriesDataRepo.fetchTodayCountriesData()
         }
 
         Result.success()

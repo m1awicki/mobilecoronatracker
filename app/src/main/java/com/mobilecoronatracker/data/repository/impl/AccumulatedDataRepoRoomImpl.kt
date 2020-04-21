@@ -7,6 +7,7 @@ import com.mobilecoronatracker.model.GeneralReportModelable
 import com.mobilecoronatracker.model.GeneralReportTimePointModelable
 import com.mobilecoronatracker.model.impl.GeneralReportModel
 import com.mobilecoronatracker.model.impl.GeneralReportTimePointModel
+import com.mobilecoronatracker.model.pojo.toAccumulatedDataList
 import com.mobilecoronatracker.model.toAccumulatedData
 import com.mobilecoronatracker.utils.getTimestampForDaysBefore
 import com.mobilecoronatracker.utils.getTodayTimestamp
@@ -39,21 +40,27 @@ class AccumulatedDataRepoRoomImpl(
         }
     }
 
-    override suspend fun refreshAccumulatedData() {
+    override suspend fun fetchTodayAccumulatedData() {
         val generalReportModelable = covidDataRepo.getCumulatedData()
         val todayTimestamp = getTodayTimestamp()
 
         insertOrUpdate(todayTimestamp, generalReportModelable)
     }
 
+    override suspend fun fetchHistoricalAccumulatedData() {
+        val accumulatedHistorical = covidDataRepo.getAccumulatedHistoricalData()
+        val accumulatedDataList = accumulatedHistorical.timeline.toAccumulatedDataList()
+        accumulatedDataDao.insert(*accumulatedDataList.toTypedArray())
+    }
+
     private suspend fun insertOrUpdate(
-        todayTimestamp: Long,
+        timestamp: Long,
         generalReportModelable: GeneralReportModelable
     ) {
-        val accumulatedData = accumulatedDataDao.getByTimestamp(todayTimestamp)
+        val accumulatedData = accumulatedDataDao.getByTimestamp(timestamp)
         if (accumulatedData == null) {
             accumulatedDataDao.insert(
-                generalReportModelable.toAccumulatedData(0, todayTimestamp)
+                generalReportModelable.toAccumulatedData(0, timestamp)
             )
         } else {
             accumulatedDataDao.update(

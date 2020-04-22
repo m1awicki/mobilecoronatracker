@@ -19,7 +19,7 @@ class DataUpdateWorkSchedulerImpl : DataUpdateWorkScheduler {
                 DATA_UPDATE_WORK_REPEAT_INTERVAL,
                 TimeUnit.HOURS
             )
-                .setInitialDelay(DATA_UPDATE_WORK_REPEAT_INTERVAL, TimeUnit.HOURS)
+                .setInitialDelay(DATA_UPDATE_WORK_INITIAL_DELAY, TimeUnit.HOURS)
                 .setConstraints(constraints)
                 .build()
 
@@ -33,6 +33,7 @@ class DataUpdateWorkSchedulerImpl : DataUpdateWorkScheduler {
 
     companion object {
         const val DATA_UPDATE_WORK_NAME = "get_latest_data_work"
-        const val DATA_UPDATE_WORK_REPEAT_INTERVAL = 1L
+        const val DATA_UPDATE_WORK_REPEAT_INTERVAL = 6L
+        const val DATA_UPDATE_WORK_INITIAL_DELAY = 1L
     }
 }

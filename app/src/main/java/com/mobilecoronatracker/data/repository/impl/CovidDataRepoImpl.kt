@@ -26,9 +26,27 @@ class CovidDataRepoImpl(
             is NetworkResult.ErrorResult -> RepoResult.FailureResult(callResult.throwable)
         }
 
+    override suspend fun getYesterdayCountriesData(): RepoResult<List<CountryReportModelable>> =
+        when (val callResult =
+            safeApiCall(dispatcher) { covidApi.getCountriesData(yesterday = true) }) {
+            is NetworkResult.ResponseResult -> RepoResult.SuccessResult(callResult.data.map {
+                CountryReportModel(it)
+            })
+            is NetworkResult.ErrorResult -> RepoResult.FailureResult(callResult.throwable)
+        }
+
     override suspend fun getCumulatedData(): RepoResult<GeneralReportModelable> =
         when (val callResult =
             safeApiCall(dispatcher) { covidApi.getAccumulatedData() }) {
+            is NetworkResult.ResponseResult -> RepoResult.SuccessResult(
+                GeneralReportModel(callResult.data)
+            )
+            is NetworkResult.ErrorResult -> RepoResult.FailureResult(callResult.throwable)
+        }
+
+    override suspend fun getYesterdayCumulatedData(): RepoResult<GeneralReportModelable> =
+        when (val callResult =
+            safeApiCall(dispatcher) { covidApi.getAccumulatedData(yesterday = true) }) {
             is NetworkResult.ResponseResult -> RepoResult.SuccessResult(
                 GeneralReportModel(callResult.data)
             )

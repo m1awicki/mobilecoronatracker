@@ -12,6 +12,7 @@ import com.mobilecoronatracker.model.pojo.toAccumulatedDataList
 import com.mobilecoronatracker.model.toAccumulatedData
 import com.mobilecoronatracker.utils.getTimestampForDaysBefore
 import com.mobilecoronatracker.utils.getTodayTimestamp
+import com.mobilecoronatracker.utils.getYesterdayTimestamp
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
@@ -42,21 +43,28 @@ class AccumulatedDataRepoRoomImpl(
     }
 
     override suspend fun fetchTodayAccumulatedData(): RepoResult<Unit> =
-        when (val repoResult = covidDataRepo.getCumulatedData()) {
-            is RepoResult.FailureResult -> RepoResult.FailureResult(repoResult.throwable)
-            is RepoResult.SuccessResult -> {
-                val todayTimestamp = getTodayTimestamp()
-                insertOrUpdate(todayTimestamp, repoResult.data)
-                RepoResult.SuccessResult(Unit)
-            }
-        }
+        getAccumulatedData(covidDataRepo.getCumulatedData(), getTodayTimestamp())
 
+    override suspend fun fetchYesterdayAccumulatedData(): RepoResult<Unit> =
+        getAccumulatedData(covidDataRepo.getYesterdayCumulatedData(), getYesterdayTimestamp())
 
     override suspend fun fetchHistoricalAccumulatedData() {
         val accumulatedHistorical = covidDataRepo.getAccumulatedHistoricalData()
         val accumulatedDataList = accumulatedHistorical.timeline.toAccumulatedDataList()
         accumulatedDataDao.insert(*accumulatedDataList.toTypedArray())
     }
+
+    private suspend fun getAccumulatedData(
+        repoResult: RepoResult<GeneralReportModelable>,
+        timestamp: Long
+    ): RepoResult<Unit> =
+        when (repoResult) {
+            is RepoResult.FailureResult -> RepoResult.FailureResult(repoResult.throwable)
+            is RepoResult.SuccessResult -> {
+                insertOrUpdate(timestamp, repoResult.data)
+                RepoResult.SuccessResult(Unit)
+            }
+        }
 
     private suspend fun insertOrUpdate(
         timestamp: Long,

@@ -12,4 +12,5 @@ interface AccumulatedDataRepo {
     suspend fun hasTodayData(): Boolean
     suspend fun hasAnyData(): Boolean
     suspend fun fetchHistoricalAccumulatedData()
+    suspend fun fetchYesterdayAccumulatedData(): RepoResult<Unit>
 }

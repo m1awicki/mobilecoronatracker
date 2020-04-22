@@ -10,7 +10,9 @@ import com.mobilecoronatracker.ui.cumulatedreport.CumulatedReportViewModelable
 
 interface CovidDataRepo {
     suspend fun getCountriesData(): RepoResult<List<CountryReportModelable>>
+    suspend fun getYesterdayCountriesData(): RepoResult<List<CountryReportModelable>>
     suspend fun getCumulatedData(): RepoResult<GeneralReportModelable>
+    suspend fun getYesterdayCumulatedData(): RepoResult<GeneralReportModelable>
     suspend fun getCountryHistoricalData(): List<CovidCountryHistory>
     suspend fun getAccumulatedHistoricalData(): CovidAccumulatedHistory
 }

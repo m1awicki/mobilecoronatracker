@@ -20,18 +20,21 @@ class DataUpdateWorker(
     private val countriesDataRepo: CountriesDataRepo by inject()
 
     override suspend fun doWork(): Result = coroutineScope {
-        var accumulatedSuccessful: RepoResult<Unit> = RepoResult.FailureResult()
+        var todayAccumulatedSuccessful: RepoResult<Unit> = RepoResult.FailureResult()
+        var yesterdayAccumulatedSuccessful: RepoResult<Unit> = RepoResult.FailureResult()
         var todayCountriesSuccessful: RepoResult<Unit> = RepoResult.FailureResult()
         var yesterdayCountriesSuccessful: RepoResult<Unit> = RepoResult.FailureResult()
         withContext(Dispatchers.IO) {
-            accumulatedSuccessful = accumulatedDataRepo.fetchTodayAccumulatedData()
+            todayAccumulatedSuccessful = accumulatedDataRepo.fetchTodayAccumulatedData()
+            yesterdayAccumulatedSuccessful = accumulatedDataRepo.fetchYesterdayAccumulatedData()
             todayCountriesSuccessful = countriesDataRepo.fetchTodayCountriesData()
             yesterdayCountriesSuccessful = countriesDataRepo.fetchYesterdayCountriesData()
         }
 
-        if (accumulatedSuccessful is RepoResult.SuccessResult
+        if (todayAccumulatedSuccessful is RepoResult.SuccessResult
             && todayCountriesSuccessful is RepoResult.SuccessResult
             && yesterdayCountriesSuccessful is RepoResult.SuccessResult
+            && yesterdayAccumulatedSuccessful is RepoResult.SuccessResult
         ) {
             return@coroutineScope Result.success()
         }

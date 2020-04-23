@@ -9,8 +9,8 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import java.util.concurrent.TimeUnit
 
-class DataUpdateWorkSchedulerImpl : DataUpdateWorkScheduler {
-    override fun schedule(context: Context) {
+class DataUpdateCycleImpl : DataUpdateCycle {
+    override fun start(context: Context) {
         val constraints: Constraints =
             Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
 

@@ -2,7 +2,7 @@ package com.mobilecoronatracker.data.workmanager
 
 import android.content.Context
 
-interface DataUpdateWorkScheduler {
+interface DataUpdateCycle {
 
-    fun schedule(context: Context)
+    fun start(context: Context)
 }

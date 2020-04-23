@@ -3,13 +3,16 @@ package com.mobilecoronatracker.data.repository.impl
 import com.mobilecoronatracker.data.persistence.dao.AccumulatedDataDao
 import com.mobilecoronatracker.data.repository.AccumulatedDataRepo
 import com.mobilecoronatracker.data.repository.CovidDataRepo
+import com.mobilecoronatracker.data.repository.RepoResult
 import com.mobilecoronatracker.model.GeneralReportModelable
 import com.mobilecoronatracker.model.GeneralReportTimePointModelable
 import com.mobilecoronatracker.model.impl.GeneralReportModel
 import com.mobilecoronatracker.model.impl.GeneralReportTimePointModel
+import com.mobilecoronatracker.model.pojo.toAccumulatedDataList
 import com.mobilecoronatracker.model.toAccumulatedData
 import com.mobilecoronatracker.utils.getTimestampForDaysBefore
 import com.mobilecoronatracker.utils.getTodayTimestamp
+import com.mobilecoronatracker.utils.getYesterdayTimestamp
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
@@ -39,21 +42,38 @@ class AccumulatedDataRepoRoomImpl(
         }
     }
 
-    override suspend fun refreshAccumulatedData() {
-        val generalReportModelable = covidDataRepo.getCumulatedData()
-        val todayTimestamp = getTodayTimestamp()
+    override suspend fun fetchTodayAccumulatedData(): RepoResult<Unit> =
+        getAccumulatedData(covidDataRepo.getCumulatedData(), getTodayTimestamp())
 
-        insertOrUpdate(todayTimestamp, generalReportModelable)
+    override suspend fun fetchYesterdayAccumulatedData(): RepoResult<Unit> =
+        getAccumulatedData(covidDataRepo.getYesterdayCumulatedData(), getYesterdayTimestamp())
+
+    override suspend fun fetchHistoricalAccumulatedData() {
+        val accumulatedHistorical = covidDataRepo.getAccumulatedHistoricalData()
+        val accumulatedDataList = accumulatedHistorical.timeline.toAccumulatedDataList()
+        accumulatedDataDao.insert(*accumulatedDataList.toTypedArray())
     }
 
+    private suspend fun getAccumulatedData(
+        repoResult: RepoResult<GeneralReportModelable>,
+        timestamp: Long
+    ): RepoResult<Unit> =
+        when (repoResult) {
+            is RepoResult.FailureResult -> RepoResult.FailureResult(repoResult.throwable)
+            is RepoResult.SuccessResult -> {
+                insertOrUpdate(timestamp, repoResult.data)
+                RepoResult.SuccessResult(Unit)
+            }
+        }
+
     private suspend fun insertOrUpdate(
-        todayTimestamp: Long,
+        timestamp: Long,
         generalReportModelable: GeneralReportModelable
     ) {
-        val accumulatedData = accumulatedDataDao.getByTimestamp(todayTimestamp)
+        val accumulatedData = accumulatedDataDao.getByTimestamp(timestamp)
         if (accumulatedData == null) {
             accumulatedDataDao.insert(
-                generalReportModelable.toAccumulatedData(0, todayTimestamp)
+                generalReportModelable.toAccumulatedData(0, timestamp)
             )
         } else {
             accumulatedDataDao.update(

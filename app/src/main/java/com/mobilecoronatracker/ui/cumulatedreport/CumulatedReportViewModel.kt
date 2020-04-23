@@ -47,7 +47,7 @@ class CumulatedReportViewModel(
     private fun refreshData() {
         isRefreshing.postValue(true)
         viewModelScope.launch(Dispatchers.IO) {
-            accumulatedDataRepo.refreshAccumulatedData()
+            accumulatedDataRepo.fetchTodayAccumulatedData()
         }
     }
 

@@ -85,7 +85,7 @@ class CountriesListViewModel(
     private fun refreshData() {
         isRefreshing.postValue(true)
         viewModelScope.launch(Dispatchers.IO) {
-            countriesDataRepo.refreshCountriesData()
+            countriesDataRepo.fetchTodayCountriesData()
         }
     }
 

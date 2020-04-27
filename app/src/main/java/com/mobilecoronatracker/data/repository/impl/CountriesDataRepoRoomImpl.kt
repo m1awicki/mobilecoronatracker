@@ -19,10 +19,13 @@ import com.mobilecoronatracker.model.pojo.toCountryDataList
 import com.mobilecoronatracker.model.toCountryData
 import com.mobilecoronatracker.utils.getTodayTimestamp
 import com.mobilecoronatracker.utils.getYesterdayTimestamp
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import java.util.Locale
 
+@ExperimentalCoroutinesApi
 class CountriesDataRepoRoomImpl(
     private val countryDataDao: CountryDataDao,
     private val countryDao: CountryDao,
@@ -36,7 +39,7 @@ class CountriesDataRepoRoomImpl(
 
     override fun getAllCountriesYesterdayData(): Flow<List<CountryReportModelable>> {
         val yesterdayTimestamp = getYesterdayTimestamp()
-        return getAllCountriesForDate(yesterdayTimestamp)
+        return getAllCountriesForDate(yesterdayTimestamp).distinctUntilChanged()
     }
 
     override fun getCountryHistory(countryName: String): Flow<List<CountryReportTimePointModelable>> {

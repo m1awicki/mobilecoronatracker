@@ -7,17 +7,19 @@ import androidx.lifecycle.viewModelScope
 import com.mobilecoronatracker.data.repository.CountriesDataRepo
 import com.mobilecoronatracker.data.repository.CountriesFollowRepo
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.util.Locale
 
 
+@ExperimentalCoroutinesApi
 class CountriesListViewModel(
     private val countriesFollowRepo: CountriesFollowRepo,
     private val countriesDataRepo: CountriesDataRepo
 ) : ViewModel(),
-    CountriesListViewModelable
-{
+    CountriesListViewModelable {
     private var currentList: List<CountriesListViewModelable.CountryReport> = emptyList()
     private var currentFilterText: String = ""
     override val countryReports = MutableLiveData<List<CountriesListViewModelable.CountryReport>>()
@@ -30,10 +32,11 @@ class CountriesListViewModel(
                 refreshData()
             }
 
-            countriesDataRepo.getAllCountriesTodayData().collect { todayList ->
-                val todayMap = todayList.map { it.iso2 to it }.toMap()
-                countriesDataRepo.getAllCountriesYesterdayData().collect { yesterdayList ->
-                    val deltas = yesterdayList.map { yesterday ->
+            countriesDataRepo.getAllCountriesTodayData()
+                .combine(countriesDataRepo.getAllCountriesYesterdayData()) { today, yesterday -> today to yesterday }
+                .collect { (todayList, yesterdayList) ->
+                    val todayMap = todayList.map { it.iso2 to it }.toMap()
+                    val deltas = yesterdayList.mapNotNull { yesterday ->
                         val today = todayMap[yesterday.iso2]
                         today?.let {
                             val casesDelta = it.cases.minus(yesterday.cases)
@@ -47,11 +50,10 @@ class CountriesListViewModel(
                                 countryReport = today
                             )
                         }
-                    }.filterNotNull()
+                    }
                     currentList = deltas
                     postFilteredList()
                 }
-            }
         }
     }
 
@@ -104,8 +106,7 @@ class CountriesListViewModel(
     }
 
     private fun getFollowStatusList(filtered: List<CountriesListViewModelable.CountryReport>):
-            List<CountriesListViewModelable.CountryReport>
-    {
+            List<CountriesListViewModelable.CountryReport> {
         val followedCountries = countriesFollowRepo.getFollowedCountries()
         val followed = filtered.filter {
             followedCountries.contains(it.countryReport.country)

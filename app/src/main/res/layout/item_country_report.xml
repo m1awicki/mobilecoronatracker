@@ -233,9 +233,10 @@
                     android:id="@+id/bookmark_button"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:layout_marginStart="95dp"
                     android:onClick="@{() -> item.countryReport.followed ? followListener.onCountryUnfollowed(item.countryReport.country) : followListener.onCountryFollowed(item.countryReport.country) }"
-                    android:src="@drawable/ic_bookmark"
-                    android:tint="@{item.countryReport.followed ? @color/colorAccent : @color/gray}" />
+                    android:src="@{item.countryReport.followed ? @drawable/ic_flag_colored : @drawable/ic_flag}"
+                    tools:src="@drawable/ic_flag_colored" />
 
                 <ImageView
                     android:id="@+id/show_more_button"
@@ -244,7 +245,7 @@
                     android:layout_marginStart="40dp"
                     android:layout_marginEnd="40dp"
                     android:onClick="@{() -> analysisRequestListener.onCountryAnalysisRequested(item.countryReport.country)}"
-                    android:src="@drawable/ic_more"
+                    android:src="@drawable/ic_donut_chart"
                     android:tint="@color/gray" />
 
                 <ImageView

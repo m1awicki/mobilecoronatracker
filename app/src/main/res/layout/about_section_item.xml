@@ -6,6 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
         android:orientation="vertical"
         android:padding="10dp">
 
@@ -14,8 +15,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textSize="18sp"
-            android:text="@{item.header}"
+            android:text="@{item.title}"
+            android:textColor="@color/gray"
+            android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -26,17 +29,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:lineSpacingMultiplier="1.2"
+            android:text="@{item.description}"
+            android:textColor="@color/gray"
             android:textSize="18sp"
-            android:text="@{item.body}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/header"
-            tools:text="body body body" />
+            tools:text="body\nbody\nbody" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <data>
+
         <variable
             name="item"
-            type="com.mobilecoronatracker.model.CreditsEntryModel" />
+            type="com.mobilecoronatracker.ui.about.AboutViewModelable.AboutSection" />
     </data>
 </layout>

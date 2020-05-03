@@ -30,4 +30,8 @@
     <string name="cases_label_text">Przypadki</string>
     <string name="deaths_label_text">Zgony</string>
     <string name="critical_label_text">W stanie krytycznym</string>
+    <string name="license_label">Licencja</string>
+    <string name="general_info_label">Informacje ogólne</string>
+    <string name="full_license_direction_label">Pełny tekst licencji do przeczytania pod adresem:</string>
+    <string name="icons_authors_label">Autorzy ikon</string>
 </resources>

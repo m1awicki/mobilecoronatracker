@@ -25,8 +25,8 @@
     <string name="data_source">Data source</string>
     <string name="about_text">This application is free and was created to help track progress of COVID-19 pandemic - disease caused by SARS-CoV-2 coronavirus discovered in 2019 in Wuhan, China.</string>
     <string name="credits" translatable="false">Credits:</string>
-    <string name="credits_freepik_from_flaticon" translatable="false">made by Freepik from www.flaticon.com</string>
-    <string name="credits_freepik_from_freepik" translatable="false">World vector created by freepik - www.freepik.com</string>
+    <string name="credits_freepik_from_flaticon" translatable="false">Freepik - www.flaticon.com</string>
+    <string name="credits_pixelperfect_from_flaticon" translatable="false">Pixel perfect - www.flaticon.com</string>
     <string name="credits_elite_da_myth_github" translatable="false">https://github.com/NovelCOVID/API</string>
     <string name="more_data">More data</string>
     <string name="plus_sign" translatable="false">+</string>
@@ -43,5 +43,4 @@
     <string name="apache_2_limitation_of_liablity_excerpt" translatable="false">In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall any Contributor be liable to You for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this License or out of the use or inability to use the Work (including but not limited to damages for loss of goodwill, work stoppage, computer failure or malfunction, or any and all other commercial damages or losses), even if such Contributor has been advised of the possibility of such damages.</string>
     <string name="apache_2_license_label" translatable="false">Apache License 2.0</string>
     <string name="general_info_label">General information</string>
-    <string name="credits_pixelperfect_from_flaticon" translatable="false">made by Pixel perfect from www.flaticon.com</string>
 </resources>

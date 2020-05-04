@@ -204,7 +204,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:backgroundTint="@color/existing"
             app:borderWidth="0dp"
-            app:srcCompat="@drawable/ic_timeline" />
+            app:srcCompat="@drawable/ic_line_chart" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <data>

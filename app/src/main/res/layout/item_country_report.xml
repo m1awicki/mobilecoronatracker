@@ -244,7 +244,7 @@
                     android:layout_marginStart="40dp"
                     android:layout_marginEnd="40dp"
                     android:onClick="@{() -> analysisRequestListener.onCountryAnalysisRequested(item.countryReport.country)}"
-                    android:src="@drawable/ic_donut_chart"
+                    android:src="@drawable/ic_line_chart"
                     android:tint="@color/gray" />
 
                 <ImageView

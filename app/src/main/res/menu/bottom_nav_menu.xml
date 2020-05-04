@@ -3,16 +3,16 @@
 
     <item
         android:id="@+id/navigation_cumulated"
-        android:icon="@drawable/ic_report"
+        android:icon="@drawable/ic_global_vir"
         android:title="@string/cumulated_report_title" />
 
     <item
         android:id="@+id/navigation_countries_list"
-        android:icon="@drawable/ic_contagious"
+        android:icon="@drawable/ic_countries_vir"
         android:title="@string/reports_by_country_title" />
 
     <item
         android:id="@+id/navigation_about"
-        android:icon="@drawable/ic_info"
+        android:icon="@drawable/ic_question"
         android:title="@string/about_title" />
 </menu>

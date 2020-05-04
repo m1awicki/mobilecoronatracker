@@ -1,5 +1,7 @@
 package com.mobilecoronatracker.ui.about
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,13 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.mobilecoronatracker.R
 import com.mobilecoronatracker.databinding.FragmentAboutBinding
-import kotlinx.android.synthetic.main.fragment_about.*
-import com.mobilecoronatracker.ui.utils.addLinksNoAppend
-import java.util.regex.Pattern
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AboutFragment : Fragment() {
-    private lateinit var viewModel: CreditsListViewModel
-    private val adapter = CreditsListAdapter()
+    private val viewModel by viewModel<AboutViewModel>()
+    private val adapter = AboutSectionsListAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,7 +25,7 @@ class AboutFragment : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentAboutBinding>(inflater,
             R.layout.fragment_about, container, false
         )
-        viewModel = CreditsListViewModel(requireActivity().application)
+        binding.viewModel = viewModel
         binding.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
@@ -33,8 +33,6 @@ class AboutFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val pattern = Pattern.compile(getString(R.string.github_repo_label))
-        addLinksNoAppend(gh_link, pattern, getString(R.string.repo_link))
         bindObservers()
     }
 
@@ -42,6 +40,14 @@ class AboutFragment : Fragment() {
         viewModel.credits.observe(viewLifecycleOwner, Observer {
             adapter.credits = it
             adapter.notifyDataSetChanged()
+        })
+        viewModel.onOpenUrl.observe(viewLifecycleOwner, Observer { url ->
+            if (url.isEmpty()) {
+                return@Observer
+            }
+            val uri = Uri.parse(url)
+            viewModel.onOpenUrl.value = ""
+            startActivity(Intent(Intent.ACTION_VIEW, uri))
         })
     }
 }

@@ -4,6 +4,7 @@ import android.app.Application
 import com.facebook.stetho.Stetho
 import com.mobilecoronatracker.data.workmanager.DataUpdateCycle
 import com.mobilecoronatracker.data.workmanager.DataUpdateCycleImpl
+import com.mobilecoronatracker.koin.module.aboutModule
 import com.mobilecoronatracker.koin.module.appModule
 import com.mobilecoronatracker.koin.module.countriesListModule
 import com.mobilecoronatracker.koin.module.countryAnalysisModule
@@ -29,6 +30,7 @@ class CoronaTrackerApp : Application() {
                 countriesListModule,
                 countryAnalysisModule,
                 cumulatedReportModule,
+                aboutModule,
                 dbModule
             )
         }

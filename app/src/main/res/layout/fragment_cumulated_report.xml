@@ -204,6 +204,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:backgroundTint="@color/existing"
             app:borderWidth="0dp"
+            android:tint="@color/colorPrimaryDark"
             app:srcCompat="@drawable/ic_line_chart" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -233,7 +233,6 @@
                     android:id="@+id/bookmark_button"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginStart="95dp"
                     android:onClick="@{() -> item.countryReport.followed ? followListener.onCountryUnfollowed(item.countryReport.country) : followListener.onCountryFollowed(item.countryReport.country) }"
                     android:src="@{item.countryReport.followed ? @drawable/ic_flag_colored : @drawable/ic_flag}"
                     tools:src="@drawable/ic_flag_colored" />

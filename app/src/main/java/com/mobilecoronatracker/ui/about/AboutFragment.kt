@@ -11,9 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.mobilecoronatracker.R
 import com.mobilecoronatracker.databinding.FragmentAboutBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AboutFragment : Fragment() {
-    private lateinit var viewModel: AboutViewModel
+    private val viewModel by viewModel<AboutViewModel>()
     private val adapter = AboutSectionsListAdapter()
 
     override fun onCreateView(
@@ -24,7 +25,6 @@ class AboutFragment : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentAboutBinding>(inflater,
             R.layout.fragment_about, container, false
         )
-        viewModel = AboutViewModel(requireActivity().application)
         binding.viewModel = viewModel
         binding.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner

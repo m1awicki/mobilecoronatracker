@@ -7,19 +7,45 @@
 
     <fragment
         android:id="@+id/navigation_cumulated"
-        android:name="com.mobilecoronatracker.ui.cumulatedreport.FragmentCumulatedReport"
+        android:name="com.mobilecoronatracker.ui.cumulatedreport.CumulatedReportFragment"
         android:label="@string/cumulated_report_title"
-        tools:layout="@layout/fragment_cumulated_report" />
+        tools:layout="@layout/fragment_cumulated_report">
+
+        <action
+            android:id="@+id/action_navigation_cumulated_to_accumulatedChartsFragment"
+            app:destination="@id/accumulatedChartsFragment" />
+    </fragment>
 
     <fragment
-        android:id="@+id/navigation_per_country"
-        android:name="com.mobilecoronatracker.ui.countriesreports.FragmentCountriesReports"
+        android:id="@+id/navigation_countries_list"
+        android:name="com.mobilecoronatracker.ui.countrieslist.CountriesListFragment"
         android:label="@string/reports_by_country_title"
-        tools:layout="@layout/fragment_countries_reports" />
+        tools:layout="@layout/fragment_countries_list" >
+        <action
+            android:id="@+id/action_navigation_countries_list_to_countryAnalysisFragment"
+            app:destination="@id/countryAnalysisFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_about"
-        android:name="com.mobilecoronatracker.ui.about.FragmentAbout"
+        android:name="com.mobilecoronatracker.ui.about.AboutFragment"
         android:label="@string/about_title"
         tools:layout="@layout/fragment_about" />
+
+    <fragment
+        android:id="@+id/accumulatedChartsFragment"
+        android:name="com.mobilecoronatracker.ui.accumulatedcharts.AccumulatedChartsFragment"
+        android:label="@string/accumulated_charts_title"
+        tools:layout="@layout/accumulated_charts_fragment" />
+
+    <fragment
+        android:id="@+id/countryAnalysisFragment"
+        android:name="com.mobilecoronatracker.ui.countryanalysis.CountryAnalysisFragment"
+        android:label="@string/country_analysis"
+        tools:layout="@layout/fragment_country_analysis" >
+        <argument
+            android:name="countryName"
+            app:argType="string"
+            android:defaultValue='""' />
+    </fragment>
 </navigation>

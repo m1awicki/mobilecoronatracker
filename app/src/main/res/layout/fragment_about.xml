@@ -6,60 +6,45 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorPrimaryDark"
         android:orientation="vertical"
         android:padding="10dp">
-
-        <TextView
-            android:id="@+id/general_info"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/about_text"
-            android:paddingBottom="15dp"
-            android:textAlignment="center"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <TextView
-            android:id="@+id/credits_label"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/credits"
-            android:textAlignment="center"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/general_info"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/credits_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginBottom="20dp"
             app:adapter="@{adapter}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toTopOf="@id/gh_link"
+            app:layout_constraintBottom_toTopOf="@id/gh_repo_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/credits_label"
-            android:layout_marginBottom="10dp"
-            tools:listitem="@layout/item_credits"/>
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/about_section_item" />
 
-        <Button
-            android:id="@+id/gh_link"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/github_repo_label"
-            android:textSize="21sp"
-            android:background="@drawable/rounded_outline_rect_bg"
-            android:textColorLink="@color/colorPrimaryDark"
+        <ImageButton
+            android:id="@+id/gh_repo_button"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/ic_github"
+            android:backgroundTint="@color/gray"
+            android:onClick="@{() -> viewModel.onNavigateToGithubRepoRequested()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <data>
+
         <variable
             name="adapter"
-            type="com.mobilecoronatracker.ui.about.CreditsListAdapter" />
+            type="com.mobilecoronatracker.ui.about.AboutSectionsListAdapter" />
+
+        <variable
+            name="viewModel"
+            type="com.mobilecoronatracker.ui.about.AboutViewModelable" />
     </data>
 </layout>

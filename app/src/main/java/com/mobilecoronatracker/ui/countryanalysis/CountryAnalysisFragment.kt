@@ -8,7 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
-import coil.api.load
+import coil.load
 import com.mobilecoronatracker.R
 import com.mobilecoronatracker.databinding.FragmentCountryAnalysisBinding
 import com.mobilecoronatracker.ui.chart.williamchart.view.ImplementsAlphaChart
@@ -24,7 +24,7 @@ class CountryAnalysisFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = DataBindingUtil.inflate<FragmentCountryAnalysisBinding>(
             inflater, R.layout.fragment_country_analysis, container, false
         )
@@ -57,6 +57,7 @@ class CountryAnalysisFragment : Fragment() {
         tested_to_identified_chart.animation.duration = defaultAnimationDuration
         tested_to_identified_chart.animate(initialDonutChartValues)
     }
+
     private fun setupHistoryChart() {
         country_history_chart.animation.duration = defaultAnimationDuration
         country_history_chart.labelsFormatter = { data -> data.toInt().toString() }
@@ -68,6 +69,7 @@ class CountryAnalysisFragment : Fragment() {
             )
         )
     }
+
     private fun setupActiveHistoryChart() {
         country_active_history_chart.animation.duration = defaultAnimationDuration
         country_active_history_chart.labelsFormatter = { data -> data.toInt().toString() }
@@ -77,6 +79,7 @@ class CountryAnalysisFragment : Fragment() {
             )
         )
     }
+
     private fun setupDailyIncreaseChart() {
         daily_increase_chart.animation.duration = defaultAnimationDuration
         daily_increase_chart.labelsFormatter = { data -> data.toInt().toString() }
@@ -86,6 +89,7 @@ class CountryAnalysisFragment : Fragment() {
             )
         )
     }
+
     private fun setupDailyIncreaseAsPercentChart() {
         daily_increase_as_percent_of_all_chart.animation.duration = defaultAnimationDuration
         daily_increase_as_percent_of_all_chart.labelsFormatter = { data -> data.toInt().toString() }
@@ -95,6 +99,7 @@ class CountryAnalysisFragment : Fragment() {
             )
         )
     }
+
     private fun setupPerMillionDataChart() {
         data_per_million_chart.labelsFormatter = { data -> data.toInt().toString() }
         data_per_million_chart.animation.duration = defaultAnimationDuration
@@ -103,26 +108,26 @@ class CountryAnalysisFragment : Fragment() {
     }
 
     private fun bindObservers() {
-        viewModel.testedToIdentifiedData.observe(viewLifecycleOwner, Observer {
+        viewModel.testedToIdentifiedData.observe(viewLifecycleOwner, {
             tested_to_identified_chart.donutTotal = it.reduce { acc, fl -> acc + fl }
             tested_to_identified_chart.animate(it)
         })
-        viewModel.casesPerMillionData.observe(viewLifecycleOwner, Observer {
+        viewModel.casesPerMillionData.observe(viewLifecycleOwner, {
             data_per_million_chart.animate(it.labels, it.values)
         })
-        viewModel.countryHistoryData.observe(viewLifecycleOwner, Observer {
+        viewModel.countryHistoryData.observe(viewLifecycleOwner, {
             country_history_chart.animate(it.labels, it.timeLines)
         })
-        viewModel.countryActiveCasesData.observe(viewLifecycleOwner, Observer {
+        viewModel.countryActiveCasesData.observe(viewLifecycleOwner, {
             country_active_history_chart.animate(it.labels, listOf(it.values))
         })
-        viewModel.dailyIncreaseData.observe(viewLifecycleOwner, Observer {
+        viewModel.dailyIncreaseData.observe(viewLifecycleOwner, {
             daily_increase_chart.animate(it.labels, listOf(it.values))
         })
-        viewModel.dailyIncreaseAsPercentOfAllData.observe(viewLifecycleOwner, Observer {
+        viewModel.dailyIncreaseAsPercentOfAllData.observe(viewLifecycleOwner, {
             daily_increase_as_percent_of_all_chart.animate(it.labels, listOf(it.values))
         })
-        viewModel.countryFlagPath.observe(viewLifecycleOwner, Observer {
+        viewModel.countryFlagPath.observe(viewLifecycleOwner, {
             country_flag.load(it)
         })
     }

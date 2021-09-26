@@ -9,9 +9,11 @@ import com.mobilecoronatracker.data.repository.RepoResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import org.koin.core.component.KoinApiExtension
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
+@KoinApiExtension
 class DataUpdateWorker(
     appContext: Context,
     workerParameters: WorkerParameters

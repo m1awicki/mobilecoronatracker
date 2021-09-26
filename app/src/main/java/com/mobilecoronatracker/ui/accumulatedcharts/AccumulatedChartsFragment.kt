@@ -4,26 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.mobilecoronatracker.R
 import com.mobilecoronatracker.databinding.AccumulatedChartsFragmentBinding
 import com.mobilecoronatracker.ui.chart.williamchart.view.ImplementsAlphaChart
-import kotlinx.android.synthetic.main.accumulated_charts_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @ImplementsAlphaChart
 class AccumulatedChartsFragment : Fragment() {
-
     private val viewModel: AccumulatedChartsViewModelable by viewModel<AccumulatedChartsViewModel>()
+    private var _binding: AccumulatedChartsFragmentBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val binding = DataBindingUtil.inflate<AccumulatedChartsFragmentBinding>(
-            inflater, R.layout.accumulated_charts_fragment, container, false)
+    ): View {
+        _binding = AccumulatedChartsFragmentBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
@@ -35,40 +32,53 @@ class AccumulatedChartsFragment : Fragment() {
         setupObservers()
     }
 
-    private fun setupDonutCharts() {
-        critical_to_active.donutColors = intArrayOf(
-            resources.getColor(R.color.existing, null),
-            resources.getColor(R.color.critical, null)
-        )
-        critical_to_active.animation.duration = chartAnimationDuration
-        critical_to_active.animate(initialDonutChartsValues)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
-        tested_to_infected.donutColors = intArrayOf(
-            resources.getColor(R.color.recovered, null),
-            resources.getColor(R.color.existing, null)
-        )
-        tested_to_infected.animation.duration = chartAnimationDuration
-        tested_to_infected.animate(initialDonutChartsValues)
+    private fun setupDonutCharts() {
+        with(binding.criticalToActive) {
+            donutColors = intArrayOf(
+                resources.getColor(R.color.existing, null),
+                resources.getColor(R.color.critical, null)
+            )
+            animation.duration = chartAnimationDuration
+            animate(initialDonutChartsValues)
+        }
+
+        with(binding.testedToInfected) {
+            donutColors = intArrayOf(
+                resources.getColor(R.color.recovered, null),
+                resources.getColor(R.color.existing, null)
+            )
+            animation.duration = chartAnimationDuration
+            animate(initialDonutChartsValues)
+        }
     }
 
     private fun setupLinearCharts() {
-        accumulated_history_chart.animation.duration = chartAnimationDuration
-        accumulated_history_chart.labelsFormatter = { data -> data.toInt().toString() }
-        accumulated_history_chart.setLineColors(
-            listOf(
-                resources.getColor(R.color.existing, null),
-                resources.getColor(R.color.recovered, null),
-                resources.getColor(R.color.dead, null)
+        with(binding.accumulatedHistoryChart) {
+            animation.duration = chartAnimationDuration
+            labelsFormatter = { data -> data.toInt().toString() }
+            setLineColors(
+                listOf(
+                    resources.getColor(R.color.existing, null),
+                    resources.getColor(R.color.recovered, null),
+                    resources.getColor(R.color.dead, null)
+                )
             )
-        )
 
-        active_cases_history_chart.animation.duration = chartAnimationDuration
-        active_cases_history_chart.labelsFormatter = { data -> data.toInt().toString() }
-        active_cases_history_chart.setLineColors(
-            listOf(
-                resources.getColor(R.color.existing, null)
-            )
-        )
+            with(binding.activeCasesHistoryChart) {
+                animation.duration = chartAnimationDuration
+                labelsFormatter = { data -> data.toInt().toString() }
+                setLineColors(
+                    listOf(
+                        resources.getColor(R.color.existing, null)
+                    )
+                )
+            }
+        }
     }
 
     private fun setupViews() {
@@ -77,20 +87,20 @@ class AccumulatedChartsFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        viewModel.historyChartUpdate.observe(viewLifecycleOwner, Observer {
-            accumulated_history_chart.animate(it.labels, it.timeLines)
+        viewModel.historyChartUpdate.observe(viewLifecycleOwner, {
+            binding.accumulatedHistoryChart.animate(it.labels, it.timeLines)
         })
-        viewModel.activeCasesChartUpdate.observe(viewLifecycleOwner, Observer {
-            active_cases_history_chart.animate(it.labels, it.timeLines)
+        viewModel.activeCasesChartUpdate.observe(viewLifecycleOwner, {
+            binding.activeCasesHistoryChart.animate(it.labels, it.timeLines)
         })
-        viewModel.globalDataWithToday.observe(viewLifecycleOwner, Observer {
+        viewModel.globalDataWithToday.observe(viewLifecycleOwner, {
             val criticalToActive = listOf(it.critical.toFloat(), it.active.toFloat())
-            critical_to_active.donutTotal = criticalToActive.reduce { acc, fl -> acc + fl }
-            critical_to_active.animate(criticalToActive)
+            binding.criticalToActive.donutTotal = criticalToActive.reduce { acc, fl -> acc + fl }
+            binding.criticalToActive.animate(criticalToActive)
 
             val testedToInfected = listOf(it.cases.toFloat(), it.tested.toFloat())
-            tested_to_infected.donutTotal = testedToInfected.reduce { acc, fl -> acc + fl }
-            tested_to_infected.animate(testedToInfected)
+            binding.testedToInfected.donutTotal = testedToInfected.reduce { acc, fl -> acc + fl }
+            binding.testedToInfected.animate(testedToInfected)
         })
     }
 
@@ -98,5 +108,4 @@ class AccumulatedChartsFragment : Fragment() {
         const val chartAnimationDuration = 1500L
         val initialDonutChartsValues = listOf(0f)
     }
-
 }

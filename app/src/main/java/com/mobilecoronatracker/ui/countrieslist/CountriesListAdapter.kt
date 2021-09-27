@@ -3,6 +3,7 @@ package com.mobilecoronatracker.ui.countrieslist
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.mobilecoronatracker.databinding.ItemCountryReportBinding
@@ -32,11 +33,7 @@ class CountriesListAdapter :
             binding.followListener = followListener
             binding.shareListener = shareReportListener
             binding.analysisRequestListener = countryAnalysisRequestListener
-            if (item.countryReport.followed) {
-                setDetailsVisible(binding, true)
-            } else {
-                setDetailsVisible(binding, false)
-            }
+            setDetailsVisible(binding, item.countryReport.followed)
             binding.executePendingBindings()
         }
     }
@@ -53,10 +50,6 @@ class CountriesListAdapter :
         holder.bind(countriesReports[position])
 
     private fun setDetailsVisible(binding: ItemCountryReportBinding, visible: Boolean) {
-        if (visible) {
-            binding.collapsibleContainer.visibility = View.VISIBLE
-        } else {
-            binding.collapsibleContainer.visibility = View.GONE
-        }
+        binding.collapsibleContainer.isVisible = visible
     }
 }

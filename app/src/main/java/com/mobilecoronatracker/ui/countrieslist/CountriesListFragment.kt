@@ -8,14 +8,11 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.mobilecoronatracker.R
 import com.mobilecoronatracker.databinding.FragmentCountriesListBinding
 import com.mobilecoronatracker.ui.utils.hideKeyboard
-import kotlinx.android.synthetic.main.fragment_countries_list.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CountriesListFragment : Fragment() {
@@ -23,16 +20,16 @@ class CountriesListFragment : Fragment() {
     private val adapter by lazy {
         CountriesListAdapter()
     }
+    private var _binding: FragmentCountriesListBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         setHasOptionsMenu(true)
-        val binding = DataBindingUtil.inflate<FragmentCountriesListBinding>(
-            inflater, R.layout.fragment_countries_list, container, false
-        )
+        _binding = FragmentCountriesListBinding.inflate(inflater, container, false)
         adapter.followListener = viewModel
         adapter.shareReportListener = viewModel
         adapter.countryAnalysisRequestListener = viewModel
@@ -54,6 +51,7 @@ class CountriesListFragment : Fragment() {
         adapter.followListener = null
         adapter.shareReportListener = null
         adapter.countryAnalysisRequestListener = null
+        _binding = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -72,11 +70,11 @@ class CountriesListFragment : Fragment() {
     }
 
     private fun setupViews() {
-        countries_search_view.setOnQueryTextListener(object :
+        binding.countriesSearchView.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(text: String?): Boolean {
                 viewModel.onFilterTextChanged(text ?: "")
-                context?.let { hideKeyboard(it, countries_search_view) }
+                context?.let { hideKeyboard(it, binding.countriesSearchView) }
                 return true
             }
 
@@ -86,21 +84,24 @@ class CountriesListFragment : Fragment() {
             }
         })
 
-        countries_reports_swipe_refresh.setOnRefreshListener {
+        binding.countriesReportsSwipeRefresh.setOnRefreshListener {
             viewModel.onRefreshRequested()
         }
     }
 
     private fun bindObservers() {
-        viewModel.countryReports.observe(viewLifecycleOwner, Observer {
+        viewModel.countryReports.observe(viewLifecycleOwner, {
             adapter.countriesReports = it
             adapter.notifyDataSetChanged()
         })
-        viewModel.navigationToCountryRequested.observe(viewLifecycleOwner, Observer {
+        viewModel.navigationToCountryRequested.observe(viewLifecycleOwner, {
             if (it.isBlank()) {
-                return@Observer
+                return@observe
             }
-            val action = CountriesListFragmentDirections.actionNavigationCountriesListToCountryAnalysisFragment(it)
+            val action =
+                CountriesListFragmentDirections.actionNavigationCountriesListToCountryAnalysisFragment(
+                    it
+                )
             viewModel.navigationToCountryRequested.value = ""
             findNavController().navigate(action)
         })

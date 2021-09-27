@@ -99,8 +99,8 @@ class CountriesListViewModel(
 
     private fun getFilteredList(): List<CountriesListViewModelable.CountryReport> {
         return currentList.filter {
-            val countryName = it.countryReport.country.toLowerCase(Locale.getDefault())
-            val countryIso = it.countryReport.iso2.toLowerCase(Locale.getDefault())
+            val countryName = it.countryReport.country.lowercase(Locale.getDefault())
+            val countryIso = it.countryReport.iso2.lowercase(Locale.getDefault())
             countryName.contains(currentFilterText) || countryIso.contains(currentFilterText)
         }
     }
@@ -117,7 +117,7 @@ class CountriesListViewModel(
         val notFollowed = filtered.filterNot {
             followedCountries.contains(it.countryReport.country)
         }.map {
-            it.countryReport.followed = false;
+            it.countryReport.followed = false
             it
         }
         return followed + notFollowed

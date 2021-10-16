@@ -9,15 +9,15 @@ import retrofit2.http.Query
 
 
 interface CovidApi {
-    @GET("v2/countries")
+    @GET("countries")
     suspend fun getCountriesData(@Query("yesterday") yesterday: Boolean = false): List<CovidCountryEntry>
 
-    @GET("v2/all")
+    @GET("all")
     suspend fun getAccumulatedData(@Query("yesterday") yesterday: Boolean = false): CovidCumulatedData
 
-    @GET("v2/historical?lastdays=all")
+    @GET("historical?lastdays=all")
     suspend fun getCountryHistoricalData(): List<CovidCountryHistory>
 
-    @GET("v2/historical/all?lastdays=all")
+    @GET("historical/all?lastdays=all")
     suspend fun getAccumulatedHistoricalData(): Timeline
 }

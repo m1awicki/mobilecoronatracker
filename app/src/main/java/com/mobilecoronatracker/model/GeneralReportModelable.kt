@@ -7,7 +7,7 @@ interface GeneralReportModelable {
     var deaths: Int
     var recovered: Int
     var critical: Int
-    var tests: Int
+    var tests: Long
     var todayCases: Int
     var todayDeaths: Int
     var casesPerMillion: Double

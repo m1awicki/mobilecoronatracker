@@ -41,7 +41,7 @@ class AccumulatedChartsViewModel(
             AccumulatedChartsViewModelable.GlobalDataWithToday(
                 today.cases, today.todayCases, today.deaths, today.todayDeaths,
                 today.cases - today.deaths - today.recovered, today.recovered,
-                today.recovered - yesterday.recovered, today.critical,  today.tests.toInt()
+                today.recovered - yesterday.recovered, today.critical, today.tests
             )
         )
     }

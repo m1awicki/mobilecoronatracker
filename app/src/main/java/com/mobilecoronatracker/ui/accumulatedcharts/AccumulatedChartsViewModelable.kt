@@ -11,7 +11,7 @@ interface AccumulatedChartsViewModelable {
 
     data class GlobalDataWithToday(
         val cases: Int, val casesToday: Int, val deaths: Int, val deathsToday: Int, val active: Int,
-        val recovered: Int, val recoveredToday: Int, val critical: Int, val tested: Int
+        val recovered: Int, val recoveredToday: Int, val critical: Int, val tested: Long
     )
     data class HistoryChartData(val timeLines: List<List<Float>>, val labels: List<String>)
 }

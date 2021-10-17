@@ -13,5 +13,5 @@ object RetrofitClientProviderImpl :
             .build()
     }
 
-    private const val BASE_URL = "https://corona.lmao.ninja/"
+    private const val BASE_URL = "https://disease.sh/v3/covid-19/"
 }

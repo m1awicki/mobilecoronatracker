@@ -9,8 +9,8 @@ import com.mobilecoronatracker.data.repository.RepoResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class DataUpdateWorker(
     appContext: Context,
@@ -20,10 +20,10 @@ class DataUpdateWorker(
     private val countriesDataRepo: CountriesDataRepo by inject()
 
     override suspend fun doWork(): Result = coroutineScope {
-        var todayAccumulatedSuccessful: RepoResult<Unit> = RepoResult.FailureResult()
-        var yesterdayAccumulatedSuccessful: RepoResult<Unit> = RepoResult.FailureResult()
-        var todayCountriesSuccessful: RepoResult<Unit> = RepoResult.FailureResult()
-        var yesterdayCountriesSuccessful: RepoResult<Unit> = RepoResult.FailureResult()
+        var todayAccumulatedSuccessful: RepoResult<Unit>
+        var yesterdayAccumulatedSuccessful: RepoResult<Unit>
+        var todayCountriesSuccessful: RepoResult<Unit>
+        var yesterdayCountriesSuccessful: RepoResult<Unit>
         withContext(Dispatchers.IO) {
             todayAccumulatedSuccessful = accumulatedDataRepo.fetchTodayAccumulatedData()
             yesterdayAccumulatedSuccessful = accumulatedDataRepo.fetchYesterdayAccumulatedData()

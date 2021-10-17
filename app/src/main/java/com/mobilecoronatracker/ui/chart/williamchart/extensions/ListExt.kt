@@ -107,8 +107,8 @@ fun List<DataPoint>.toSmoothLinePath(smoothFactor: Float): Path {
 
 private fun List<Float>.floatLimits(): Pair<Float, Float> {
 
-    val min = min() ?: 0F
-    var max = max() ?: 1F
+    val min = minOrNull() ?: 0F
+    var max = maxOrNull() ?: 1F
 
     if (min == max)
         max += 1F

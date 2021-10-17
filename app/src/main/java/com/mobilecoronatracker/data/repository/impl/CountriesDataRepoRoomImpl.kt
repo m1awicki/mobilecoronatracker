@@ -68,14 +68,14 @@ class CountriesDataRepoRoomImpl(
         val countryHistorical = covidDataRepo.getCountryHistoricalData()
         val (normalCountries, countriesFromProvinces) =
             countryHistorical.partition {
-                !countriesMap.containsKey(it.province?.toLowerCase(Locale.ROOT))
+                !countriesMap.containsKey(it.province?.lowercase(Locale.ROOT))
             }
 
         val mergedCountriesHistory = mergeCountriesHistory(normalCountries)
         val countriesTimelines: MutableList<List<CountryData>> =
             mergedCountriesHistory.map { historicalEntry ->
                 val timeline = historicalEntry.timeline.toCountryDataList(
-                    historicalEntry.country.toLowerCase(Locale.ROOT),
+                    historicalEntry.country.lowercase(Locale.ROOT),
                     countriesMap
                 )
                 timeline
@@ -83,7 +83,7 @@ class CountriesDataRepoRoomImpl(
 
         countriesTimelines += countriesFromProvinces.map { historicalEntry ->
             val timeline = historicalEntry.timeline.toCountryDataList(
-                historicalEntry.province?.toLowerCase(Locale.ROOT) ?: "",
+                historicalEntry.province?.lowercase(Locale.ROOT) ?: "",
                 countriesMap
             )
             timeline
@@ -154,12 +154,12 @@ class CountriesDataRepoRoomImpl(
     private suspend fun prepareCountriesMap(): Map<String, Country> {
         val countriesMap =
             countryDao.getAllCountries().map {
-                it.name.toLowerCase(Locale.ROOT) to it
+                it.name.lowercase(Locale.ROOT) to it
             }.toMap().toMutableMap()
 
         countryNamesMapping.forEach { entry ->
-            countriesMap[entry.key.toLowerCase(Locale.ROOT)]?.let {
-                countriesMap[entry.value.toLowerCase(Locale.ROOT)] = it
+            countriesMap[entry.key.lowercase(Locale.ROOT)]?.let {
+                countriesMap[entry.value.lowercase(Locale.ROOT)] = it
             }
         }
 

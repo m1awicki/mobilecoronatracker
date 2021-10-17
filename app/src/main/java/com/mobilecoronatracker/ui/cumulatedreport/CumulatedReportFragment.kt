@@ -7,30 +7,27 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.mobilecoronatracker.R
 import com.mobilecoronatracker.databinding.FragmentCumulatedReportBinding
 import com.mobilecoronatracker.ui.chart.williamchart.view.ImplementsAlphaChart
-import kotlinx.android.synthetic.main.fragment_cumulated_report.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @ImplementsAlphaChart
 class CumulatedReportFragment : Fragment() {
     private val viewModel: CumulatedReportViewModelable by viewModel<CumulatedReportViewModel>()
+    private var _binding: FragmentCumulatedReportBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         setHasOptionsMenu(true)
 
-        val binding = DataBindingUtil.inflate<FragmentCumulatedReportBinding>(
-            inflater, R.layout.fragment_cumulated_report, container, false
-        )
+        _binding = FragmentCumulatedReportBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
@@ -40,6 +37,11 @@ class CumulatedReportFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupViews()
         bindObservers()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -57,40 +59,40 @@ class CumulatedReportFragment : Fragment() {
         }
     }
 
-    private fun setupDonutChart() {
-        cumulated_data_chart.donutColors = intArrayOf(
+    private fun setupDonutChart() = with(binding.cumulatedDataChart) {
+        donutColors = intArrayOf(
             resources.getColor(R.color.existing, null),
             resources.getColor(R.color.recovered, null),
             resources.getColor(R.color.dead, null)
         )
-        cumulated_data_chart.animation.duration = chartAnimationDuration
-        cumulated_data_chart.animate(initialDonutChartData)
+        animation.duration = chartAnimationDuration
+        animate(initialDonutChartData)
     }
 
 
     private fun setupViews() {
-        cumulated_report_swipe_refresh.setOnRefreshListener {
+        binding.cumulatedReportSwipeRefresh.setOnRefreshListener {
             viewModel.onRefreshRequested()
         }
         setupDonutChart()
     }
 
     private fun bindObservers() {
-        viewModel.navigateToChartsEvent.observe(viewLifecycleOwner, Observer {
+        viewModel.navigateToChartsEvent.observe(viewLifecycleOwner, {
             if (it) {
                 viewModel.navigateToChartsEvent.value = false
                 findNavController().navigate(CumulatedReportFragmentDirections.actionNavigationCumulatedToAccumulatedChartsFragment())
             }
         })
 
-        viewModel.currentStateChart.observe(viewLifecycleOwner, Observer {
+        viewModel.currentStateChart.observe(viewLifecycleOwner, {
             val donutData = listOf(
                 it.deaths.toFloat(),
                 it.recovered.toFloat(),
                 it.active.toFloat()
             )
-            cumulated_data_chart.donutTotal = it.active.toFloat()
-            cumulated_data_chart.animate(donutData)
+            binding.cumulatedDataChart.donutTotal = it.active.toFloat()
+            binding.cumulatedDataChart.animate(donutData)
         })
     }
 

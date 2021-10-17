@@ -9,7 +9,7 @@ class GeneralReportModel(
     override var deaths: Int = 0,
     override var recovered: Int = 0,
     override var critical: Int = 0,
-    override var tests: Int = 0,
+    override var tests: Long = 0,
     override var todayCases: Int = 0,
     override var todayDeaths: Int = 0,
     override var casesPerMillion: Double = 0.0,
@@ -18,7 +18,7 @@ class GeneralReportModel(
     override var affectedCountries: Int = 0
 ) : GeneralReportModelable {
     constructor(data: CovidCumulatedData) : this(
-        data.cases, data.deaths, data.recovered, data.critical, data.tests, data.todayCases,
+        data.cases, data.deaths, data.recovered, data.critical, data.tests as Long, data.todayCases,
         data.todayDeaths, data.casesPerMillion, data.deathsPerMillion, data.testPerMillion,
         data.affectedCountries
     )

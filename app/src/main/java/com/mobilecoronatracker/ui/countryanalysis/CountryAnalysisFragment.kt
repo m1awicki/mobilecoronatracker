@@ -4,30 +4,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
-import coil.api.load
+import coil.load
 import com.mobilecoronatracker.R
 import com.mobilecoronatracker.databinding.FragmentCountryAnalysisBinding
 import com.mobilecoronatracker.ui.chart.williamchart.view.ImplementsAlphaChart
-import kotlinx.android.synthetic.main.fragment_country_analysis.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @ImplementsAlphaChart
 class CountryAnalysisFragment : Fragment() {
     private val viewModel: CountryAnalysisViewModelable by viewModel<CountryAnalysisViewModel>()
-    val args: CountryAnalysisFragmentArgs by navArgs()
+    private val args: CountryAnalysisFragmentArgs by navArgs()
+
+    private var _binding: FragmentCountryAnalysisBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val binding = DataBindingUtil.inflate<FragmentCountryAnalysisBinding>(
-            inflater, R.layout.fragment_country_analysis, container, false
-        )
+    ): View {
+
+        _binding = FragmentCountryAnalysisBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
@@ -40,6 +39,11 @@ class CountryAnalysisFragment : Fragment() {
         bindObservers()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun setupViews() {
         setupDonutChart()
         setupHistoryChart()
@@ -49,18 +53,19 @@ class CountryAnalysisFragment : Fragment() {
         setupDailyIncreaseAsPercentChart()
     }
 
-    private fun setupDonutChart() {
-        tested_to_identified_chart.donutColors = intArrayOf(
+    private fun setupDonutChart() = with(binding.testedToIdentifiedChart) {
+        donutColors = intArrayOf(
             resources.getColor(R.color.recovered, null),
             resources.getColor(R.color.existing, null)
         )
-        tested_to_identified_chart.animation.duration = defaultAnimationDuration
-        tested_to_identified_chart.animate(initialDonutChartValues)
+        animation.duration = defaultAnimationDuration
+        animate(initialDonutChartValues)
     }
-    private fun setupHistoryChart() {
-        country_history_chart.animation.duration = defaultAnimationDuration
-        country_history_chart.labelsFormatter = { data -> data.toInt().toString() }
-        country_history_chart.setLineColors(
+
+    private fun setupHistoryChart() = with(binding.countryHistoryChart) {
+        animation.duration = defaultAnimationDuration
+        labelsFormatter = { data -> data.toInt().toString() }
+        setLineColors(
             listOf(
                 resources.getColor(R.color.existing, null),
                 resources.getColor(R.color.recovered, null),
@@ -68,62 +73,67 @@ class CountryAnalysisFragment : Fragment() {
             )
         )
     }
-    private fun setupActiveHistoryChart() {
-        country_active_history_chart.animation.duration = defaultAnimationDuration
-        country_active_history_chart.labelsFormatter = { data -> data.toInt().toString() }
-        country_active_history_chart.setLineColors(
+
+    private fun setupActiveHistoryChart() = with(binding.countryActiveHistoryChart) {
+        animation.duration = defaultAnimationDuration
+        labelsFormatter = { data -> data.toInt().toString() }
+        setLineColors(
             listOf(
                 resources.getColor(R.color.existing, null)
             )
         )
     }
-    private fun setupDailyIncreaseChart() {
-        daily_increase_chart.animation.duration = defaultAnimationDuration
-        daily_increase_chart.labelsFormatter = { data -> data.toInt().toString() }
-        daily_increase_chart.setLineColors(
+
+    private fun setupDailyIncreaseChart() = with(binding.dailyIncreaseChart) {
+        animation.duration = defaultAnimationDuration
+        labelsFormatter = { data -> data.toInt().toString() }
+        setLineColors(
             listOf(
                 resources.getColor(R.color.existing, null)
             )
         )
     }
-    private fun setupDailyIncreaseAsPercentChart() {
-        daily_increase_as_percent_of_all_chart.animation.duration = defaultAnimationDuration
-        daily_increase_as_percent_of_all_chart.labelsFormatter = { data -> data.toInt().toString() }
-        daily_increase_as_percent_of_all_chart.setLineColors(
-            listOf(
-                resources.getColor(R.color.existing, null)
+
+    private fun setupDailyIncreaseAsPercentChart() =
+        with(binding.dailyIncreaseAsPercentOfAllChart) {
+            animation.duration = defaultAnimationDuration
+            labelsFormatter = { data -> data.toInt().toString() }
+            setLineColors(
+                listOf(
+                    resources.getColor(R.color.existing, null)
+                )
             )
-        )
-    }
-    private fun setupPerMillionDataChart() {
-        data_per_million_chart.labelsFormatter = { data -> data.toInt().toString() }
-        data_per_million_chart.animation.duration = defaultAnimationDuration
-        data_per_million_chart.barsColor = resources.getColor(R.color.existing, null)
-        data_per_million_chart.labelsColor = resources.getColor(R.color.gray, null)
+        }
+
+    private fun setupPerMillionDataChart() = with(binding.dataPerMillionChart) {
+        labelsFormatter = { data -> data.toInt().toString() }
+        animation.duration = defaultAnimationDuration
+        barsColor = resources.getColor(R.color.existing, null)
+        labelsColor = resources.getColor(R.color.gray, null)
     }
 
     private fun bindObservers() {
-        viewModel.testedToIdentifiedData.observe(viewLifecycleOwner, Observer {
-            tested_to_identified_chart.donutTotal = it.reduce { acc, fl -> acc + fl }
-            tested_to_identified_chart.animate(it)
+        viewModel.testedToIdentifiedData.observe(viewLifecycleOwner, {
+            binding.testedToIdentifiedChart.donutTotal = it.reduce { acc, fl -> acc + fl }
+            binding.testedToIdentifiedChart.animate(it)
         })
-        viewModel.casesPerMillionData.observe(viewLifecycleOwner, Observer {
-            data_per_million_chart.animate(it.labels, it.values)
+        viewModel.casesPerMillionData.observe(viewLifecycleOwner, {
+            binding.dataPerMillionChart.animate(it.labels, it.values)
         })
-        viewModel.countryHistoryData.observe(viewLifecycleOwner, Observer {
-            country_history_chart.animate(it.labels, it.timeLines)
+        viewModel.countryHistoryData.observe(viewLifecycleOwner, {
+            binding.countryHistoryChart.animate(it.labels, it.timeLines)
         })
-        viewModel.countryActiveCasesData.observe(viewLifecycleOwner, Observer {
-            country_active_history_chart.animate(it.labels, listOf(it.values))
+        viewModel.countryActiveCasesData.observe(viewLifecycleOwner, {
+            binding.countryActiveHistoryChart.animate(it.labels, listOf(it.values))
         })
-        viewModel.dailyIncreaseData.observe(viewLifecycleOwner, Observer {
-            daily_increase_chart.animate(it.labels, listOf(it.values))
+        viewModel.dailyIncreaseData.observe(viewLifecycleOwner, {
+            binding.dailyIncreaseChart.animate(it.labels, listOf(it.values))
         })
-        viewModel.dailyIncreaseAsPercentOfAllData.observe(viewLifecycleOwner, Observer {
-            daily_increase_as_percent_of_all_chart.animate(it.labels, listOf(it.values))
+        viewModel.dailyIncreaseAsPercentOfAllData.observe(viewLifecycleOwner, {
+            binding.dailyIncreaseAsPercentOfAllChart.animate(it.labels, listOf(it.values))
         })
-        viewModel.countryFlagPath.observe(viewLifecycleOwner, Observer {
-            country_flag.load(it)
+        viewModel.countryFlagPath.observe(viewLifecycleOwner, {
+            binding.countryFlag.load(it)
         })
     }
 

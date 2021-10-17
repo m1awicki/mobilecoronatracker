@@ -5,7 +5,7 @@ data class CovidCumulatedData(
     val deaths: Int = 0,
     val recovered: Int = 0,
     val critical: Int = 0,
-    val tests: Int = 0,
+    val tests: Long = 0,
     val todayCases: Int = 0,
     val todayDeaths: Int = 0,
     val casesPerMillion: Double = 0.0,

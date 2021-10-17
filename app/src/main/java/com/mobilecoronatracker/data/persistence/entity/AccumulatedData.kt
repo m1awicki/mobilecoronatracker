@@ -17,7 +17,7 @@ data class AccumulatedData(
     val deaths: Int = 0,
     val recovered: Int = 0,
     val critical: Int = 0,
-    val tests: Int = 0,
+    val tests: Long = 0,
     @ColumnInfo(name = "today_cases") val todayCases: Int = 0,
     @ColumnInfo(name = "today_deaths") val todayDeaths: Int = 0,
     @ColumnInfo(name = "cases_per_million") val casesPerMillion: Double = 0.0,
